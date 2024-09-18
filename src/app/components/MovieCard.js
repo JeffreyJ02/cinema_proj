@@ -1,5 +1,5 @@
 import React from 'react';
-
+{/* MovieCard component, goes into the MovieCarousel*/}
 const MovieCard = ({ movie }) => {
   return (
     <div>
