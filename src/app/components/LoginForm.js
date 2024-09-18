@@ -1,10 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';  // Use useRouter instead of useNavigate
+import { useRouter } from 'next/navigation'; 
 
 function LoginPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const router = useRouter();  // Use useRouter for navigation
+    const router = useRouter(); 
 
     const [formData, setFormData] = useState({
         email: '',
@@ -42,7 +42,7 @@ function LoginPage() {
                 if (data.status === 'ok') {
                     alert('Login successful');
                     window.localStorage.setItem('token', data.data);
-                    router.push('/App-Page');  // Navigate using router.push
+                    router.push('/App-Page'); 
                 } else {
                     alert(data.error);
                 }
