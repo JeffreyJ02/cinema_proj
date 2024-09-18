@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; 
 
-function LoginPage() {
+function LoginForm() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const router = useRouter(); 
 
@@ -18,6 +18,10 @@ function LoginPage() {
             [name]: value,
         }));
     };
+
+    const handleSignUp = () => {
+        router.push('/sign-up');
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -75,7 +79,10 @@ function LoginPage() {
                 </button>
                 <div className='logIn'>
                     <p>
-                        Don't have an account already? <a href='#'>Sign Up</a>
+                        Don't have an account already? 
+                        <span onClick={handleSignUp}>
+                        Sign Up
+                        </span>
                     </p>
                 </div>
             </form>
@@ -83,4 +90,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default LoginForm;
