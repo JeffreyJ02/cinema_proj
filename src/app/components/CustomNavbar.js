@@ -8,6 +8,7 @@ const CustomNavbar = () => {
     const signInButton = () => {
         router.push("/sign-in");
     }
+    {/* Navbar component from bootstrap library*/}
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
@@ -42,10 +43,11 @@ const CustomNavbar = () => {
                     id="basic-nav-dropdown"
                     align="end"
                     >
-                    <NavDropdown.Item href="#action/1">Action</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/2">Another action</NavDropdown.Item>
+                    <NavDropdown.Item href="#action/1">Edit Profile</NavDropdown.Item>
+                    <NavDropdown.Item href="#action/2">Manage Account</NavDropdown.Item>
+                    <NavDropdown.Item href="#action/2">View Order History</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3">Separated link</NavDropdown.Item>
+                    <NavDropdown.Item href="#action/3">Sign Out</NavDropdown.Item>
                 </NavDropdown>
             </Nav>
             </Navbar.Collapse>
