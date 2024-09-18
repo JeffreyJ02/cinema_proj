@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 const MovieCarousel = ({ movies, header}) => {
     {/* Placeholder movies */}
   const placeholderMovies = [
-    { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 1, name: "Movie 1", trailerLink: "#" },
+    { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 1, name: "Movie 1", trailerLink: "https://www.youtube.com/embed/zSWdZVtXT7E?si=w7ReOmp4NXxSyE3V" },
     { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 2, name: "Movie 2", trailerLink: "#" },
     { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 3, name: "Movie 3", trailerLink: "#" },
     { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 1, name: "Movie 4", trailerLink: "#" },
