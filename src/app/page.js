@@ -1,5 +1,5 @@
-{/* use client, components are server*/}
 'use client'
+{/* use client, components are server*/}
 
 import React from 'react';
 import CustomNavbar from './components/CustomNavbar';
