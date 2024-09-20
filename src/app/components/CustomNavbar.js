@@ -14,11 +14,8 @@ const CustomNavbar = () => {
         <Container>
             {/* Logo for navbar */}
             <Navbar.Brand className="me-auto">
-            <img
-                src="./x_pic.svg"
-                alt="Logo"
-                style={{ width: '50px' }}
-            />
+            {/* <img src="./x_pic.svg" alt="Logo" style={{ width: '50px' }}/> */}
+            MovieSite
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
