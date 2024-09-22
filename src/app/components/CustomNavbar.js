@@ -40,6 +40,7 @@ const CustomNavbar = () => {
                     id="basic-nav-dropdown"
                     align="end"
                     >
+                    <NavDropdown.Item href="admin">Admin</NavDropdown.Item>
                     <NavDropdown.Item href="#action/1">Edit Profile</NavDropdown.Item>
                     <NavDropdown.Item href="#action/2">Manage Account</NavDropdown.Item>
                     <NavDropdown.Item href="#action/2">View Order History</NavDropdown.Item>
