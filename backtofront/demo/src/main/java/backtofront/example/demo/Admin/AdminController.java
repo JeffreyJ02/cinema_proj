@@ -18,9 +18,9 @@ public class AdminController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
         if (adminService.validateAdmin(username, password)) {
-            return ResponseEntity.ok("Login successful!"); // Status 200
+            return ResponseEntity.ok("Login successful!"); 
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials!"); // Status 401
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials!"); 
     }
 }
 

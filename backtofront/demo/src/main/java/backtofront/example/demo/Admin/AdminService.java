@@ -10,6 +10,6 @@ public class AdminService {
 
     public boolean validateAdmin(String username, String password) {
         Admin admin = adminRepository.findByUsername(username);
-        return admin != null && admin.getPassword().equals(password); // use hashed password comparison in production
+        return admin != null && admin.getPassword().equals(password); 
     }
 }

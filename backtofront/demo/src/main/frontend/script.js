@@ -42,7 +42,7 @@ function displayMovies(movies) {
     });
 
     async function login(event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault(); 
     
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -54,18 +54,18 @@ function displayMovies(movies) {
                 body: new URLSearchParams({ username, password })
             });
     
-            const message = await response.text(); // Get the response message
+            const message = await response.text(); 
     
             if (response.ok) {
-                // On successful login (status code 200), display success message and redirect
-                alert(message); // Show success message
-                window.location.href = 'AdminDashBoard.html'; // Redirect to dashboard
+                
+                alert(message);
+                window.location.href = 'AdminDashBoard.html'; 
             } else {
-                // If the login fails (status code 401 or other), show error and reprompt login
+                
                 alert("Invalid credentials. Please try again.");
-                document.getElementById('username').value = ''; // Clear the form fields
+                document.getElementById('username').value = ''; 
                 document.getElementById('password').value = '';
-                window.location.href = '/admin/login'; // Redirect to login page to retry
+                window.location.href = '/admin/login'; 
             }
         } catch (error) {
             console.error('Error during login:', error);
@@ -81,7 +81,7 @@ function displayMovies(movies) {
         });
     
         const message = await response.text();
-        alert(message); // Display the server's response
+        alert(message); 
     }
     
     

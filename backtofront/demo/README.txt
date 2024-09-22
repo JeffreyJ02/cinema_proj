@@ -1,4 +1,4 @@
-In order to run this demo, first navigate to the correct directory that the files are located in
+In order to run this program, first navigate to the correct directory that the files are located in
 the starting directory will look sort of like \Github\cinema_proj, to change to the correct directory,
 type "cd .\backtofront\" this will change to the parent folder that the demo files are located.
 Then type "cd .\demo\" and this will take you to the correct folder where the files are located.
@@ -8,14 +8,15 @@ Now once you're in the \demo directory, type "mvn clean spring-boot:run", this s
 Next you want to right click on "index.html" and open with live server (if you do not have this option go to extensions in vscode and download "Live server by Ritwick Dey")
 Once you've downloaded it, try right clicking again, if it still doesn't appear, try reopening vscode and it should appear.
 
-Once the sample web page opens, there should be a button that appears in the middle of the page that says "fetch message from backend", go ahead and click it and a message should
-appear at the bottom of that button, if a message does appear, good job!, you just demonstrated how a call from the front end to the back end will work, if not, then the backend server might
-have had an issue establishing, in that case message me for troubleshooting.
+09/22/2024:
+Ok so after spending nearly 10 hour straight on this demo, I finally have a good demo as to how our cinema booking will work.
+There aren't many functions currently, HOWEVER, I have implemented a search function, that will allow any user to look up a movie,
+PROVIDED that movie exists within the database. In addition to that I have also implemented an add/delete movie function that should work well with
+with the example data base I have set up. So all in all I think this will suffice for the demo, of course it's definitely in it's early stages,
+however the foundation we currently have are, in my opinion, perfect for moving forward. Now im not entirely sure if this will seamlessly flow with
+with our frontend engineers web design, I really hope it does, but even so we know what we need now to pull entries from the database and how to add
+them and delete them from it.
 
-
-This is a very simple and barebones example of how the front end sends requests to the backend.
-In the real project we of course want the back end to handle things such as, if the user types in the name of a movie they're looking for, then the backend
-will communicate with the database to find a matching name for that movie, or if the user wishes to create an account then the front end will send the filled out form to
-the backend server to process that information (securely) and then the back end will send that information to the database to store the user's information.
-
-So yes this demo is a far cry to what we're looking for, but at least for now it shows up how we can get things running quickly.
+Admin credentials:
+User:admin
+password:adminPassword

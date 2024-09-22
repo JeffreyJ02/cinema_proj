@@ -22,7 +22,7 @@
 
                 if (response.ok) {
                     alert(message); 
-                    window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/AdminDashBoard.html'; // Change this URL as needed
+                    window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/AdminDashBoard.html'; 
                 } else {
                     document.getElementById("error-message").innerText = message;
                     document.getElementById('username').value = '';
@@ -34,13 +34,13 @@
             }
         }
         function goToIndex() {
-            window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/index.html'; // Change this URL as needed
+            window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/index.html'; 
         }
     </script>
 </head>
 <body>
     <h2>Admin Login</h2>
-    <button onclick="goToIndex()">Home</button> <!-- Index Page Button -->
+    <button onclick="goToIndex()">Home</button> 
 
     <form id="loginForm" onsubmit="login(event)">
     

@@ -14,25 +14,25 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id; // Auto-generated ID
+    private Long id; 
     
     @Column(name = "title")
-    private String title; // Matches the database column
+    private String title; 
     
     @Column(name = "description")
-    private String description; // Matches the database column
+    private String description; 
     
     @Column(name = "release_date")
-    private String releaseDate; // Matches the database column (consider changing to Date type if appropriate)
+    private String releaseDate; 
     
     @Column(name = "genre")
-    private String genre; // Matches the database column
+    private String genre; 
     
     @Column(name = "trailer_url")
-    private String trailerUrl; // Matches the database column
+    private String trailerUrl; 
     
     @Column(name = "category")
-    private String category; // Matches the database column
+    private String category; 
 }
 
 

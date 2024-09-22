@@ -18,27 +18,27 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
-    // Fetch all movies
+    
     public List<Movie> getAllMovies() {
         List<Movie> movies = movieRepository.findAll();
         logger.info("Fetched Movies: {}", movies);
         return movies;
     }
 
-    // Find movies by title
+    
     public List<Movie> findMoviesByTitle(String title) {
         List<Movie> movies = movieRepository.findByTitleContaining(title);
         logger.info("Movies matching title '{}': {}", title, movies);
         return movies;
     }
 
-    // Add a movie to the database
+    
     public void addMovie(Movie movie) {
         movieRepository.save(movie);
         logger.info("Added movie: {}", movie);
     }
 
-    // Delete a movie by ID
+    
     public boolean deleteMovieById(Long id) {
         if (movieRepository.existsById(id)) {
             movieRepository.deleteById(id);

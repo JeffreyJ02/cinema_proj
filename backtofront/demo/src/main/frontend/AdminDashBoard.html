@@ -51,19 +51,19 @@
             }
         }
         function logout() {
-            // Redirect to the login page
-            window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/AdminLogin.html'; // Change this URL as needed
+            
+            window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/AdminLogin.html'; 
         }
         function goToIndex() {
-            window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/index.html'; // Change this URL as needed
+            window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/index.html'; 
         }
     </script>
 </head>
 <body>
     <h1>Admin Dashboard</h1>
 
-    <button onclick="logout()">Logout</button> <!-- Logout Button -->
-    <button onclick="goToIndex()">Home</button> <!-- Index Page Button -->
+    <button onclick="logout()">Logout</button> 
+    <button onclick="goToIndex()">Home</button> 
 
     <h2>Add Movie</h2>
     <form id="movieForm" onsubmit="addMovie(event)">

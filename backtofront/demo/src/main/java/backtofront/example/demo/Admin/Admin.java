@@ -8,6 +8,6 @@ import lombok.Data;
 @Entity
 public class Admin {
     @Id
-    private String username; // unique identifier
-    private String password; // store hashed password
+    private String username; 
+    private String password; 
 }
