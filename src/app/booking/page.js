@@ -8,6 +8,7 @@ import MovieInfo from '../components/MovieInfo';
 import styles from './page.css';
 import TicketView from '../components/TicketView';
 import Button from '@mui/material/Button';
+import SeatGrid from '../components/SeatGrid';
 
 export default function Home() {
     const [activeTab, setActiveTab] = useState('home');
@@ -30,7 +31,7 @@ export default function Home() {
         synopsis: "A movie about space",
         rating: "PG-13"
     };
-
+    // TODO edit home, profile, etc placeholder from bootstrap
     return (
         <div>
             <CustomNavbar />
@@ -100,6 +101,7 @@ export default function Home() {
                         >
                             Seats Content
                             <img src="./screen.svg" alt="Seats SVG" />
+                            <SeatGrid nSeats={5} />
                         </div>
                         <div
                             className={`tab-pane fade ${activeTab === 'contact' ? 'show active' : ''}`}
