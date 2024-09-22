@@ -1,4 +1,4 @@
-package backtofront.example.demo;
+/*package backtofront.example.demo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,4 +16,4 @@ public class MyController {
         response.put("message", "Hello from the backend!");
         return ResponseEntity.ok(response);
     }
-}
+}*/

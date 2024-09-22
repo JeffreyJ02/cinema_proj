@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <script>
+        async function login(event) {
+            event.preventDefault(); 
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:8080/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username, password })
+                });
+
+                const message = await response.text(); 
+
+                if (response.ok) {
+                    alert(message); 
+                    window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/AdminDashBoard.html'; // Change this URL as needed
+                } else {
+                    document.getElementById("error-message").innerText = message;
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                document.getElementById("error-message").innerText = 'An error occurred. Please try again.';
+            }
+        }
+        function goToIndex() {
+            window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/index.html'; // Change this URL as needed
+        }
+    </script>
+</head>
+<body>
+    <h2>Admin Login</h2>
+    <button onclick="goToIndex()">Home</button> <!-- Index Page Button -->
+
+    <form id="loginForm" onsubmit="login(event)">
+    
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="submit">Login</button>
+    </form>
+
+    <div id="error-message" style="color: red;"></div>
+</body>
+</html>

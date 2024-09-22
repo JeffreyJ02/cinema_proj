@@ -1,21 +1,89 @@
-document.getElementById('fetchMessage').addEventListener('click', () => {
-    fetch('http://localhost:8080/api/message', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json(); // Parse JSON
-    })
-    .then(data => {
-        console.log('Success:', data);
-        document.getElementById('message').innerText = data.message; // Update the UI with the fetched data
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+document.getElementById('searchButton').addEventListener('click', function() {
+    const searchInput = document.getElementById('searchInput').value;
+    fetchMovies(searchInput);
 });
+
+const fetchMovies = async (title) => {
+    try {
+        const response = await fetch(`http://localhost:8080/api/search?title=${title}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        const data = await response.json();
+        console.log('Fetched movies:', data);
+    } catch (error) {
+        console.error('Error fetching movies:', error);
+    }
+};
+
+// Example usage:
+fetchMovies('Inception');
+
+
+function displayMovies(movies) {
+    const movieList = document.getElementById('movieList');
+    movieList.innerHTML = ''; // Clear previous results
+    if (movies.length === 0) {
+        movieList.innerText = 'No movies found';
+        return;
+    }
+    movies.forEach(movie => {
+        const movieItem = document.createElement('div');
+        movieItem.innerHTML = `
+            <h3>${movie.title}</h3>
+            <p><strong>Description:</strong> ${movie.description}</p>
+            <p><strong>Release Date:</strong> ${movie.releaseDate}</p>
+            <p><strong>Genre:</strong> ${movie.genre}</p>
+            <p><strong>Category:</strong> ${movie.category}</p>
+            <iframe width="560" height="315" src="${movie.trailerUrl}" frameborder="0" allowfullscreen></iframe>
+            <hr>
+        `;
+        movieList.appendChild(movieItem);
+    });
+
+    async function login(event) {
+        event.preventDefault(); // Prevent default form submission
+    
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+    
+        try {
+            const response = await fetch('http://localhost:8080/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ username, password })
+            });
+    
+            const message = await response.text(); // Get the response message
+    
+            if (response.ok) {
+                // On successful login (status code 200), display success message and redirect
+                alert(message); // Show success message
+                window.location.href = 'AdminDashBoard.html'; // Redirect to dashboard
+            } else {
+                // If the login fails (status code 401 or other), show error and reprompt login
+                alert("Invalid credentials. Please try again.");
+                document.getElementById('username').value = ''; // Clear the form fields
+                document.getElementById('password').value = '';
+                window.location.href = '/admin/login'; // Redirect to login page to retry
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            alert('An error occurred. Please try again.');
+        }
+    }
+    
+
+    async function deleteMovie(id) {
+        const response = await fetch(`http://localhost:8080/api/admin/movies/delete/${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        });
+    
+        const message = await response.text();
+        alert(message); // Display the server's response
+    }
+    
+    
+}
+

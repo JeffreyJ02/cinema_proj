@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AdminDashboard</title>
+    <script>
+        async function addMovie(event) {
+            event.preventDefault();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const releaseDate = document.getElementById('releaseDate').value;
+            const genre = document.getElementById('genre').value;
+            const trailerUrl = document.getElementById('trailerUrl').value;
+            const category = document.getElementById('category').value;
+
+            try {
+                const response = await fetch('http://localhost:8080/api/admin/movies/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, description, releaseDate, genre, trailerUrl, category })
+                });
+
+                const message = await response.text();
+                if (!response.ok) {
+                    throw new Error(message);
+                }
+                alert(message);
+                document.getElementById('movieForm').reset();
+            } catch (error) {
+                alert('Error adding movie: ' + error.message);
+            }
+        }
+
+        async function deleteMovie(event) {
+            event.preventDefault();
+            const movieId = document.getElementById('movieId').value;
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/admin/movies/delete/${movieId}`, {
+                    method: 'DELETE'
+                });
+
+                const message = await response.text();
+                if (!response.ok) {
+                    throw new Error(message);
+                }
+                alert(message);
+                document.getElementById('deleteForm').reset();
+            } catch (error) {
+                alert('Error deleting movie: ' + error.message);
+            }
+        }
+        function logout() {
+            // Redirect to the login page
+            window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/AdminLogin.html'; // Change this URL as needed
+        }
+        function goToIndex() {
+            window.location.href = 'http://127.0.0.1:5500/backtofront/demo/src/main/frontend/index.html'; // Change this URL as needed
+        }
+    </script>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+
+    <button onclick="logout()">Logout</button> <!-- Logout Button -->
+    <button onclick="goToIndex()">Home</button> <!-- Index Page Button -->
+
+    <h2>Add Movie</h2>
+    <form id="movieForm" onsubmit="addMovie(event)">
+        <label for="title">Title:</label>
+        <input type="text" id="title" required><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" required></textarea><br>
+
+        <label for="releaseDate">Release Date:</label>
+        <input type="date" id="releaseDate" required><br>
+
+        <label for="genre">Genre:</label>
+        <input type="text" id="genre" required><br>
+
+        <label for="trailerUrl">Trailer URL:</label>
+        <input type="url" id="trailerUrl"><br>
+
+        <label for="category">Category (e.g., "Now Showing", "Coming Soon"):</label>
+        <input type="text" id="category" required><br>
+
+        <button type="submit">Add Movie</button>
+    </form>
+
+    <br>
+
+    <h2>Delete Movie</h2>
+    <form id="deleteForm" onsubmit="deleteMovie(event)">
+        <label for="movieId">Movie ID:</label>
+        <input type="number" id="movieId" required><br>
+
+        <button type="submit">Delete Movie</button>
+    </form>
+</body>
+</html>
