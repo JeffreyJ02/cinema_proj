@@ -75,7 +75,7 @@ function LoginPage() {
                      placeholder="Password"
                  />
                  <button 
-                     class="donbutton"
+                     class="dbutton"
                      type="submit"
                      //value={isLoggedIn}
                      onClick={handleSubmit}
