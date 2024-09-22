@@ -1,0 +1,70 @@
+img {
+    object-fit: cover;
+    width: 400px;
+    height: 400px;
+    position: center;
+    margin: 20px;
+    z-index: -1;
+  }
+  
+  
+  .loginPage-container{
+    max-width: 25rem;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    
+  }
+  
+  .loginPage-container input {
+    color: black;
+    font: inherit;
+    border: 1.5px solid #ccc;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: rgb(247, 247, 247);
+    border-radius: 10px;
+    width: 91%;
+  }
+  
+  .loginPage-container > h1 {
+    color: #020308;
+    font-size: 100px;
+    font-family: monospace;
+    margin-top: -100px;
+  }
+  
+  .loginPage-container > p {
+    margin-top: 50px;
+    color: #0c0c0c;
+    font-family: monospace;
+    font-size: 32px;
+  }
+  
+  .loginPage-btns {
+    margin-top: 32px;
+  }
+  .donbutton {
+    padding: 10px;
+    background-color:#242222;
+    color: #fff;
+    border: none;
+    padding: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .donbutton:hover {
+    background-color: gray
+  }
+  
+  .donbutton:active {
+     background-color: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
+  }
+  
+  .logIn a{
+     color: red;
+  }

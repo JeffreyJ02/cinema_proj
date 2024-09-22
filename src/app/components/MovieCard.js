@@ -19,6 +19,7 @@ const MovieCard = ({ movie }) => {
           {/* Button to show trailer, onClick sets state to true adn
           conditionally renders the Youtube embed*/}
           <Button variant="primary" onClick={trailerButton}>Watch Trailer</Button>
+          <Button variant="primary" href="booking" >Book</Button>
           {showTrailer && <YoutubeEmbed trailerLink={movie.trailerLink} />}
         </div>
     </div>
