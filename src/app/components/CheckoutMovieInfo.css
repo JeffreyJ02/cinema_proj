@@ -1,0 +1,35 @@
+.movie-box {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid black;
+  }
+  
+  .poster-container {
+    flex-shrink: 0;
+    margin-right: 20px;
+  }
+  
+  .movie-poster {
+    max-width: 100px; 
+    height: auto;
+    border-radius: 4px;
+  }
+  
+  .info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .info h3 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .info p {
+    margin: 5px 0 0;
+    font-size: 1em;
+  }
+  

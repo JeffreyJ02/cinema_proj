@@ -12,7 +12,7 @@ const MovieInfo = ({ movie }) => {
 
   return (
     <div>
-      <div classname="poster-container">
+      <div className="poster-container">
         <h3>{movie.name}</h3>
         <img src={movie.img} alt={movie.name} className="movie-poster" />
         <div className="movie-info">
