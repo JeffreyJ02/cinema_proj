@@ -32,8 +32,9 @@ const MovieCard = ({ movie }) => {
       {/* Container for the movie card itself */}
       <div className='container-mov'>
         <div className="card">
-          {/* Movie image */}     
+          {/* Movie image */}
           <img src={movie.img} alt={movie.name} style={{ width: '100%', height: 'auto' }}/>
+          <h6 className='rating'>{movie.rating}</h6>
           <div className="movie-buttons">
             {/* Button to show trailer, onClick sets state to true adn
             conditionally renders the Youtube embed*/}
