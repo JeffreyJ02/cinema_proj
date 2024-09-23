@@ -1,0 +1,40 @@
+.movie-info-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin: 20px;
+  }
+
+  .movie-container {
+    flex: 1;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .movie-title {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .movie-poster {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .info-container {
+    flex: 2;
+    padding: 10px;
+  }
+  
+  h3 {
+    margin-bottom: 5px;
+  }
+  
+  p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
