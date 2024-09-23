@@ -26,7 +26,7 @@ const EditProfile = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter new email"
+          placeholder="Enter email"
         />
       </label>
       <br />
