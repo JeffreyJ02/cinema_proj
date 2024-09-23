@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import './SignUpPage.css';
 
 const SignUpPage = () => {
@@ -39,9 +39,9 @@ const SignUpPage = () => {
                 console.log(data, "userRegister");
             });
     };
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const handleLogin = () => {
-        navigate('/Login-Page');
+        router.push('/SignUpPage');
     }
 
     return (
