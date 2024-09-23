@@ -1,9 +1,8 @@
-'use client';
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; 
+import React,{useState} from 'react';
+import './LoginPage.css';
+import { useRouter } from 'next/navigation';
 
-
-function LoginForm() {
+function LoginPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const router = useRouter(); 
 
@@ -56,39 +55,39 @@ function LoginForm() {
                 console.error('Error:', error);
             });
     };
-
-    return (
-        <div className='loginPage-container'>
-            <h2>Log in</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type='email'
-                    name='email'
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder='Email'
-                />
-                <input
-                    type='password'
-                    name='password'
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    placeholder='Password'
-                />
-                <button className='donbutton' type='submit'>
-                    Log In
-                </button>
-                <div className='logIn'>
-                    <p>
-                        Don't have an account already? 
-                        <span onClick={handleSignUp}>
-                        Sign Up
-                        </span>
-                    </p>
-                </div>
-            </form>
-        </div>
-    );
-}
-
-export default LoginForm;
+ 
+     return(
+         <div className='loginPage-container' >
+             <h2>Log in</h2>
+             <form onSubmit={handleSubmit}>
+                 <input
+                     type="email"
+                     name="email"
+                     value={formData.email}
+                     onChange={handleInputChange}
+                     placeholder="Email"
+                 />
+                 <input
+                     type="password"
+                     name="password"
+                     value={formData.password}
+                     onChange={handleInputChange}
+                     placeholder="Password"
+                 />
+                 <button 
+                     class="donbutton"
+                     type="submit"
+                     //value={isLoggedIn}
+                     onClick={handleSubmit}
+                     >
+                         Log In
+                         </button>
+                     <div className='logIn'>
+                         <p>Dont have an account already? <a href="#">Sign Up</a></p>
+                         </div>
+             </form>
+         </div>
+     );
+ }
+ 
+ export default LoginPage;
