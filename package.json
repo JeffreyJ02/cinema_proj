@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "connect": "node --env-file .env connect.js",
     "start": "next start",
     "lint": "next lint"
   },
