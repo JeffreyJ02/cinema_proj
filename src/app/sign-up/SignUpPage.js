@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import './SignUpPage.css';
 
 const SignUpPage = () => {
@@ -39,9 +39,9 @@ const SignUpPage = () => {
                 console.log(data, "userRegister");
             });
     };
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
     const handleLogin = () => {
-        router.push('/SignUpPage');
+        navigate('/Login-Page');
     }
 
     return (
@@ -62,7 +62,7 @@ const SignUpPage = () => {
                     onClick={handleSubmit}
                 >Sign Up</button>
                 <div className='signIn'>
-                    <p>Already have an account? <a href="/sign-in">Sign In</a></p>
+                    <p>Already have an account? <button onClick={handleLogin}>Sign In</button></p>
                     </div>
             </form>
         </div>

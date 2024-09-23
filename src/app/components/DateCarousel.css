@@ -1,0 +1,28 @@
+.slider-container {
+    max-width: 80%;
+    margin: 0 auto; 
+    padding: 20px 0; 
+    position: relative;
+  }
+  
+  .card {
+    padding: 10px;
+    margin: 0 10px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    text-align: center;
+    border-radius: 8px;
+  }
+  
+  .slick-arrow {
+    z-index: 2;
+  }
+  
+  .slick-prev {
+    left: -40px !important;
+  }
+  
+  .slick-next {
+    right: -40px !important;
+  }
+  
