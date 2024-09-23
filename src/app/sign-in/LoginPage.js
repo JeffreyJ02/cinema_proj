@@ -83,7 +83,7 @@ function LoginPage() {
                          Log In
                          </button>
                      <div className='logIn'>
-                         <p>Dont have an account already? <a href="#">Sign Up</a></p>
+                         <p>Dont have an account already? <a href="/sign-up">Sign Up</a></p>
                          </div>
              </form>
          </div>

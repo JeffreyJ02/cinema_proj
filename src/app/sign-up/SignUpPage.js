@@ -62,7 +62,7 @@ const SignUpPage = () => {
                     onClick={handleSubmit}
                 >Sign Up</button>
                 <div className='signIn'>
-                    <p>Already have an account? <button onClick={handleLogin}>Sign In</button></p>
+                    <p>Already have an account? <a href="/sign-in">Sign In</a></p>
                     </div>
             </form>
         </div>
