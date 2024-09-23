@@ -9,7 +9,7 @@ import LoginPage from './LoginPage';
 export default function Home() {
     return (
         <div>
-            <CustomNavbar />
+            
             <h1>Sign In</h1>
             <LoginPage />
         </div>
