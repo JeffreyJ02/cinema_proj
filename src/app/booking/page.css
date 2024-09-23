@@ -47,6 +47,30 @@
   right: 20px;
 }
 
+.seats-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.screen-svg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  gap: 0px;
+  color: black;
+}
+
+.screen-svg > * {
+  margin: 0;
+  padding: 0;
+}
+
 /* kicks in when screen is less than 768px */
 @media (max-width: 768px) {
   .content-layout {

@@ -96,7 +96,6 @@ export default function Home() {
                 role="tabpanel"
                 aria-labelledby="home-tab"
               >
-                Showtimes content
                 <DateCarousel />
                 <ShowtimeButtons />
               </div>
@@ -107,7 +106,10 @@ export default function Home() {
                 aria-labelledby="profile-tab"
               >
                 <div className="seats-content">
-                    <img src="./screen.svg" alt="Seats SVG" />
+                    <div className="screen-svg">
+                        <img src="./screen.svg" alt="Seats SVG" />
+                        <h6 className='screen-text'>SCREEN</h6>
+                    </div>
                     <SeatGrid nSeats={5} />
                 </div>
               </div>

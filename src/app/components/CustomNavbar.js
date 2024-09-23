@@ -1,8 +1,10 @@
 'use client'
 import React from 'react';
-import { Navbar, Nav, Container, Form, FormControl, NavDropdown, Button} from 'react-bootstrap';
+import { Navbar, Nav, Container, Form, FormControl, NavDropdown} from 'react-bootstrap';
 import { useRouter } from "next/navigation";
-
+import Button from '@mui/material/Button';
+import SearchIcon from '@mui/icons-material/Search';
+import IconButton from '@mui/material/IconButton';
 const CustomNavbar = () => {
     const router = useRouter();
     const signInButton = () => {
@@ -21,12 +23,15 @@ const CustomNavbar = () => {
             <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
             <Nav className="ml-auto d-flex align-items-center">
                 <Form className="d-flex me-3">
-                <FormControl
-                    type="search"
-                    placeholder="Search"
-                    className="me-2"
-                    aria-label="Search"
-                />
+                    <FormControl
+                        type="search"
+                        placeholder="Search"
+                        className="me-2"
+                        aria-label="Search"
+                    />
+                    <IconButton type="submit" aria-label="search">
+                        <SearchIcon />
+                    </IconButton>
                 </Form>
                 {/* Dropdown menu */}
                 <NavDropdown
@@ -49,9 +54,9 @@ const CustomNavbar = () => {
                     <NavDropdown.Item href="#action/3">Sign Out</NavDropdown.Item>
                 </NavDropdown>
             </Nav>
-            </Navbar.Collapse>
             {/* Sign In Button */}
             <Button variant="primary" onClick={signInButton}>Sign In</Button>
+            </Navbar.Collapse>
         </Container>
         </Navbar>
     );
