@@ -1,0 +1,84 @@
+.main-content {
+  padding: 20px;
+}
+
+.content-layout {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.user-interactable-content {
+  flex: 1;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+  max-width: 60%;
+}
+
+.movie-details {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 40%;
+}
+
+.movie-info {
+  text-align: center;
+}
+
+.movie-info img {
+  max-width: 100px;
+  margin-bottom: 10px;
+}
+
+.movie-poster {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.checkout {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.seats-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.screen-svg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  gap: 0px;
+  color: black;
+}
+
+.screen-svg > * {
+  margin: 0;
+  padding: 0;
+}
+
+/* kicks in when screen is less than 768px */
+@media (max-width: 768px) {
+  .content-layout {
+    flex-direction: column;
+  }
+
+  .movie-details,
+  .user-interactable-content {
+    max-width: 100%;
+  }
+}

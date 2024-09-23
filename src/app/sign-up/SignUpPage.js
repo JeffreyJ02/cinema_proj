@@ -39,7 +39,7 @@ const SignUpPage = () => {
                 console.log(data, "userRegister");
             });
     };
-    //const navigate = useNavigate();
+    
     const handleLogin = () => {
         router.push('/SignUpPage');
     }
@@ -62,7 +62,7 @@ const SignUpPage = () => {
                     onClick={handleSubmit}
                 >Sign Up</button>
                 <div className='signIn'>
-                    <p>Already have an account? <a href="/sign-in">Sign In</a></p>
+                    <p>Already have an account? <a href = "/sign-in">Sign In</a></p>
                     </div>
             </form>
         </div>
