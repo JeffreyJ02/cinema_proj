@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import OrderConfirmation from "./OrderConfirmation";
 import { useState } from "react";
 import OrderDetails from "./OrderDetails";
+
 export default function Checkout( {order} ) {
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -11,7 +12,8 @@ export default function Checkout( {order} ) {
         event.preventDefault();
         setIsSubmitted(true);
     };
-
+    
+    {/* If the form is submitted, show the order confirmation instead of the return block below*/}
     if (isSubmitted) {
         return <OrderConfirmation order={order}/>;
     }

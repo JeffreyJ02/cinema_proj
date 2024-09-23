@@ -56,12 +56,13 @@ function SwipeToSlide() {
     new Date(new Date().setDate(new Date().getDate() + 6)),
   ];
 
+  // Arrow component for the slider, from react-slick documentation
   function Arrow(props) {
     const { className, style, onClick } = props;
     return (
       <div
         className={className}
-        style={{ ...style, display: 'block', background: 'red', right: '-25px' }}
+        style={{ ...style, display: 'block', background: 'grey', right: '-25px'}}
         onClick={onClick}
       />
     );
@@ -71,9 +72,9 @@ function SwipeToSlide() {
     <div className="slider-container">
       <Slider {...settings}>
         {/* Map through the placeholder dates and create a DateCard for each */}
-      {pDates.map((date, index) => (
-                <DateCard key={index} current={date}/>
-                ))}
+        {pDates.map((date, index) => (
+          <DateCard key={index} current={date}/>
+        ))}
       </Slider>
     </div>
   );

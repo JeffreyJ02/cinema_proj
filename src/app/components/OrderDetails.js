@@ -12,15 +12,16 @@ const OrderDetails = ( {order} ) => {
 
     return (
         <div>
-        <h1>Order Details</h1>
-        <p>My Seats: {order.seats}</p>
-        <p>My Tickets: </p>
-        <ul>
-            <li>Adult: {adult} x ${adultPrice} = ${totalAdult}</li>
-            <li>Child: {child} x ${childPrice} = ${totalChild}</li>
-            <li>Senior: {senior} x ${seniorPrice} = ${totalSenior}</li>
-        </ul>
-        <p>Total: ${total}</p>
+            {/* This component displays the order totals when given an order object */}
+            <h1>Order Details</h1>
+            <p>My Seats: {order.seats}</p>
+            <p>My Tickets: </p>
+            <ul>
+                <li>Adult: {adult} x ${adultPrice} = ${totalAdult}</li>
+                <li>Child: {child} x ${childPrice} = ${totalChild}</li>
+                <li>Senior: {senior} x ${seniorPrice} = ${totalSenior}</li>
+            </ul>
+            <p>Total: ${total}</p>
         </div>
     );
 };

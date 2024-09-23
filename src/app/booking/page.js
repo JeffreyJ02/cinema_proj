@@ -23,6 +23,7 @@ export default function Home() {
         senior: 0,
     });
 
+    // JS Object for a movie
     const placeholderMovie = {
         img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg",
         id: 1,
@@ -35,13 +36,16 @@ export default function Home() {
     return (
         <div>
             <CustomNavbar />
+            {/* Movie Info component */}
             <div className="movie-details">
                 <MovieInfo movie={placeholderMovie} />
             </div>
+            {/* Main container for the page */}
             <div className="main-container">
                 <div className="user-interactable-content">
                     {/* Navtab component from Bootstrap*/}
                     <ul className="nav nav-tabs" id="myTab" role="tablist">
+                        {/* These are all for the tabs themselves, the content within them is further down */}
                         <li className="nav-item" role="presentation">
                             <button
                                 className={`nav-link ${activeTab === 'home' ? 'active' : ''}`}
@@ -82,6 +86,7 @@ export default function Home() {
                             </button>
                         </li>
                     </ul>
+                    {/* Tab content */}
                     <div className="tab-content" id="myTabContent">
                         <div
                             className={`tab-pane fade ${activeTab === 'home' ? 'show active' : ''}`}
@@ -100,6 +105,7 @@ export default function Home() {
                             aria-labelledby="profile-tab"
                         >
                             Seats Content
+                            {/* <SeatGrid nSeats={5} /> creates a grid of seats N*N */}
                             <img src="./screen.svg" alt="Seats SVG" />
                             <SeatGrid nSeats={5} />
                         </div>
@@ -113,6 +119,8 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
+                {/* Checkout button, currently disabled, once more functionality is implemented
+                have this enable once the user has specified what tickets they want */}
                 <Button variant="contained" color="primary" disabled className='checkout'>Continue to Checkout</Button>
             </div>
         </div>

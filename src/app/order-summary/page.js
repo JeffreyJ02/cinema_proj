@@ -8,7 +8,6 @@ import { Button } from 'react-bootstrap';
 import OrderConfirmation from '../components/OrderConfirmation';
 
 export default function Home() {
-    const [isCheckout, setIsCheckout] = useState(false);
 
     const placeholderMovie = {
         img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg",
@@ -25,12 +24,9 @@ export default function Home() {
         tickets: {adult: 2, child: 1, senior: 0, adultPrice: 10, childPrice: 5, seniorPrice: 7}
     };
 
-    const handleCheckout = () => {
-        setIsCheckout(true);
-    };
-
     return (
         <div>
+            {/* Movie Info and details component, displays the info given a movie object */}
             <CheckoutMovieInfo movie={placeholderMovie} />
             <OrderDetails order={placeholderOrder} />
             <Button variant="primary" href="booking">Edit Order</Button>

@@ -21,6 +21,7 @@ const MovieInfo = ({ movie }) => {
           {showTrailer && <YoutubeEmbed embedId={movie.trailerLink} />}
         </div>
       </div>
+      {/* Info about the movie, shown using info from given movie obkect */}
       <div className="info">
             <h3>Synopsis</h3>
           <p>{movie.synopsis}</p>
