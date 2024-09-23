@@ -48,6 +48,7 @@ export default function Checkout( {order} ) {
                     <Button variant="btn btn-outline-primary">Apply</Button>
                 </label>
                 <button type="submit">Checkout</button>
+                <Button variant="btn btn-outline-primary" href="/order-summary">Back</Button>
             </form>
             <OrderDetails order={order} />
         </div>
