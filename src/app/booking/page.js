@@ -5,7 +5,7 @@ import CustomNavbar from '../components/CustomNavbar';
 import DateCarousel from '../components/DateCarousel';
 import ShowtimeButtons from '../components/ShowtimeButtons';
 import MovieInfo from '../components/MovieInfo';
-import './page.css';
+import styles from './page.css';
 import TicketView from '../components/TicketView';
 import Button from '@mui/material/Button';
 import SeatGrid from '../components/SeatGrid';
@@ -96,8 +96,10 @@ export default function Home() {
                 role="tabpanel"
                 aria-labelledby="home-tab"
               >
-                <DateCarousel />
-                <ShowtimeButtons />
+                <div className="showtime-content">
+                  <DateCarousel />
+                  <ShowtimeButtons />
+                </div>
               </div>
               <div
                 className={`tab-pane fade ${activeTab === 'profile' ? 'show active' : ''}`}

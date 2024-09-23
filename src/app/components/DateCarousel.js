@@ -3,11 +3,31 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './DateCarousel.css';
-import next from 'next';
 import DateCard from './DateCard';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
+const SamplePrevArrow = (props) => {
+  const { className, style, onClick } = props;
+  return(
+    <div onClick={onClick} className={`arrow ${className}`} >
+      <ArrowBackIcon className="arrows" style={{color:"black"}}/>
+    </div>
+  )
+  }
+
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return(
+    <div onClick={onClick} className={`arrow ${className}`} >
+      <ArrowForwardIcon className="arrows" style={{color:"black"}}/>
+    </div>
+  )
+}
+
 
 function SwipeToSlide() {
-    // Settings from https://react-slick.neostack.com/docs/example/responsive
+  // Settings from https://react-slick.neostack.com/docs/example/responsive
   var settings = {
     dots: true,
     infinite: false,
@@ -15,8 +35,8 @@ function SwipeToSlide() {
     slidesToShow: 4,
     slidesToScroll: 4,
     initialSlide: 0,
-    nextArrow: <Arrow />,
-    prevArrow: <Arrow />,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
     responsive: [
       {
         breakpoint: 1024,
@@ -44,7 +64,7 @@ function SwipeToSlide() {
       }
     ]
   };
-
+  
   // Placeholder array of dates, today, tomorrow, day after tomorrow, etc
   const pDates = [
     new Date(),
@@ -56,24 +76,12 @@ function SwipeToSlide() {
     new Date(new Date().setDate(new Date().getDate() + 6)),
   ];
 
-  // Arrow component for the slider, from react-slick documentation
-  function Arrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={className}
-        style={{ ...style, display: 'block', background: 'grey', right: '-25px'}}
-        onClick={onClick}
-      />
-    );
-  }
-
   return (
     <div className="slider-container">
       <Slider {...settings}>
         {/* Map through the placeholder dates and create a DateCard for each */}
         {pDates.map((date, index) => (
-          <DateCard key={index} current={date}/>
+          <DateCard key={index} current={date} />
         ))}
       </Slider>
     </div>

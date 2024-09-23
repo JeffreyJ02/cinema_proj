@@ -28,6 +28,7 @@ const CustomNavbar = () => {
                         placeholder="Search"
                         className="me-2"
                         aria-label="Search"
+                        id="navbar-search"
                     />
                     <IconButton type="submit" aria-label="search">
                         <SearchIcon />
