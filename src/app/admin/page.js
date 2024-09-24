@@ -13,7 +13,7 @@ export default function Home() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // TO DO: Implement authentication logic here
+    
     // For demo purposes, assume admin credentials are "admin@gmail.com", "password", and "123"
     if (email === 'admin@gmail.com' && password === 'password' && adminKey === '123') {
       setIsLoggedIn(true);
@@ -21,7 +21,7 @@ export default function Home() {
       setError('Invalid email, password, or admin key');
     }
   };
-
+  //once logged in then these buttons will appear
   if (isLoggedIn) {
     return (
       <div>
