@@ -1,20 +1,28 @@
-import React from 'react';
-import MovieCard from './MovieCard';
+import axios from 'axios'; // For API requests
+import { useEffect, useState } from 'react';
 import Slider from 'react-slick';
+import 'slick-carousel/slick/slick-theme.css'; // Import slick-carousel styles
+import 'slick-carousel/slick/slick.css';
+import MovieCard from './MovieCard';
 
-const MovieCarousel = ({ movies, header }) => {
-    {/* Placeholder movies */}
-  const placeholderMovies = [
-    { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 1, name: "Movie 1", rating: "PG-13", trailerLink: "https://www.youtube.com/embed/zSWdZVtXT7E?si=w7ReOmp4NXxSyE3V" },
-    { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 2, name: "Movie 2", rating: "PG-13", trailerLink: "#" },
-    { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 3, name: "Movie 3", rating: "PG-13", trailerLink: "#" },
-    { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 1, name: "Movie 4", rating: "PG-13", trailerLink: "#" },
-    { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 1, name: "Movie 5", rating: "PG-13", trailerLink: "#" },
-    { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 1, name: "Movie 6", rating: "PG-13", trailerLink: "#" },
-    { img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg", id: 1, name: "Movie 7", rating: "PG-13", trailerLink: "#" },
-  ];
+const MovieCarousel = ({ header }) => {
+  const [movies, setMovies] = useState([]); // State to hold movie data
 
-  {/* Settings for carousel from react-slick, taken from https://react-slick.neostack.com/*/}
+  // Fetch movie data from the backend
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/movies'); // Your API URL
+        setMovies(response.data); // Set the movie data into the state
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+      }
+    };
+
+    fetchMovies();
+  }, []);
+
+  // Settings for the react-slick carousel
   const settings = {
     centerPadding: "60px",
     infinite: true,
@@ -43,13 +51,16 @@ const MovieCarousel = ({ movies, header }) => {
 
   return (
     <div>
-        <h1>{header}</h1>
+      <h1>{header}</h1>
+      {movies.length > 0 ? ( // Check if movies are available
         <Slider {...settings}>
-            {/* Loop through movies provided in movies param, currently set to placeholder */}
-            {placeholderMovies.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-                ))}
+          {movies.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} />
+          ))}
         </Slider>
+      ) : (
+        <p>Loading movies...</p> // Loading state
+      )}
     </div>
   );
 };
