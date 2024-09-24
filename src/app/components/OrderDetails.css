@@ -1,0 +1,29 @@
+/* OrderDetails.css */
+.order-details-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+  
+  .order-details-header {
+    background-color: #007bff;
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .order-details-body {
+    padding: 20px;
+  }
+  
+  .order-details-list {
+    margin-top: 10px;
+  }
+  
+  .total-amount {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #333;
+  }
+  
