@@ -1,30 +1,9 @@
-import axios from 'axios'; // For API requests
-import { useEffect, useState } from 'react';
 import Slider from 'react-slick';
-import 'slick-carousel/slick/slick-theme.css'; // Import slick-carousel styles
-import 'slick-carousel/slick/slick.css';
 import MovieCard from './MovieCard';
 
-const MovieCarousel = ({ header }) => {
-  const [movies, setMovies] = useState([]); // State to hold movie data
-
-  // Fetch movie data from the backend
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/movies');
-        setMovies(response.data); // Set the movie data into the state
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-      }
-    };
-
-    fetchMovies();
-  }, []);
-
-  // Settings for the react-slick carousel
+const MovieCarousel = ({ movies, header }) => {
   const settings = {
-    centerPadding: "60px",
+    centerPadding: "90px",
     infinite: true,
     speed: 500,
     slidesToShow: 5,
@@ -33,7 +12,7 @@ const MovieCarousel = ({ header }) => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 3,
           slidesToScroll: 1,
           infinite: true,
           dots: true,
@@ -52,15 +31,11 @@ const MovieCarousel = ({ header }) => {
   return (
     <div>
       <h1>{header}</h1>
-      {movies.length > 0 ? ( // Check if movies are available
-        <Slider {...settings}>
-          {movies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))}
-        </Slider>
-      ) : (
-        <p>Loading movies...</p> // Loading state
-      )}
+      <Slider {...settings}>
+        {movies.map((movie) => (
+          <MovieCard key={movie.id} movie={movie} />
+        ))}
+      </Slider>
     </div>
   );
 };

@@ -30,12 +30,17 @@ const MovieCard = ({ movie }) => {
       {/* Movie Card */}
       <div className="card">
         <img
+        /* Movie image */
           src={movie.imageUrl}
           alt={movie.title}
         />
+         {/* Button to show trailer, onClick sets state to true adn
+            conditionally renders the Youtube embed*/}
+            {/*<Button variant="primary" onClick={trailerButton}>Watch Trailer</Button>*/}
         <div className="movie-buttons">
           <Button variant="primary" onClick={handleShow}>Watch Trailer</Button>
           <Button variant="primary" href="/booking">Book</Button>
+           {/*showTrailer && <YoutubeEmbed trailerLink={movie.trailerLink} />*/}
         </div>
         <div className="rating">PG-13</div>
         <div className="movie-info">
