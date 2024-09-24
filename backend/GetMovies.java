@@ -17,6 +17,7 @@ public class GetMovies {
             while (result.next()) {
                 System.out.println(result.getString("title"));
             }
+            System.out.println("done");
         }
         catch (Exception e) {
             System.out.println(e);
