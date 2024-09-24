@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import './MovieCard.css'; // Ensure the correct path to your CSS file
+import './MovieCard.css';
 import YoutubeEmbed from './YoutubeEmbed';
 
 const MovieCard = ({ movie }) => {
@@ -30,7 +30,7 @@ const MovieCard = ({ movie }) => {
       {/* Movie Card */}
       <div className="card">
         <img
-          src={movie.imageUrl} // Use the correct property for image URL
+          src={movie.imageUrl}
           alt={movie.title}
         />
         <div className="movie-buttons">
