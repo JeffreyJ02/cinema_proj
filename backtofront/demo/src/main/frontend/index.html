@@ -13,15 +13,15 @@
         <input type="text" id="search" placeholder="Search for a movie...">
         <button id="searchButton">Search</button>
     </div>
-    
-    <div id="movieList"></div>
 
     <script>
+        movies.length = 0;
         document.getElementById('searchButton').addEventListener('click', fetchMovies);
         document.getElementById('homeButton').onclick(() => {
             //code to go to homepage
         });
         async function fetchMovies() {
+            //code to go to search page
             const title = document.getElementById('search').value;
             try {
                 const response = await fetch(`http://localhost:8080/api/search?title=${encodeURIComponent(title)}`);

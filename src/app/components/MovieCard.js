@@ -45,7 +45,7 @@ const MovieCard = ({ movie }) => {
           </div>
         </div>
         <div className="movie-info">
-            <h3>{movie.name}</h3>
+            <h3>{movie.title}</h3>
           </div>
       </div>
     </>
