@@ -60,7 +60,7 @@ const MovieCarousel = ({ movies, header }) => {
         <h1>{header}</h1>
         <Slider {...settings}>
             {/* Loop through movies provided in movies param, currently set to placeholder */}
-            {movieCards.filter((movie) => movie.playing == header).map((movie) => (
+            {movieCards/*.filter((movie) => movie.playing == header)*/.map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
                 ))}
         </Slider>

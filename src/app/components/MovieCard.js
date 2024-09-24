@@ -18,10 +18,10 @@ const MovieCard = ({ movie }) => {
       {/* Modal to show trailer, from react-bootsrap */}
       <Modal size="xl" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{movie.name} - Trailer</Modal.Title>
+          <Modal.Title>{movie.title} - Trailer</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <YoutubeEmbed trailerLink={movie.trailerLink} />
+          <YoutubeEmbed trailer={movie.trailerLink} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -33,7 +33,7 @@ const MovieCard = ({ movie }) => {
       <div className='container-mov'>
         <div className="card">
           {/* Movie image */}
-          <img src={movie.img} alt={movie.name} style={{ width: '100%', height: 'auto' }}/>
+          <img src={movie.poster} alt={movie.title} style={{ width: '100%', height: 'auto' }}/>
           <h6 className='rating'>{movie.rating}</h6>
           <div className="movie-buttons">
             {/* Button to show trailer, onClick sets state to true adn
