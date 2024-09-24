@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default function DateCard( {current} ) {
+    {/* This takes a Date object and displays the day of the week, month, and day of the month */}
     return (
         <div className='card'>
             <h2>{current.toLocaleDateString('en-US', {weekday: 'short'})}</h2>  {/* Shortened weekday */}

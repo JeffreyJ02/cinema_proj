@@ -3,6 +3,7 @@ import './CheckoutMovieInfo.css';
 
 const CheckoutMovieInfo = ({ movie }) => {
 
+  {/* This is the movie info component that displays the movie poster and rating given a movie object*/}
   return (
     <div className='movie-box'>
       <div className="poster-container">

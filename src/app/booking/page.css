@@ -1,7 +1,18 @@
+.main-content {
+  padding: 20px;
+}
+
+.content-layout {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
 .user-interactable-content {
   flex: 1;
   padding: 10px;
   border-right: 1px solid #ddd;
+  max-width: 60%;
 }
 
 .movie-details {
@@ -10,6 +21,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 40%;
 }
 
 .movie-info {
@@ -19,22 +31,6 @@
 .movie-info img {
   max-width: 100px;
   margin-bottom: 10px;
-}
-
-.video-responsive {
-  overflow: hidden;
-  padding-bottom: 56.25%;
-  position: relative;
-  height: 0;
-  margin-top: 10px;
-}
-
-.video-responsive iframe {
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  position: absolute;
 }
 
 .movie-poster {
@@ -49,4 +45,40 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
+}
+
+.seats-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.screen-svg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  gap: 0px;
+  color: black;
+}
+
+.screen-svg > * {
+  margin: 0;
+  padding: 0;
+}
+
+/* kicks in when screen is less than 768px */
+@media (max-width: 768px) {
+  .content-layout {
+    flex-direction: column;
+  }
+
+  .movie-details,
+  .user-interactable-content {
+    max-width: 100%;
+  }
 }

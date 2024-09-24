@@ -1,11 +1,10 @@
 import React,{useState} from 'react';
-import './LoginPage.css';
 
+import './LoginPage.css';
+{/* I think this is mostly extra backend stuff from aayans previous project*/}
 function LoginPage() {
     // const [email, setEmail] = React.useState("");
     // const [password, setPassword] = React.useState("");
-     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-     const navigate = useNavigate();
  
      const [formData, setFormData] = useState({
          email: '',
@@ -82,7 +81,7 @@ function LoginPage() {
                          Log In
                          </button>
                      <div className='logIn'>
-                         <p>Dont have an account already? <a href="#">Sign Up</a></p>
+                         <p>Dont have an account already? <a href="sign-up">Sign Up</a></p>
                          </div>
              </form>
          </div>

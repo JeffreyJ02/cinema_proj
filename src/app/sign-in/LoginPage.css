@@ -46,10 +46,10 @@ img {
   .loginPage-btns {
     margin-top: 32px;
   }
-  .donbutton {
+  .dbutton {
     padding: 10px;
     background-color:#242222;
-    color: #fff;
+    color: #ffffff;
     border: none;
     padding: 1rem;
     border-radius: 10px;
@@ -57,11 +57,11 @@ img {
     width: 100%;
   }
   
-  .donbutton:hover {
+  .dbutton:hover {
     background-color: gray
   }
   
-  .donbutton:active {
+  .dbutton:active {
      background-color: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
   }
   

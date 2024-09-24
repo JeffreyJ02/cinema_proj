@@ -1,0 +1,82 @@
+/* Checkout.css */
+.checkout-container {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .checkout-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .checkout-row {
+    gap: 20px;
+  }
+  
+  .checkout-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .payment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .card-number {
+    flex: 2;
+    margin-right: 10px;
+  }
+  
+  .saved-card-btn {
+    flex: 1;
+    white-space: nowrap;
+  }
+  
+  .payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .name-row,
+  .exp-cvv-row,
+  .promo-row,
+  .button-row {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .name-row .form-group,
+  .exp-cvv-row .form-group {
+    flex: 1;
+  }
+  
+  .divider {
+    margin: 20px 0;
+  }
+  
+  .promo-group {
+    flex: 3;
+  }
+  
+  .apply-btn {
+    flex: 1;
+    align-self: flex-end;
+    margin-left: 10px;
+  }
+  
+  .button-row {
+    justify-content: space-between;
+  }
+  
+  .back-btn,
+  .checkout-btn {
+    flex: 1;
+  }
+  

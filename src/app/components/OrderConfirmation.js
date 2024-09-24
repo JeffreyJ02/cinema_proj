@@ -1,6 +1,7 @@
 import React from "react";
 
 const OrderConfirmation = ({ order }) => {
+    {/* This component displays the order confirmation when given an order object */}
     return (
         <div>
             <h1>Order Confirmation</h1>

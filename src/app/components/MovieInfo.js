@@ -1,31 +1,21 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import YoutubeEmbed from './YoutubeEmbed';
+import './MovieInfo.css';
 
 const MovieInfo = ({ movie }) => {
-  const [showTrailer, setShowTrailer] = useState(false);
-
-  // Function to show the trailer
-  const trailerButton = () => {
-    setShowTrailer(true);
-  };
 
   return (
-    <div>
-      <div className="poster-container">
-        <h3>{movie.name}</h3>
+    <div className="movie-info-container">
+      {/* Left side with title and image */}
+      <div className="movie-container">
+        <h3 className="movie-title">{movie.name}</h3>
         <img src={movie.img} alt={movie.name} className="movie-poster" />
-        <div className="movie-info">
-          {/* Button to show trailer, onClick sets state to true */}
-          {/* <Button variant="primary" onClick={trailerButton}>Watch Trailer</Button> */}
-          {showTrailer && <YoutubeEmbed embedId={movie.trailerLink} />}
-        </div>
       </div>
-      <div className="info">
-            <h3>Synopsis</h3>
-          <p>{movie.synopsis}</p>
-          <h3>Rating</h3>
-            <p>{movie.rating}</p>
+
+      {/* Right side with synopsis and rating */}
+      <div className="info-container">
+        <p>{movie.rating} | {movie.runtime}</p>
+        <p>{movie.synopsis}</p>
       </div>
     </div>
   );

@@ -42,6 +42,7 @@ const CustomNavbar = () => {
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
+
             <Container>
                 <Navbar.Brand className="me-auto">
                     MovieSite
@@ -82,6 +83,7 @@ const CustomNavbar = () => {
                 </Navbar.Collapse>
                 <Button variant="primary" onClick={signInButton}>Sign In</Button>
             </Container>
+
         </Navbar>
     );
 };

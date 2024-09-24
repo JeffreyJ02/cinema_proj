@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-
+import styles from './SeatGrid.css';
 const SeatGrid = ( {nSeats} ) => {
     // const [toggled, setToggled] = React.useState(false);
 
