@@ -14,7 +14,7 @@ const MovieInfo = ({ movie }) => {
 
       {/* Right side with synopsis and rating */}
       <div className="info-container">
-        <p>{movie.rating} | {movie.runtime}</p>
+        <p>{movie.rating} | {movie.runtime} | Cast: {movie.cast.join(", ")}</p>
         <p>{movie.synopsis}</p>
       </div>
     </div>
