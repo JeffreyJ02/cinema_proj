@@ -39,6 +39,7 @@
             // Redirect to the homepage 
             window.location.href = 'http://localhost:3000/'; 
         };
+        
 
         async function fetchMovies() {
             const title = document.getElementById('searchInput').value; // Get search input
@@ -59,7 +60,7 @@
                 document.getElementById('movieList').innerText = 'Error fetching movies';
             }
         }
-    
+        
         function displayMovies(movies) {
             const movieList = document.getElementById('movieList');
             movieList.innerHTML = ''; // Clear previous results
@@ -72,17 +73,32 @@
                 movieItem.innerHTML = `
                     <h3>${movie.title}</h3>
                     <p><strong>Description:</strong> ${movie.description}</p>
+                    <p><strong>Director:</strong> ${movie.director}</p>
+                    <p><strong>Producer:</strong> ${movie.producer}</p>
                     <p><strong>Release Date:</strong> ${movie.releaseDate}</p>
                     <p><strong>Genre:</strong> ${movie.genre}</p>
                     <p><strong>Category:</strong> ${movie.category}</p>
                     <p><strong>Age-Rating:</strong> ${movie.ageRating}</p>
                     <iframe width="560" height="315" src="${movie.trailerUrl}" frameborder="0" allowfullscreen></iframe>
                     <hr>
+                    <div><button class="bookingButton">Book</button></div>
                 `;
                 movieList.appendChild(movieItem); // Append movie details to the list
+                
             });
-        }
+            // Add event listeners to the dynamically created booking buttons
+            document.querySelectorAll('.bookingButton').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const movieTitle = event.target.getAttribute('data-movie-title');
+                    // Redirect to a general booking placeholder page
+                    window.location.href = 'http://localhost:3000/booking';
+        });
+    });
+}
     </script>
+    
+    
+    
     
 </body>
 </html>
