@@ -16,8 +16,16 @@ const fetchMovies = async (title) => {
     }
 };
 
-// Example usage:
-fetchMovies('Inception');
+var search = document.getElementsByClassName("me-2")[0];
+search.addEventListener("keypress", function(event) {
+    if (event.key === "Enter"){
+        event.preventDefault();
+        fetchMovies(search.innerHTML);
+        
+
+    }
+})
+
 
 
 function displayMovies(movies) {

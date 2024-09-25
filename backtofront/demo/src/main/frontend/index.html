@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Search</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <button id="homeButton">Home</button>
     <h1>Movie Search</h1>
-
-     
-     <button onclick="window.location.href='http://127.0.0.1:5500/backtofront/demo/src/main/frontend/AdminLogin.html'"">Admin Login</button>
-
-    <input type="text" id="search" placeholder="Search for a movie...">
-    <button id="searchButton">Search</button>
+    <div id="search">
+        <input type="text" id="search" placeholder="Search for a movie...">
+        <button id="searchButton">Search</button>
+    </div>
+    
     <div id="movieList"></div>
 
     <script>
         document.getElementById('searchButton').addEventListener('click', fetchMovies);
-    
+        document.getElementById('homeButton').onclick(() => {
+            //code to go to homepage
+        });
         async function fetchMovies() {
             const title = document.getElementById('search').value;
             try {

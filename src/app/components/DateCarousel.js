@@ -7,24 +7,23 @@ import DateCard from './DateCard';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const SamplePrevArrow = (props) => {
+const PrevArrow = (props) => {
   const { className, style, onClick } = props;
   return(
     <div onClick={onClick} className={`arrow ${className}`} >
-      <ArrowBackIcon className="arrows" style={{color:"black"}}/>
-    </div>
-  )
-  }
-
-function SampleNextArrow(props) {
-  const { className, style, onClick } = props;
-  return(
-    <div onClick={onClick} className={`arrow ${className}`} >
-      <ArrowForwardIcon className="arrows" style={{color:"black"}}/>
+      <ArrowBackIcon className="arrows" style={{color:"white"}}/>
     </div>
   )
 }
 
+function NextArrow(props) {
+  const { className, style, onClick } = props;
+  return(
+    <div onClick={onClick} className={`arrow ${className}`} >
+      <ArrowForwardIcon className="arrows" style={{color:"white"}}/>
+    </div>
+  )
+}
 
 function SwipeToSlide() {
   // Settings from https://react-slick.neostack.com/docs/example/responsive
@@ -35,8 +34,8 @@ function SwipeToSlide() {
     slidesToShow: 4,
     slidesToScroll: 4,
     initialSlide: 0,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     responsive: [
       {
         breakpoint: 1024,
