@@ -32,6 +32,7 @@ export default function Home() {
     trailerLink: 'https://www.youtube.com/embed/zSWdZVtXT7E?si=w7ReOmp4NXxSyE3V',
     synopsis: 'A movie about space',
     rating: 'PG-13',
+    cast: ['Actor 1', 'Actor 2', 'Actor 3'],
   };
 
   return (
