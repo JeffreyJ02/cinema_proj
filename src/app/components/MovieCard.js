@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import './MovieCard.css';
 import YoutubeEmbed from './YoutubeEmbed';
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie, onBook }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -30,19 +30,19 @@ const MovieCard = ({ movie }) => {
       {/* Movie Card */}
       <div className="card">
         <img
-        /* Movie image */
+          /* Movie image */
           src={movie.imageUrl}
           alt={movie.title}
         />
-         {/* Button to show trailer, onClick sets state to true adn
-            conditionally renders the Youtube embed*/}
-            {/*<Button variant="primary" onClick={trailerButton}>Watch Trailer</Button>*/}
+        {/* Button to show trailer, onClick sets state to true and
+            conditionally renders the Youtube embed */}
         <div className="movie-buttons">
           <Button variant="primary" onClick={handleShow}>Watch Trailer</Button>
-          <Button variant="primary" href="/booking">Book</Button>
-           {/*showTrailer && <YoutubeEmbed trailerLink={movie.trailerLink} />*/}
+          <Button variant="primary" onClick={() => onBook(movie)}>Book</Button> {/* Call onBook function */}
         </div>
-        <div className="rating">PG-13</div>
+
+        {/* Display the age rating fetched from the database */}
+        <div className="rating">{movie.ageRating}</div>
         <div className="movie-info">
           <h3>{movie.title}</h3>
         </div>

@@ -5,12 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Search</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #movieList {
+            margin-top: 20px;
+        }
+        h3 {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
     <button id="homeButton">Home</button>
     <h1>Movie Search</h1>
     <div id="search">
-        <input type="text" id="search" placeholder="Search for a movie...">
+        <input type="text" id="searchInput" placeholder="Search for a movie...">
         <button id="searchButton">Search</button>
     </div>
     
@@ -18,11 +30,23 @@
 
     <script>
         document.getElementById('searchButton').addEventListener('click', fetchMovies);
-        document.getElementById('homeButton').onclick(() => {
-            //code to go to homepage
+        document.getElementById('searchInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') { // Check if Enter key is pressed
+                fetchMovies(); // Call fetchMovies function
+            }
         });
+        document.getElementById('homeButton').onclick = () => {
+            // Redirect to the homepage 
+            window.location.href = 'http://localhost:3000/'; 
+        };
+
         async function fetchMovies() {
-            const title = document.getElementById('search').value;
+            const title = document.getElementById('searchInput').value; // Get search input
+            if (!title.trim()) {
+                alert('Please enter a movie title.');
+                return;
+            }
+
             try {
                 const response = await fetch(`http://localhost:8080/api/search?title=${encodeURIComponent(title)}`);
                 if (!response.ok) {
@@ -38,9 +62,9 @@
     
         function displayMovies(movies) {
             const movieList = document.getElementById('movieList');
-            movieList.innerHTML = ''; 
+            movieList.innerHTML = ''; // Clear previous results
             if (movies.length === 0) {
-                movieList.innerText = 'No movies found';
+                movieList.innerText = 'No movies found'; // Display message if no movies found
                 return;
             }
             movies.forEach(movie => {
@@ -54,11 +78,10 @@
                     <iframe width="560" height="315" src="${movie.trailerUrl}" frameborder="0" allowfullscreen></iframe>
                     <hr>
                 `;
-                movieList.appendChild(movieItem);
+                movieList.appendChild(movieItem); // Append movie details to the list
             });
         }
     </script>
     
 </body>
 </html>
-
