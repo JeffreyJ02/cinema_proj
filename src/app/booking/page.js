@@ -127,7 +127,7 @@ export default function Home() {
             </div>
           </div>
           {/* Checkout button */}
-          <Button variant="contained" color="primary" disabled className="checkout">
+          <Button variant="contained" color="primary" className="checkout">
             Continue to Checkout
           </Button>
         </div>
