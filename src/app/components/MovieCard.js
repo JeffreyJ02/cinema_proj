@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import './MovieCard.css';
 import YoutubeEmbed from './YoutubeEmbed';
 
-const MovieCard = ({ movie, onBook }) => {
+const MovieCard = ({ movie}) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -38,7 +38,7 @@ const MovieCard = ({ movie, onBook }) => {
             conditionally renders the Youtube embed */}
         <div className="movie-buttons">
           <Button variant="primary" onClick={handleShow}>Watch Trailer</Button>
-          <Button variant="primary" onClick={() => onBook(movie)}>Book</Button> {/* Call onBook function */}
+          <Button variant="primary" href="/booking">Book</Button>
         </div>
 
         {/* Display the age rating fetched from the database */}
