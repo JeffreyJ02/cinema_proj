@@ -3,6 +3,7 @@ import CustomNavbar from "../components/CustomNavbar";
 import OrderDetails from "../components/OrderDetails";
 import Checkout from "../components/Checkout";
 import styles from "./page.css";
+import { Button } from "react-bootstrap";
 
 export default function Home() {
   const placeholderMovie = {

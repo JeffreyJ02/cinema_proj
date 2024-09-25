@@ -37,6 +37,9 @@ public class Movie {
     @Column(name = "image_url")
     private String imageUrl; // Add this field to hold the movie image URL
 
+    @Column(name = "age_rating")
+    private String ageRating;
+
 }
 
 
