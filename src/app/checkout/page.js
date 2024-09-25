@@ -3,6 +3,7 @@ import CustomNavbar from "../components/CustomNavbar";
 import OrderDetails from "../components/OrderDetails";
 import Checkout from "../components/Checkout";
 import styles from "./page.css";
+import { Button } from "react-bootstrap";
 
 export default function Home() {
   const placeholderMovie = {
@@ -33,6 +34,7 @@ export default function Home() {
       <div className="checkout-content">
         <Checkout order={placeholderOrder} />
         <OrderDetails order={placeholderOrder} />
+        <Button variant="primary" className="return-btn" href="booking">Edit Order</Button>
       </div>
     </div>
   );

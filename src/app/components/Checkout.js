@@ -81,7 +81,7 @@ export default function Checkout({ order }) {
             </div>
 
             <div className="button-row">
-              <Button variant="outline-primary" href="/order-summary" className="back-btn">Back</Button>
+              {/*<Button variant="outline-primary" href="/order-summary" className="back-btn">Back</Button>*/}
               <Button variant="primary" type="submit" className="checkout-btn">Checkout</Button>
             </div>
           </Form>

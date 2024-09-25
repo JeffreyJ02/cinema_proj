@@ -73,7 +73,7 @@ const CustomNavbar = () => {
                             align="end"
                         >
                             <NavDropdown.Item href="admin">Admin</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/1">Edit Profile</NavDropdown.Item>
+                            <NavDropdown.Item href="edit-profile">Edit Profile</NavDropdown.Item>
                             <NavDropdown.Item href="#action/2">Manage Account</NavDropdown.Item>
                             <NavDropdown.Item href="#action/2">View Order History</NavDropdown.Item>
                             <NavDropdown.Divider />
