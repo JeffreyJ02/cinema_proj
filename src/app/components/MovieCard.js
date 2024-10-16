@@ -19,6 +19,11 @@ const MovieCard = ({ movie}) => {
         </Modal.Header>
         <Modal.Body>
           <YoutubeEmbed trailerLink={movie.trailerUrl} />
+          <div className="movie-details">
+            <p><strong>Description:</strong>{movie.description}</p>
+            <p><strong>Release Date:</strong>{movie.releaseDate}</p>
+            <p><strong>Director:</strong>{movie.director}</p>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

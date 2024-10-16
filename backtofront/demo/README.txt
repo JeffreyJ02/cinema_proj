@@ -17,6 +17,7 @@ however the foundation we currently have are, in my opinion, perfect for moving 
 with our frontend engineers web design, I really hope it does, but even so we know what we need now to pull entries from the database and how to add
 them and delete them from it.
 
-Admin credentials:
-User:admin
-password:adminPassword
+09/25/2024:
+in order to display the web page, make sure to run the backend api first by following the steps above in one terminal. Then you can run the web program on another terminal with 'npm run dev'
+make sure to download "npm install @mui/material, @emotion/react, @emotion/styled", in addition to that you must use live server on index.html in order to
+display the search page. Finally, since the backend api, utilizes maven, you must also download it as well, Apache maven 3.9.9.

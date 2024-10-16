@@ -40,6 +40,12 @@ public class Movie {
     @Column(name = "age_rating")
     private String ageRating;
 
+    @Column(name = "director")
+    private String director;
+
+    @Column(name = "producer")
+    private String producer;
+
 }
 
 

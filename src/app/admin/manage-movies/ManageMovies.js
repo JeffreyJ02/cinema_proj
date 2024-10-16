@@ -9,11 +9,14 @@ const ManageMovies = () => {
   const [theatre, setTheatre] = useState('');
   const [details, setDetails] = useState({
     director: '',
+    producer: '',
     cast: '',
     rating: '',
     duration: '',
   });
   const [ticketPrice, setTicketPrice] = useState('');
+  const [synopsis, setSysnopsis] = useState('');
+  const [reviews,  setReviews] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -44,6 +47,9 @@ const ManageMovies = () => {
           <label>Director:</label>
           <input type="text" value={details.director} onChange={(e) => setDetails({ ...details, director: e.target.value })} />
           <br />
+          <label>Producer:</label>
+          <input type="text" value={details.producer} onChange={(e) => setDetails({ ...details, producer: e.target.value })} />
+          <br />
           <label>Cast:</label>
           <input type="text" value={details.cast} onChange={(e) => setDetails({ ...details, cast: e.target.value })} />
           <br />
@@ -56,6 +62,12 @@ const ManageMovies = () => {
         <br />
         <label>Edit Ticket Price:</label>
         <input type="text" value={ticketPrice} onChange={(e) => setTicketPrice(e.target.value)} />
+        <br />
+        <label>Edit Synopsis:</label>
+        <input type="text" value={synopsis} onChange={(e) => setSynopsis(e.target.value)} />
+        <br />
+        <label>Edit Reviews:</label>
+        <input type="text" value={reviews} onChange={(e) => setReviews(e.target.value)} />
         <br />
         <button type="submit" className="update-button">Update</button>
       </form>
