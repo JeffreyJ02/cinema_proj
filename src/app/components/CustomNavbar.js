@@ -1,17 +1,31 @@
 'use client';
+import React, {useEffect, useState} from 'react';
 import { useRouter } from "next/navigation";
 import { Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 const CustomNavbar = () => {
-    const router = useRouter(); // Initialize useRouter
+    const router = useRouter();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const signInButton = () => {
         router.push("/sign-in");
     };
 
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        setIsLoggedIn(!!token); // If token exists, set isLoggedIn to true
+    }, []);
+
     const handleSearchPage = () => {
         router.push('http://127.0.0.1:5500/backtofront/demo/src/main/frontend/index.html'); // Redirect to the search page directly
     };
+
+    const logout = () => {
+        // Remove the token from local storage
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        router.push('/');
+    }
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
@@ -40,8 +54,12 @@ const CustomNavbar = () => {
                             <NavDropdown.Item href="edit-profile">Edit Profile</NavDropdown.Item>
                             <NavDropdown.Item href="#action/2">Manage Account</NavDropdown.Item>
                             <NavDropdown.Item href="#action/2">View Order History</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3">Sign Out</NavDropdown.Item>
+                            {isLoggedIn && ( // Conditionally render logout based on state
+                                <div>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item onClick={handleLogout}>Sign Out</NavDropdown.Item>
+                                </div>
+                            )}
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
