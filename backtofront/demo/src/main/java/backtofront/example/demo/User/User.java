@@ -1,5 +1,7 @@
 package backtofront.example.demo.User;
 
+import backtofront.example.demo.Address.Address;
+import backtofront.example.demo.CreditCard.CreditCard;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,18 +18,25 @@ public class User {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "first_name", nullable = false)
+    private String first_name;
+
+    @Column(name = "last_name", nullable = false)
+    private String last_name;
+
+    @Column(name = "phone_number", unique = true, nullable = false)
+    private String phone_number;
+
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password; //No Encryption
 
-    @Column(name = "credit_card_number")
-    private String creditCardNumber;
+    @Column(name = "credit_card")
+    private CreditCard credit_card;
 
-    @Column(name = "credit_card_expiration_date")
-    private String creditCardExpirationDate;
+    @Column(name = "home_address")
+    private Address home_address;
 
-    @Column(name = "credit_card_ccv")
-    private String creditCardCcv;
 } 
