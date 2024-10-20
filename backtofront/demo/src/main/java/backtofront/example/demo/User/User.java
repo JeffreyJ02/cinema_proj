@@ -33,8 +33,14 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password; //No Encryption
 
-    @Column(name = "credit_card")
-    private CreditCard credit_card;
+    @Column(name = "credit_card_1")
+    private CreditCard credit_card_1;
+
+    @Column(name = "credit_card_2")
+    private CreditCard credit_card_2;
+
+    @Column(name = "credit_card_3")
+    private CreditCard credit_card_3;
 
     @Column(name = "home_address")
     private Address home_address;

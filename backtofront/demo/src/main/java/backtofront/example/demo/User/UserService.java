@@ -25,7 +25,7 @@ public class UserService {
         user.setPhone_number(phone_number);
         user.setEmail(email);
         user.setPassword(password);
-        user.setCredit_card(credit_card);
+        user.setCredit_card_1(credit_card);
         user.setHome_address(home_address);
 
         // generate unique user id
