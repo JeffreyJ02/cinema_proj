@@ -16,18 +16,18 @@ public class User {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password", nullable = false)
-    private String password; //No Encryption
+    private String password; // No Encryption
 
-    @Column(name = "credit_card_number")
-    private String creditCardNumber;
-
-    @Column(name = "credit_card_expiration_date")
-    private String creditCardExpirationDate;
-
-    @Column(name = "credit_card_ccv")
-    private String creditCardCcv;
-} 
+    @Column(name = "register_for_promotions", nullable = false)
+    private boolean registerForPromotions;
+}

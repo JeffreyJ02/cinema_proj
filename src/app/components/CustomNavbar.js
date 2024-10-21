@@ -1,6 +1,6 @@
 'use client';
-import React, {useEffect, useState} from 'react';
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
 import { Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 const CustomNavbar = () => {
@@ -12,7 +12,7 @@ const CustomNavbar = () => {
     };
 
     useEffect(() => {
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('token'); // Make sure to use the correct token key
         setIsLoggedIn(!!token); // If token exists, set isLoggedIn to true
     }, []);
 
@@ -25,7 +25,7 @@ const CustomNavbar = () => {
         localStorage.removeItem('token');
         setIsLoggedIn(false);
         router.push('/');
-    }
+    };
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
@@ -57,13 +57,15 @@ const CustomNavbar = () => {
                             {isLoggedIn && ( // Conditionally render logout based on state
                                 <div>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item onClick={handleLogout}>Sign Out</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={logout}>Sign Out</NavDropdown.Item>
                                 </div>
                             )}
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
-                <Button variant="primary" onClick={signInButton}>Sign In</Button>
+                {!isLoggedIn && ( // Render Sign In button only if the user is not logged in
+                    <Button variant="primary" onClick={signInButton}>Sign In</Button>
+                )}
             </Container>
         </Navbar>
     );

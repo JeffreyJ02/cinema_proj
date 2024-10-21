@@ -1,16 +1,16 @@
-'use cleint';
-import React, {useEffect, useState} from 'react';
-
-import './LoginPage.css';
+'use client';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import './LoginPage.css';
 
 function LoginPage() {
     const router = useRouter();
-     const [formData, setFormData] = useState({
-         email: '',
-         password: '',
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
     });
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState(''); // State for success message
     const [isMounted, setIsMounted] = useState(false);
 
     const handleInputChange = (event) => {
@@ -19,59 +19,46 @@ function LoginPage() {
             ...prevState,
             [name]: value
         }));
-     }
+    };
 
     useEffect(() => {
         setIsMounted(true); // Set to true when mounted
     }, []);
-     
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const{email, password} = formData;
+        const { email, password } = formData;
 
         try {
-        // Sending api call to login endpoint
-        /*
-            SENDING EX:
-            {
-                "email": "u@ex.com",
-                "password": "password" * password is sent over as plain text right now, I believe the backend will hash it
+            // Sending API call to login endpoint
+            const response = await fetch('http://localhost:8080/api/login-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Unknown Login Error');
             }
-        */
-        const response = await fetch('http://localhost:8080/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({email, password}),
-        });
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Unknown Login Error');
-        }
-        const data = await response.json();
-        /*
-            RECEIVING EX:
-            {
-                "token": "abcxyz...", 
-                "user": {
-                    "id": 1,
-                    "email": "u@ex.com",
-                    "username": "JohnDoe",
-                    "role": "user"
-                }
-            }
-        */
-        console.log('Login successful:', data);
-        // Here we should save the token to local storage, larger storage than cookies
-        localStorage.setItem('token', data.token);
-        isMounted && router.push('/');
+
+            const data = await response.json();
+            console.log('Login successful:', data);
+
+            // Here we should save the token to local storage
+            localStorage.setItem('token', data.token);
+            setSuccessMessage("Login successful! Redirecting..."); // Set success message
+            isMounted && router.push('/'); // Redirect after successful login
+
         } catch (error) {
-        console.error('Login error:', error);
-        setErrorMessage(error.message);
+            console.error('Login error:', error);
+            setErrorMessage(error.message); // Set error message for user feedback
+            setSuccessMessage(''); // Clear success message on error
         }
     };
-    
+
     if (!isMounted) return null;
 
     return (
@@ -96,6 +83,7 @@ function LoginPage() {
                 />
                 <button type="submit">Log In</button>
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
+                {successMessage && <p className="success-message">{successMessage}</p>} {/* Display success message */}
                 <div className="logIn">
                     <p>
                         Don't have an account already? <a href="/sign-up">Sign Up</a>

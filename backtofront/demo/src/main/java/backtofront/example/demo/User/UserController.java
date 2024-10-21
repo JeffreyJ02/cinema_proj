@@ -5,9 +5,11 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,13 +23,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    // User Registration Endpoint
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
-        // Register the user 
-        userService.registerUser(user.getEmail(), user.getPassword());
-        return ResponseEntity.ok("User registered successfully!");
+@PostMapping("/register")
+public ResponseEntity<?> registerUser(@RequestBody User user) {
+    try {
+        userService.registerUser(
+            user.getFirstName(),
+            user.getLastName(),
+            user.getEmail(),
+            user.getPassword(),
+            user.isRegisterForPromotions() // Get the boolean value
+        );
+        return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
     }
+}
+
+    
 
     // User Login Endpoint
     @PostMapping("/login-user")
@@ -49,6 +63,19 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/user")
+    public ResponseEntity<Object> getUserProfile(@RequestParam String email) {
+        User user = userService.findByEmail(email).orElse(null);
+        if (user != null) {
+            // Include the registerForPromotions field in the response
+            return ResponseEntity.ok(new UserProfileResponse(user.getFirstName(), user.getLastName(), user.getEmail(), user.isRegisterForPromotions()));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found"));
+        }
+    }
+    
+
     // Response classes
     private static class LoginResponse {
         private String message;
@@ -57,6 +84,14 @@ public class UserController {
         public LoginResponse(String message, String email) {
             this.message = message;
             this.email = email;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public String getEmail() {
+            return email;
         }
     }
 
@@ -71,4 +106,52 @@ public class UserController {
             return error;
         }
     }
+
+
+    // ResponseMessage class
+private static class ResponseMessage {
+    private String message;
+
+    public ResponseMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}
+
+
+// User profile response class
+// User profile response class
+private static class UserProfileResponse {
+    private String firstName;
+    private String lastName;
+    private String email;
+    private boolean registerForPromotions; // Include this field
+
+    public UserProfileResponse(String firstName, String lastName, String email, boolean registerForPromotions) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.registerForPromotions = registerForPromotions;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean isRegisterForPromotions() {
+        return registerForPromotions;
+    }
+}
+
 }
