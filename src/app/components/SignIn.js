@@ -6,13 +6,16 @@ import {
   Box,
   Button,
   TextField,
+  FormControlLabel,
   Typography,
+  Checkbox,
   Link,
   Container,
   Alert,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
+// This component is adapted from the Material-UI example at: https://mui.com/material-ui/getting-started/templates/sign-in/
 export default function SignIn() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -22,6 +25,8 @@ export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState(''); // State for success message
   const [isMounted, setIsMounted] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -38,7 +43,7 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
-
+    validateInputs();
     try {
         // Sending API call to login endpoint
         const response = await fetch('http://localhost:8080/api/login-user', {
@@ -70,6 +75,28 @@ export default function SignIn() {
     };
 
   if (!isMounted) return null;
+
+  const validateInputs = () => {
+    let isValid = true;
+
+    // Email Validation
+    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+      setEmailError('Please enter a valid email address.');
+      isValid = false;
+    } else {
+      setEmailError('');
+    }
+
+    // Password Validation
+    if (!formData.password || formData.password.length < 6) {
+      setPasswordError('Password must be at least 6 characters long.');
+      isValid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    return isValid;
+  };
 
   return (
     <Container maxWidth="xs">
@@ -103,6 +130,8 @@ export default function SignIn() {
           fullWidth
           required
           autoFocus
+          helperText={emailError}
+          error={emailError}
           placeholder='your@email.com'
           variant="outlined"
         />
@@ -123,11 +152,27 @@ export default function SignIn() {
           name="password"
           value={formData.password}
           onChange={handleInputChange}
+          helperText={passwordError}
+          error={passwordError}
           fullWidth
           required
           variant="outlined"
           placeholder="••••••"
+          color={passwordError ? 'error' : 'primary'}
           sx={{ mt: 1 }}
+        />
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={formData.rememberMe}
+              onChange={handleInputChange}
+              name="rememberMe"
+              color="primary"
+            />
+          }
+          label="Remember me"
+          sx={{ alignSelf: 'flex-start', mt: 1 }}
         />
 
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
@@ -136,7 +181,6 @@ export default function SignIn() {
 
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
-
         <Typography sx={{ mt: 2 }}>
           Don't have an account?{' '}
           <Link href="/sign-up" variant="body2">
