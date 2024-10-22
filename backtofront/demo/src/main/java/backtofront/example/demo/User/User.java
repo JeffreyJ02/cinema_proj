@@ -30,19 +30,22 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    // encrypt
     @Column(name = "password", nullable = false)
     private String password; //No Encryption
 
+    // encrypt
     @Column(name = "credit_card_1")
     private CreditCard credit_card_1;
 
+    // encrypt
     @Column(name = "credit_card_2")
     private CreditCard credit_card_2;
 
+    // encrypt
     @Column(name = "credit_card_3")
     private CreditCard credit_card_3;
 
     @Column(name = "home_address")
     private Address home_address;
-
 } 
