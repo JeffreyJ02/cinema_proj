@@ -1,7 +1,14 @@
-import SignIn from '../components/SignIn';
+'use client'
+{/* use client, components are server*/}
 
-export default function HomePage() {
-  return (
-    <SignIn />
-  );
-};
+import LoginPage from './LoginPage';
+
+export default function Home() {
+    return (
+        <div>
+            
+            <h1>Sign In</h1>
+            <LoginPage />
+        </div>
+    );
+}

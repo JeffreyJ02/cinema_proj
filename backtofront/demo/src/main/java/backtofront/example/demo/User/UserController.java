@@ -145,7 +145,6 @@ private static class ResponseMessage {
 
 
 // User profile response class
-// User profile response class
 private static class UserProfileResponse {
     @SuppressWarnings("FieldMayBeFinal")
     private String firstName;
