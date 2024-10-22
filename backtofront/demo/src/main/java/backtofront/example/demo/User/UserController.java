@@ -145,7 +145,6 @@ private static class ResponseMessage {
 
 
 // User profile response class
-// User profile response class
 private static class UserProfileResponse {
     @SuppressWarnings("FieldMayBeFinal")
     private String firstName;
@@ -154,7 +153,7 @@ private static class UserProfileResponse {
     @SuppressWarnings("FieldMayBeFinal")
     private String email;
     @SuppressWarnings("FieldMayBeFinal")
-    private boolean registerForPromotions; // Include this field
+    private boolean registerForPromotions;
 
     public UserProfileResponse(String firstName, String lastName, String email, boolean registerForPromotions) {
         this.firstName = firstName;
