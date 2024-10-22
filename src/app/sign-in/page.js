@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from 'react';
 import SignIn from '../components/SignIn';
 import Card from '@mui/material/Card';
@@ -12,19 +11,3 @@ export default function HomePage() {
     </Card>
   );
 };
-=======
-'use client'
-{/* use client, components are server*/}
-
-import LoginPage from './LoginPage';
-
-export default function Home() {
-    return (
-        <div>
-            
-            <h1>Sign In</h1>
-            <LoginPage />
-        </div>
-    );
-}
->>>>>>> 08ed4dfb12621abd49534bd94b622244b3839e1b
