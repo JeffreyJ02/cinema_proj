@@ -51,9 +51,9 @@ const EditProfile = () => {
   // Function to add a new credit card to stored cards
   const handleAddCard = () => {
     // Validate credit card number format
-    const cardNumberPattern = /^\d{4}-\d{4}-\d{4}$/; // Pattern for 12-digit card number with hyphens
+    const cardNumberPattern = /^\d{4}-\d{4}-\d{4}-\d{4}$/; // Pattern for 16-digit card number with hyphens
     if (!cardNumberPattern.test(creditCardNumber)) {
-      alert("Invalid credit card number format. Please use xxxx-xxxx-xxxx.");
+      alert("Invalid credit card number format. Please use xxxx-xxxx-xxxx-xxxx.");
       return;
     }
   
@@ -156,8 +156,8 @@ const EditProfile = () => {
               type="text"
               value={creditCardNumber}
               onChange={(e) => setCreditCardNumber(e.target.value)} // Update credit card number state on change
-              placeholder="Enter credit card number (xxxx-xxxx-xxxx)"
-              pattern="\d{4}-\d{4}-\d{4}" // Regex pattern for 12-digit card number with hyphens
+              placeholder="Enter card number"
+              pattern="\d{4}-\d{4}-\d{4}-\d{4}" // Regex pattern for 12-digit card number with hyphens
               required // Make this field required
             />
           </label>
