@@ -49,7 +49,6 @@ export default function SignIn() {
     }
   }, [successMessage, router]);
 
-  
   const validateInputs = () => { // Validation from sample code
     let isValid = true;
 
@@ -93,7 +92,13 @@ export default function SignIn() {
         const data = await response.json();
         setSuccessMessage("Login successful! Redirecting..."); // Set success message
 
-        router.push('/');
+        console.log("data.administrator: ", data.administrator);
+        if (data.administrator == 1) {
+          router.push('/admin');
+        } else {
+          router.push('/');
+        }
+
         } catch (error) {
             console.error('Login error:', error);
             setErrorMessage(error.message);
@@ -200,7 +205,7 @@ public class AuthController {
             <Typography>Password</Typography>
           </Grid>
           <Grid xs="auto">
-            <Link href="#" variant="body2">
+            <Link href="/password-reset" variant="body2">
               Forgot password?
             </Link>
           </Grid>
