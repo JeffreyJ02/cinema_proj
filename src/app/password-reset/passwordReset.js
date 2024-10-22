@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import './passwordReset.css';
 
-function passwordReset() {
+function PasswordReset() {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
@@ -34,16 +34,56 @@ function passwordReset() {
         return password.split('').sort(() => Math.random() - 0.5).join('');
     }; //generatePassword
 
-    
+    const handleSubmit = async (e)  => {
+        e.preventDefault();
+        setMessage('');
+        setError('');
+
+        //check for email
+        if (!email) {
+            setError('Please Enter Valid Email Address');
+            return;
+        }
+        // still need to find way to check for valid email in DB
 
 
+        const tempPassword = generatePassword();
 
+        // Here you would send the email with the temporary password
+        // For now, I am just logging it to the console
+        console.log(`Sending email to ${email} with temporary password: ${tempPassword}`);
 
+        // Simulate sending email (replace this with your actual email sending logic)
+        try {
+            // Example: await sendEmail(email, tempPassword);
+            setMessage(`A temporary password has been sent to ${email}.`);
+        } catch (err) {
+            setError('Failed to send email. Please try again later.');
+        }
 
-
-
+    }; //handleSubmit
+    console.log('Component Rendered');
+    return (
+        <div className="passwordReset-container">
+            <h2>Reset Password</h2>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                />
+                <button type="submit">Send Temporary Password</button>
+                {error && <p className="error-message">{error}</p>}
+                {message && <p className="success-message">{message}</p>}
+            </form>
+        </div>
+    );
 
 } //passwordReset()
+
+export default PasswordReset;
 
 
 
