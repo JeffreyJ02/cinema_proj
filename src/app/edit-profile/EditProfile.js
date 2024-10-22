@@ -16,6 +16,10 @@ const EditProfile = () => {
   const [storedCards, setStoredCards] = useState([]);
   const [errors, setErrors] = useState({});
   const [showAddCard, setShowAddCard] = useState(false);
+  const [street, setStreet] = useState(''); // New state for street
+  const [city, setCity] = useState(''); // New state for city
+  const [state, setState] = useState(''); // New state for state
+  const [zipCode, setZipCode] = useState(''); // New state for zip code
 
   // Function to validate email format
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
@@ -42,6 +46,12 @@ const EditProfile = () => {
 
     console.log('Encrypted Password:', encryptedPassword);
     console.log('Encrypted Credit Card:', encryptedCreditCard);
+    console.log('Address:', {
+      street,
+      city,
+      state,
+      zipCode,
+    });
   };
 
   // Function to add a new credit card to stored cards
@@ -143,6 +153,46 @@ const EditProfile = () => {
           value={confirmNewPassword}
           onChange={(e) => setConfirmNewPassword(e.target.value)}
           placeholder="Confirm new password"
+        />
+      </label>
+      <br />
+      <label>
+        Street:
+        <input
+          type="text"
+          value={street}
+          onChange={(e) => setStreet(e.target.value)}
+          placeholder="Enter street"
+        />
+      </label>
+      <br />
+      <label>
+        City:
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="Enter city"
+        />
+      </label>
+      <br />
+      <label>
+        State:
+        <input
+          type="text"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          placeholder="Enter state"
+        />
+      </label>
+      <br />
+      <label>
+        Zip Code:
+        <input
+          type="text"
+          value={zipCode}
+          onChange={(e) => setZipCode(e.target.value)}
+          placeholder="Enter zip code"
         />
       </label>
       <br />
