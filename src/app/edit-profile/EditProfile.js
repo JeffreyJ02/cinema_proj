@@ -50,6 +50,26 @@ const EditProfile = () => {
 
   // Function to add a new credit card to stored cards
   const handleAddCard = () => {
+    // Validate credit card number format
+    const cardNumberPattern = /^\d{4}-\d{4}-\d{4}$/; // Pattern for 12-digit card number with hyphens
+    if (!cardNumberPattern.test(creditCardNumber)) {
+      alert("Invalid credit card number format. Please use xxxx-xxxx-xxxx.");
+      return;
+    }
+  
+    // Validate expiration date format
+    const expirationPattern = /^(0[1-9]|1[0-2])\/\d{2}$/; // Pattern for MM/YY format
+    if (!expirationPattern.test(expirationDate)) {
+      alert("Invalid expiration date format. Please use MM/YY.");
+      return;
+    }
+  
+    // Validate CVV length
+    if (!/^\d{3,4}$/.test(cvv)) { // Check for 3 or 4 digit CVV
+      alert("CVV must be 3 or 4 digits.");
+      return;
+    }
+  
     if (storedCards.length < 4) { // Check if less than 4 cards are stored
       const card = {
         number: creditCardNumber,
@@ -136,7 +156,9 @@ const EditProfile = () => {
               type="text"
               value={creditCardNumber}
               onChange={(e) => setCreditCardNumber(e.target.value)} // Update credit card number state on change
-              placeholder="Enter credit card number"
+              placeholder="Enter credit card number (xxxx-xxxx-xxxx)"
+              pattern="\d{4}-\d{4}-\d{4}" // Regex pattern for 12-digit card number with hyphens
+              required // Make this field required
             />
           </label>
           <br />
@@ -146,7 +168,9 @@ const EditProfile = () => {
               type="text"
               value={expirationDate}
               onChange={(e) => setExpirationDate(e.target.value)} // Update expiration date state on change
-              placeholder="Enter expiration date"
+              placeholder="MM/YY"
+              pattern="^(0[1-9]|1[0-2])\/\d{2}$" // Regex pattern for MM/YY format
+              required // Make this field required
             />
           </label>
           <br />
@@ -155,8 +179,10 @@ const EditProfile = () => {
             <input
               type="text"
               value={cvv}
-              onChange={(e) => setCvv(e.target.value)} // Update cvv state on change
-              placeholder="Enter cvv"
+              onChange={(e) => setCvv(e.target.value)} // Update CVV state on change
+              placeholder="Enter CVV"
+              pattern="^\d{3,4}$" // Regex pattern for 3 or 4 digit CVV
+              required // Make this field required
             />
           </label>
           <br />
