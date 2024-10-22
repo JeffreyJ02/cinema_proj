@@ -26,19 +26,19 @@ public class User {
     private String email;
 
     @Column(name = "password", nullable = false)
-    private String password; // No Encryption yet
+    private String password;
 
     @Column(name = "register_for_promotions", nullable = false)
     private boolean registerForPromotions;
 
     @Column(name = "credit_card_number", nullable = true)
-    private String creditCardNumber; // Optional
+    private String creditCardNumber; 
 
     @Column(name = "expiration_date", nullable = true)
-    private String expirationDate; // Optional
+    private String expirationDate; 
 
     @Column(name = "cvv", nullable = true)
-    private String cvv; // Optional
+    private String cvv; 
 
     @Column(name = "status", nullable = false)
     private String status;
