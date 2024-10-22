@@ -1,83 +1,73 @@
-/* EditProfile.css */
-
+/* Basic styling for the form */
 form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  max-width: 400px; /* Set a maximum width for the form */
+  margin: auto; /* Center the form */
+  padding: 20px; /* Add padding around the form */
+  border: 1px solid #ccc; /* Add a border around the form */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #f9f9f9; /* Light background color */
 }
 
-h2 {
-  text-align: center;
-  color: #333;
-}
-
+/* Styling for labels */
 label {
-  display: block;
-  margin-bottom: 10px;
-  font-weight: bold;
+  display: block; /* Make labels block elements */
+  margin-bottom: 10px; /* Space between labels */
 }
 
+/* Styling for input fields */
 input[type="email"],
 input[type="password"],
 input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  width: 100%; /* Full width inputs */
+  padding: 8px; /* Padding inside inputs */
+  margin-top: 5px; /* Space above inputs */
+  border: 1px solid #ccc; /* Border around inputs */
+  border-radius: 4px; /* Rounded corners */
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
+/* Styling for error messages */
 .error {
-  color: red;
-  font-size: 12px;
-  margin-top: -8px;
-  margin-bottom: 10px;
+  color: red; /* Red color for error messages */
+  font-size: 0.9em; /* Slightly smaller font size */
 }
 
-.stored-card {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #f1f1f1;
+/* Dropdown styling for adding a card */
+.add-card-dropdown {
+  margin-top: 10px; /* Space above the dropdown */
+  padding: 10px; /* Padding inside the dropdown */
+  border: 1px solid #ccc; /* Border around the dropdown */
+  border-radius: 4px; /* Rounded corners */
+  background-color: #f1f1f1; /* Light background for the dropdown */
 }
 
-.card-number {
-  display: inline-block;
-  margin-right: 10px;
+/* Button styling */
+button {
+  padding: 10px 15px; /* Padding for buttons */
+  margin-top: 10px; /* Space above buttons */
+  border: none; /* Remove default border */
+  border-radius: 4px; /* Rounded corners */
+  background-color: #007bff; /* Bootstrap blue color */
+  color: white; /* White text color */
+  cursor: pointer; /* Pointer cursor on hover */
 }
 
-.delete-card {
-  cursor: pointer;
-  color: red;
-  text-decoration: underline;
+/* Button hover effect */
+button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
 }
 
-.delete-card:hover {
-  color: darkred;
+/* List styling for stored cards */
+ul {
+  list-style-type: none; /* Remove default list styles */
+  padding: 0; /* Remove padding */
+}
+
+li {
+  display: flex; /* Flexbox for card items */
+  justify-content: space-between; /* Space between card text and delete button */
+  align-items: center; /* Center items vertically */
+  margin-top: 5px; /* Space between list items */
+  padding: 10px; /* Padding inside list items */
+  border: 1px solid #ddd; /* Border around list items */
+  border-radius: 4px; /* Rounded corners */
 }

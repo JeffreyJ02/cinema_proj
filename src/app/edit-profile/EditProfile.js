@@ -13,6 +13,7 @@ const EditProfile = () => {
   const [billingAddress, setBillingAddress] = useState('');
   const [storedCards, setStoredCards] = useState([]);
   const [errors, setErrors] = useState({}); // State for error messages
+  const [showAddCard, setShowAddCard] = useState(false); // State to control dropdown visibility
 
   // Function to validate email format
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
@@ -60,6 +61,7 @@ const EditProfile = () => {
       setCreditCardNumber('');
       setCvv('');
       setExpirationDate('');
+      setShowAddCard(false); // Hide the dropdown after adding the card
     }
   };
 
@@ -89,7 +91,7 @@ const EditProfile = () => {
           type="password"
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)} // Update current password state on change
-          placeholder="Enter current password"
+          placeholder=" Enter current password"
         />
       </label>
       <br />
@@ -116,36 +118,6 @@ const EditProfile = () => {
       </label>
       <br />
       <label>
-        Credit Card Number:
-        <input
-          type="text"
-          value={creditCardNumber}
-          onChange={(e) => setCreditCardNumber(e.target.value)} // Update credit card number state on change
-          placeholder="Enter credit card number"
-        />
-      </label>
-      <br />
-      <label>
-        Expiration Date:
-        <input
-          type="text"
-          value={expirationDate}
-          onChange={(e) => setExpirationDate(e.target.value)} // Update expiration date state on change
-          placeholder="Enter expiration date"
-        />
-      </label>
-      <br />
-      <label>
-        CVV:
-        <input
-          type="text"
-          value={cvv}
-          onChange={(e) => setCvv(e.target.value)} // Update cvv state on change
-          placeholder="Enter cvv"
-        />
-      </label>
-      <br />
-      <label>
         Billing Address:
         <input
           type="text"
@@ -155,16 +127,51 @@ const EditProfile = () => {
         />
       </label>
       <br />
-      <button type="submit">Submit</button>
-      <button type="button" onClick={handleAddCard}>Add Card</button>
+      <button type="button" onClick={() => setShowAddCard(!showAddCard)}>Add Card</button>
+      {showAddCard && (
+        <div className="add-card-dropdown">
+          <label>
+            Credit Card Number:
+            <input
+              type="text"
+              value={creditCardNumber}
+              onChange={(e) => setCreditCardNumber(e.target.value)} // Update credit card number state on change
+              placeholder="Enter credit card number"
+            />
+          </label>
+          <br />
+          <label>
+            Expiration Date:
+            <input
+              type="text"
+              value={expirationDate}
+              onChange={(e) => setExpirationDate(e.target.value)} // Update expiration date state on change
+              placeholder="Enter expiration date"
+            />
+          </label>
+          <br />
+          <label>
+            CVV:
+            <input
+              type="text"
+              value={cvv}
+              onChange={(e) => setCvv(e.target.value)} // Update cvv state on change
+              placeholder="Enter cvv"
+            />
+          </label>
+          <br />
+          <button type="button" onClick={handleAddCard}>Add Card</button>
+        </div>
+      )}
       <ul>
         {storedCards.map((card, index) => (
           <li key={index}>
-            {card.number} (Expires: {card.expirationDate})
+            {'****' + card.number.slice(-4)} (Expires: {card.expirationDate})
             <button type="button" onClick={() => handleDeleteCard(index)}>Delete</button>
           </li>
         ))}
       </ul>
+      <button type="submit">Submit</button>
     </form>
   );
 };
