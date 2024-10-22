@@ -26,7 +26,6 @@ export default function SignIn() {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [isMounted, setIsMounted] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [cookies, setCookie] = useCookies(["token"]);
@@ -38,10 +37,6 @@ export default function SignIn() {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
-  useEffect(() => {
-    setIsMounted(true); // Set to true when mounted
-  }, []);
 
   useEffect(() => {
     if (successMessage) {
@@ -115,8 +110,6 @@ export default function SignIn() {
       setSuccessMessage("");
     }
   };
-
-  if (!isMounted) return null;
 
   return (
     <Container maxWidth="xs">
