@@ -3,6 +3,8 @@ import './EditProfile.css';
 
 const EditProfile = () => {
   // State variables for form inputs
+  const [firstName, setFirstName] = useState(''); // New state for first name
+  const [lastName, setLastName] = useState(''); // New state for last name
   const [email, setEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -10,85 +12,75 @@ const EditProfile = () => {
   const [creditCardNumber, setCreditCardNumber] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [cvv, setCvv] = useState('');
-  const [billingAddress, setBillingAddress] = useState('');
+  const [address, setAddress] = useState('');
   const [storedCards, setStoredCards] = useState([]);
-  const [errors, setErrors] = useState({}); // State for error messages
-  const [showAddCard, setShowAddCard] = useState(false); // State to control dropdown visibility
+  const [errors, setErrors] = useState({});
+  const [showAddCard, setShowAddCard] = useState(false);
 
   // Function to validate email format
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
   // Function to validate password complexity
   const validatePassword = (password) => 
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password); // Updated regex for min length
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password);
 
   // Function to handle form submission
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
 
-    const newErrors = {}; // Object to hold any new error messages
+    const newErrors = {};
 
-    // Validate email and passwords, and populate newErrors if invalid
     if (!validateEmail(email)) newErrors.email = "Invalid email";
     if (!validatePassword(newPassword)) newErrors.newPassword = "Password must include upper, lower, number, symbol, and be at least 8 characters long";
     if (newPassword !== confirmNewPassword) newErrors.confirmNewPassword = "Passwords do not match";
 
-    setErrors(newErrors); // Update state with any new errors
-    if (Object.keys(newErrors).length > 0) return; // If there are errors, exit early
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
 
-    // Encrypting passwords and credit card numbers (mock encryption)
-    const encryptedPassword = btoa(newPassword); // Simple base64 encoding for demonstration
+    const encryptedPassword = btoa(newPassword);
     const encryptedCreditCard = btoa(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
 
-    // Log encrypted data to the console
     console.log('Encrypted Password:', encryptedPassword);
     console.log('Encrypted Credit Card:', encryptedCreditCard);
-    console.log('Form submitted with billing address:', billingAddress);
-
-    // Add logic to connect to the database and update user profile
   };
 
   // Function to add a new credit card to stored cards
   const handleAddCard = () => {
-    // Validate credit card number format
-    const cardNumberPattern = /^\d{4}-\d{4}-\d{4}-\d{4}$/; // Pattern for 16-digit card number with hyphens
+    const cardNumberPattern = /^\d{4}-\d{4}-\d{4}-\d{4}$/;
     if (!cardNumberPattern.test(creditCardNumber)) {
       alert("Invalid credit card number format. Please use xxxx-xxxx-xxxx-xxxx.");
       return;
     }
-  
-    // Validate expiration date format
-    const expirationPattern = /^(0[1-9]|1[0-2])\/\d{2}$/; // Pattern for MM/YY format
+
+    const expirationPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
     if (!expirationPattern.test(expirationDate)) {
       alert("Invalid expiration date format. Please use MM/YY.");
       return;
     }
-  
-    // Validate CVV length
-    if (!/^\d{3,4}$/.test(cvv)) { // Check for 3 or 4 digit CVV
+
+    if (!/^\d{3,4}$/.test(cvv)) {
       alert("CVV must be 3 or 4 digits.");
       return;
     }
-  
-    if (storedCards.length < 4) { // Check if less than 4 cards are stored
+
+    if (storedCards.length < 3) {
       const card = {
         number: creditCardNumber,
         cvv,
         expirationDate,
+        billingAddress: address // Include billing address with the card
       };
-      setStoredCards([...storedCards, card]); // Add new card to stored cards
-      // Reset fields after adding card
+      setStoredCards([...storedCards, card]);
       setCreditCardNumber('');
       setCvv('');
       setExpirationDate('');
-      setShowAddCard(false); // Hide the dropdown after adding the card
+      setShowAddCard(false);
     }
   };
 
-  // Function to delete a card from stored cards
   const handleDeleteCard = (index) => {
-    const newCards = storedCards.filter((_, i) => i !== index); // Remove card at specified index
-    setStoredCards(newCards); // Update state with new list of cards
+    const newCards = storedCards.filter((_, i) => i !== index);
+    setStoredCards(newCards);
   };
 
   return (
@@ -99,10 +91,29 @@ const EditProfile = () => {
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)} // Update email state on change
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter email"
         />
-        {errors.email && <span className="error">{errors.email}</span>} {/* Show email error */}
+      </label>
+      <br />
+      <label>
+        First Name:
+        <input
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="Enter first name"
+        />
+      </label>
+      <br />
+      <label>
+        Last Name:
+        <input
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          placeholder="Enter last name"
+        />
       </label>
       <br />
       <label>
@@ -110,8 +121,8 @@ const EditProfile = () => {
         <input
           type="password"
           value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)} // Update current password state on change
-          placeholder=" Enter current password"
+          onChange={(e) => setCurrentPassword(e.target.value)}
+          placeholder="Enter current password"
         />
       </label>
       <br />
@@ -120,10 +131,9 @@ const EditProfile = () => {
         <input
           type="password"
           value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)} // Update new password state on change
+          onChange={(e) => setNewPassword(e.target.value)}
           placeholder="Enter new password"
         />
-        {errors.newPassword && <span className="error">{errors.newPassword}</span>} {/* Show new password error */}
       </label>
       <br />
       <label>
@@ -131,34 +141,20 @@ const EditProfile = () => {
         <input
           type="password"
           value={confirmNewPassword}
-          onChange={(e) => setConfirmNewPassword(e.target.value)} // Update confirm new password state on change
+          onChange={(e) => setConfirmNewPassword(e.target.value)}
           placeholder="Confirm new password"
         />
-        {errors.confirmNewPassword && <span className="error">{errors.confirmNewPassword}</span>} {/* Show confirm new password error */}
       </label>
       <br />
-      <label>
-        Billing Address:
-        <input
-          type="text"
-          value={billingAddress}
-          onChange={(e) => setBillingAddress(e.target.value)} // Update billing address state on change
-          placeholder="Enter billing address"
-        />
-      </label>
-      <br />
-      <button type="button" onClick={() => setShowAddCard(!showAddCard)}>Add Card</button>
-      {showAddCard && (
-        <div className="add-card-dropdown">
+      {showAddCard ? (
+        <div>
           <label>
             Credit Card Number:
             <input
               type="text"
               value={creditCardNumber}
-              onChange={(e) => setCreditCardNumber(e.target.value)} // Update credit card number state on change
-              placeholder="Enter card number"
-              pattern="\d{4}-\d{4}-\d{4}-\d{4}" // Regex pattern for 12-digit card number with hyphens
-              required // Make this field required
+              onChange={(e) => setCreditCardNumber(e.target.value)}
+              placeholder="xxxx-xxxx-xxxx-xxxx"
             />
           </label>
           <br />
@@ -167,10 +163,8 @@ const EditProfile = () => {
             <input
               type="text"
               value={expirationDate}
-              onChange={(e) => setExpirationDate(e.target.value)} // Update expiration date state on change
+              onChange={(e) => setExpirationDate(e.target.value)}
               placeholder="MM/YY"
-              pattern="^(0[1-9]|1[0-2])\/\d{2}$" // Regex pattern for MM/YY format
-              required // Make this field required
             />
           </label>
           <br />
@@ -179,25 +173,42 @@ const EditProfile = () => {
             <input
               type="text"
               value={cvv}
-              onChange={(e) => setCvv(e.target.value)} // Update CVV state on change
-              placeholder="Enter CVV"
-              pattern="^\d{3,4}$" // Regex pattern for 3 or 4 digit CVV
-              required // Make this field required
+              onChange={(e) => setCvv(e.target.value)}
+              placeholder="***"
             />
           </label>
           <br />
-          <button type="button" onClick={handleAddCard}>Add Card</button>
+          <label>
+            Billing Address:
+            <input
+              type="text"
+              value={address} // New input for billing address
+              onChange={(e) => setAddress(e.target.value)} // New state for billing address
+              placeholder="Enter billing address"
+            />
+          </label>
+          <br />
+          <button onClick={handleAddCard}>Add Card</button>
         </div>
+      ) : (
+        <button onClick={() => setShowAddCard(true)}>Add New Card</button>
       )}
-      <ul>
-        {storedCards.map((card, index) => (
-          <li key={index}>
-            {'****' + card.number.slice(-4)} (Expires: {card.expirationDate})
-            <button type="button" onClick={() => handleDeleteCard(index)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-      <button type="submit">Submit</button>
+      <br />
+      <h2>Saved Cards:</h2>
+      {storedCards.map((card, index) => (
+        <div key={index}>
+          <p>
+          Card Number: ****{card.number.slice(-4)} {/* Display only the last 4 digits */}
+            <br />
+            Expiration Date: {card.expirationDate}
+            <br />
+            Billing Address: {card.billingAddress} 
+          </p>
+          <button onClick={() => handleDeleteCard(index)}>Delete Card</button>
+        </div>
+      ))}
+      <br />
+      <button type="submit">Save Changes</button>
     </form>
   );
 };
