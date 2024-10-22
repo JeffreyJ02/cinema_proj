@@ -20,6 +20,7 @@ const EditProfile = () => {
   const [city, setCity] = useState(''); // New state for city
   const [state, setState] = useState(''); // New state for state
   const [zipCode, setZipCode] = useState(''); // New state for zip code
+  const [promotionalEmails, setPromotionalEmails] = useState(false); //set it to false
 
   // Function to validate email format
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
@@ -194,6 +195,16 @@ const EditProfile = () => {
           onChange={(e) => setZipCode(e.target.value)}
           placeholder="Enter zip code"
         />
+      </label>
+      <br />
+      <label>
+        <input
+          type="checkbox"
+          checked={promotionalEmails}
+          onChange={(e) => setPromotionalEmails(e.target.checked)}
+          style={{ marginRight: '8px' }}
+        />
+        Toggle promotional emails
       </label>
       <br />
       {showAddCard ? (
