@@ -17,6 +17,7 @@ backtofront\example\demo\WebApp.class
 backtofront\example\demo\Admin\AdminController.class
 backtofront\example\demo\Admin\AdminRepository.class
 backtofront\example\demo\MovieService.class
+backtofront\example\demo\User\EmailService.class
 backtofront\example\demo\MovieController.class
 backtofront\example\demo\User\UserRepository.class
 backtofront\example\demo\Movie.class

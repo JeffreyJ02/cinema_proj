@@ -9,7 +9,10 @@ const SignUpPage = () => {
         confirmEmail: '',
         password: '',
         confirmPassword: '',
-        registerForPromotions: false, // New field for promotions
+        registerForPromotions: false,
+        creditCardNumber: '', // New optional field
+        expirationDate: '', // New optional field
+        cvv: '', // New optional field
     });
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -29,7 +32,7 @@ const SignUpPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { firstName, lastName, email, password, confirmEmail, confirmPassword, registerForPromotions } = formData;
+        const { firstName, lastName, email, password, confirmEmail, confirmPassword, registerForPromotions, creditCardNumber, expirationDate, cvv } = formData;
 
         // Validate email and password confirmation
         if (email !== confirmEmail) {
@@ -49,7 +52,7 @@ const SignUpPage = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ firstName, lastName, email, password, registerForPromotions }),
+                body: JSON.stringify({ firstName, lastName, email, password, registerForPromotions, creditCardNumber, expirationDate, cvv }),
             });
 
             if (!response.ok) {
@@ -80,6 +83,9 @@ const SignUpPage = () => {
                 password: '',
                 confirmPassword: '',
                 registerForPromotions: false,
+                creditCardNumber: '',
+                expirationDate: '',
+                cvv: '',
             });
 
         } catch (error) {
@@ -159,6 +165,36 @@ const SignUpPage = () => {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         required
+                    />
+                </div>
+                <div className="signup-info">
+                    <input
+                        type="text"
+                        id="creditCardNumber"
+                        name="creditCardNumber"
+                        placeholder="Credit Card Number (Optional)"
+                        value={formData.creditCardNumber}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="signup-info">
+                    <input
+                        type="text"
+                        id="expirationDate"
+                        name="expirationDate"
+                        placeholder="Expiration Date (MM/YY) (Optional)"
+                        value={formData.expirationDate}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="signup-info">
+                    <input
+                        type="text"
+                        id="cvv"
+                        name="cvv"
+                        placeholder="CVV (Optional)"
+                        value={formData.cvv}
+                        onChange={handleChange}
                     />
                 </div>
                 <div className="signup-info">
