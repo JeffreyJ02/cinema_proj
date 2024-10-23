@@ -33,6 +33,7 @@ const EditProfile = () => {
 
   // Function to handle form submission
   const handleSubmit = (e) => {
+    console.log('Submitting form...');
     e.preventDefault();
 
     const newErrors = {};
@@ -58,8 +59,12 @@ const EditProfile = () => {
       state,
       zipCode,
     });
-
-    editProfileEmail({email});
+    try {
+      console.log('Sending editProfile email...');
+      editProfileEmail({email});
+    } catch (error) {
+      console.error('Error sending editProfile email:', error);
+    }
   };
 
   // Function to add a new credit card to stored cards

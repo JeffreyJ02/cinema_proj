@@ -11,7 +11,7 @@ function optInPromoEmails( {email} ) {
     emailjs.send("service_4brc417", "template_r3h3fid", parms)
 }
 
-function editProfileEmail( {email} ) {
+export function editProfileEmail( {email} ) {
     let parms = {
         subject: "Profile Edited",
         user_email: email,
@@ -28,7 +28,7 @@ function forgotPassword( {email, message} ) {
     emailjs.send("service_4brc417", "template_6zuhtqr", parms)
 }
 
-function verificationCode({ email, message }) {
+export function verificationCode({ email, message }) {
     const parms = {
       user_email: email,
       message,
