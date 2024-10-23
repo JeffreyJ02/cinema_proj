@@ -15,8 +15,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+<<<<<<< HEAD
     @Column(name = "user_id", nullable = false)
     private int user_id; 
+=======
+    @Column(name = "user_id")
+    private int id;
+>>>>>>> 8e59243c3b670a30ba2db7e3154d0042b9c2dea0
 
     @Column(name = "first_name", nullable = false)
     private String firstName;

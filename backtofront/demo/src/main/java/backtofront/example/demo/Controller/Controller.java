@@ -22,8 +22,12 @@ import backtofront.example.demo.Address.*;
 public class Controller {
 
     private final UserService userService;
+<<<<<<< HEAD:backtofront/demo/src/main/java/backtofront/example/demo/Controller/Controller.java
     private final CreditCardService creditCardService;
     private final AddressService addressService;
+=======
+   // private userId = 10;
+>>>>>>> 8e59243c3b670a30ba2db7e3154d0042b9c2dea0:backtofront/demo/src/main/java/backtofront/example/demo/User/UserController.java
 
     public Controller(UserService userService, CreditCardService creditCardService, AddressService addressService) {
         this.userService = userService;
@@ -35,6 +39,7 @@ public class Controller {
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             userService.registerUser(
+
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
@@ -289,6 +294,7 @@ public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updat
 
 // Request classes for profile and password updates
 private static class UpdateProfileRequest {
+    private int id;
     private String email;
     private String firstName;
     private String lastName;
@@ -299,6 +305,10 @@ private static class UpdateProfileRequest {
     private boolean registerForPromotions;
 
     // Getters and Setters
+    /* public int setid(int id) {
+        this.id = id;
+    } */
+
     public String getEmail() {
         return email;
     }

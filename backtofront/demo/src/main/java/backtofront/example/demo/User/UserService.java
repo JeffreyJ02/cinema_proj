@@ -19,7 +19,11 @@ public class UserService {
             throw new IllegalArgumentException("Email already exists");
         }
         User newUser = new User();
+<<<<<<< HEAD
         newUser.setUser_id((int)userRepository.count());
+=======
+        newUser.setId((int)userRepository.count() + 1);
+>>>>>>> 8e59243c3b670a30ba2db7e3154d0042b9c2dea0
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
         newUser.setEmail(email);
