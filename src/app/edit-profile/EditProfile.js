@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import './EditProfile.css';
+import { editProfileEmail } from '../../utils/email';
+import { encrypt } from '../../utils/encryption';
 
 const EditProfile = () => {
   // State variables for form inputs
@@ -42,8 +44,11 @@ const EditProfile = () => {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    const encryptedPassword = btoa(newPassword);
-    const encryptedCreditCard = btoa(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
+    //const encryptedPassword = btoa(newPassword);
+    //const encryptedCreditCard = btoa(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
+
+    const encryptedPassword = encrypt(newPassword);
+    const encryptedCreditCard = encrypt(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
 
     console.log('Encrypted Password:', encryptedPassword);
     console.log('Encrypted Credit Card:', encryptedCreditCard);
@@ -53,6 +58,8 @@ const EditProfile = () => {
       state,
       zipCode,
     });
+
+    editProfileEmail({email});
   };
 
   // Function to add a new credit card to stored cards

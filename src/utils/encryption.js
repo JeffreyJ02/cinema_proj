@@ -1,9 +1,8 @@
 const key = 'teamB8';
 
-function encrypt() {
-    let password = document.getElementById("pass").value;
+function encrypt(password) {
     const secretPass = CryptoJS.AES.encrypt(password, key);
-    document.getElementById("pass").value = secretPass;
+    return secretPass;
 };
 
 function decrypt() {
