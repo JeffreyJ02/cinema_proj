@@ -1,8 +1,7 @@
 "use client";
-import { useUser } from "../../context/UserContext";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useUser } from "../../context/UserContext";
 
 const CustomNavbar = () => {
   const router = useRouter();

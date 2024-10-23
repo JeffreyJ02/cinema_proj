@@ -1,13 +1,12 @@
-import { useState } from 'react';
-import './EditProfile.css';
+import { useEffect, useState } from 'react';
 import { editProfileEmail } from '../../utils/email';
 import { encrypt } from '../../utils/encryption';
+import './EditProfile.css';
 
 const EditProfile = () => {
-  // State variables for form inputs
-  const [firstName, setFirstName] = useState(''); // New state for first name
-  const [lastName, setLastName] = useState(''); // New state for last name
-  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState(''); // Will be fetched
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -18,29 +17,70 @@ const EditProfile = () => {
   const [storedCards, setStoredCards] = useState([]);
   const [errors, setErrors] = useState({});
   const [showAddCard, setShowAddCard] = useState(false);
-  const [street, setStreet] = useState(''); // New state for street
-  const [city, setCity] = useState(''); // New state for city
-  const [state, setState] = useState(''); // New state for state
-  const [zipCode, setZipCode] = useState(''); // New state for zip code
-  const [promotionalEmails, setPromotionalEmails] = useState(false); //set it to false
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  const [promotionalEmails, setPromotionalEmails] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   // Function to validate email format
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
   // Function to validate password complexity
-  const validatePassword = (password) => 
+  const validatePassword = (password) =>
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password);
 
-  // Function to handle form submission
-  const handleSubmit = (e) => {
-    console.log('Submitting form...');
-    e.preventDefault();
+// Fetch user profile on component mount
+useEffect(() => {
+  const token = localStorage.getItem('token'); // Assuming token is stored in local storage
+  const userEmail = localStorage.getItem('userEmail'); // Retrieve email from local storage or use context
 
+  const fetchUserProfile = async (email) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/user-profile?email=${email}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // If you are using token-based authentication
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch user profile');
+      }
+
+      const userData = await response.json();
+      // Update state with user data
+      setFirstName(userData.firstName);
+      setLastName(userData.lastName);
+      setEmail(userData.email);
+      setStreet(userData.street);
+      setCity(userData.city);
+      setState(userData.state);
+      setZipCode(userData.zipCode);
+      setPromotionalEmails(userData.registerForPromotions);
+      
+      console.log(userData);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  fetchUserProfile(userEmail); // Call the fetch function with the user email
+}, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSuccessMessage('');
     const newErrors = {};
 
-    if (!validateEmail(email)) newErrors.email = "Invalid email";
-    if (!validatePassword(newPassword)) newErrors.newPassword = "Password must include upper, lower, number, symbol, and be at least 8 characters long";
-    if (newPassword !== confirmNewPassword) newErrors.confirmNewPassword = "Passwords do not match";
+    if (newPassword && !validatePassword(newPassword)) {
+      newErrors.newPassword = "Password must include upper, lower, number, symbol, and be at least 8 characters long";
+    }
+    if (newPassword && newPassword !== confirmNewPassword) {
+      newErrors.confirmNewPassword = "Passwords do not match";
+    }
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
@@ -64,6 +104,46 @@ const EditProfile = () => {
       editProfileEmail({email});
     } catch (error) {
       console.error('Error sending editProfile email:', error);
+    }
+    try {
+      // Update user profile
+      const profileResponse = await fetch('http://localhost:8080/api/update-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          street,
+          city,
+          state,
+          zipCode,
+          promotionalEmails,
+        }),
+      });
+
+      if (!profileResponse.ok) {
+        throw new Error('Failed to update profile');
+      }
+
+      // Update password if provided
+      if (newPassword) {
+        const passwordResponse = await fetch('http://localhost:8080/api/update-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            currentPassword,
+            newPassword,
+          }),
+        });
+
+        if (!passwordResponse.ok) {
+          throw new Error('Failed to update password');
+        }
+      }
+
+      setSuccessMessage('Profile updated successfully.');
+    } catch (error) {
+      setErrors({ form: error.message });
     }
   };
 
@@ -91,7 +171,7 @@ const EditProfile = () => {
         number: creditCardNumber,
         cvv,
         expirationDate,
-        billingAddress: address // Include billing address with the card
+        billingAddress: address,
       };
       setStoredCards([...storedCards, card]);
       setCreditCardNumber('');
@@ -109,13 +189,13 @@ const EditProfile = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Edit Profile</h2>
+      {successMessage && <p className="success-message">{successMessage}</p>}
       <label>
         Email:
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter email"
+          readOnly // Make email read-only
         />
       </label>
       <br />
@@ -216,13 +296,19 @@ const EditProfile = () => {
           onChange={(e) => setPromotionalEmails(e.target.checked)}
           style={{ marginRight: '8px' }}
         />
-        Toggle promotional emails
+        Receive promotional emails
       </label>
       <br />
-      {showAddCard ? (
+      <button type="submit">Update Profile</button>
+      <h3>Stored Credit Cards</h3>
+      <button type="button" onClick={() => setShowAddCard(true)}>
+        Add New Card
+      </button>
+      {showAddCard && (
         <div>
+          <h4>Add Credit Card</h4>
           <label>
-            Credit Card Number:
+            Card Number:
             <input
               type="text"
               value={creditCardNumber}
@@ -232,7 +318,7 @@ const EditProfile = () => {
           </label>
           <br />
           <label>
-            Expiration Date:
+            Expiration Date (MM/YY):
             <input
               type="text"
               value={expirationDate}
@@ -247,7 +333,7 @@ const EditProfile = () => {
               type="text"
               value={cvv}
               onChange={(e) => setCvv(e.target.value)}
-              placeholder="***"
+              placeholder="CVV"
             />
           </label>
           <br />
@@ -255,33 +341,29 @@ const EditProfile = () => {
             Billing Address:
             <input
               type="text"
-              value={address} // New input for billing address
-              onChange={(e) => setAddress(e.target.value)} // New state for billing address
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               placeholder="Enter billing address"
             />
           </label>
           <br />
-          <button onClick={handleAddCard}>Add Card</button>
+          <button type="button" onClick={handleAddCard}>Add Card</button>
+          <button type="button" onClick={() => setShowAddCard(false)}>Cancel</button>
         </div>
-      ) : (
-        <button onClick={() => setShowAddCard(true)}>Add New Card</button>
       )}
-      <br />
-      <h2>Saved Cards:</h2>
-      {storedCards.map((card, index) => (
-        <div key={index}>
-          <p>
-          Card Number: ****{card.number.slice(-4)} {/* Display only the last 4 digits */}
-            <br />
-            Expiration Date: {card.expirationDate}
-            <br />
-            Billing Address: {card.billingAddress} 
-          </p>
-          <button onClick={() => handleDeleteCard(index)}>Delete Card</button>
-        </div>
-      ))}
-      <br />
-      <button type="submit">Save Changes</button>
+      {storedCards.length > 0 ? (
+        <ul>
+          {storedCards.map((card, index) => (
+            <li key={index}>
+              {card.number} - {card.expirationDate}
+              <button type="button" onClick={() => handleDeleteCard(index)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No stored cards available.</p>
+      )}
+      {errors.form && <p className="error-message">{errors.form}</p>}
     </form>
   );
 };
