@@ -40,13 +40,14 @@ public class Controller {
                 user.getEmail(),
                 user.getPassword(),
                 user.isRegisterForPromotions(), // Get the boolean value
-                user.getCreditCardNumber(), // Optional field
-                user.getExpirationDate(), // Optional field
-                user.getCvv(), // Optional field
-                user.getStreet(),
-                user.getCity(),
-                user.getState(),
-                user.getZipCode()
+                user.getCard_type1(),           // Optional field
+                user.getCreditCardNumber1(),    // Optional field
+                user.getExpirationDate1(),      // Optional field
+                user.getCvv1(),                 // Optional field
+                user.getStreet(),               // Optional
+                user.getCity(),                 // Optional
+                user.getState(),                // Optional
+                user.getZipCode()               // Optional
             );
             return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
         } catch (IllegalArgumentException e) {

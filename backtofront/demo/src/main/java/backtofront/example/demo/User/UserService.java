@@ -12,7 +12,9 @@ public class UserService {
     private UserRepository userRepository;
 
     // Updated registerUser method to include optional credit card fields
-    public void registerUser(String firstName, String lastName, String email, String password, boolean registerForPromotions, String creditCardNumber, String expirationDate, String cvv, String street, String city, String state, String zipCode) {
+    public void registerUser(String firstName, String lastName, String email, String password, boolean registerForPromotions, 
+                             String cardType, String creditCardNumber, String expirationDate, String cvv, String street, 
+                             String city, String state, String zipCode) {
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email already exists");
         }
@@ -23,19 +25,22 @@ public class UserService {
         newUser.setPassword(password);
         newUser.setRegisterForPromotions(registerForPromotions);
         newUser.setStatus("Active");
+
+        // Set the Address
         newUser.setStreet(street);
         newUser.setCity(city);
+        newUser.setState(state);
         newUser.setZipCode(zipCode);
 
         // Set the credit card information only if provided
         if (creditCardNumber != null && !creditCardNumber.isEmpty()) {
-            newUser.setCreditCardNumber(creditCardNumber);
+            newUser.setCreditCardNumber1(creditCardNumber);
         }
         if (expirationDate != null && !expirationDate.isEmpty()) {
-            newUser.setExpirationDate(expirationDate);
+            newUser.setExpirationDate1(expirationDate);
         }
         if (cvv != null && !cvv.isEmpty()) {
-            newUser.setCvv(cvv);
+            newUser.setCvv1(cvv);
         }
 
         userRepository.save(newUser);
