@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import './passwordReset.css';
+import { forgotPassword } from '../../utils/email';
 
 function PasswordReset() {
     const [email, setEmail] = useState('');
@@ -49,16 +50,16 @@ function PasswordReset() {
 
         const tempPassword = generatePassword();
 
-        // Here you would send the email with the temporary password
-        // For now, I am just logging it to the console
-        console.log(`Sending email to ${email} with temporary password: ${tempPassword}`);
+        const message = "Here is your temporary password to help you log in: " + tempPassword;
 
         // Simulate sending email (replace this with your actual email sending logic)
         try {
-            // Example: await sendEmail(email, tempPassword);
-            setMessage(`A temporary password has been sent to ${email}.`);
-        } catch (err) {
-            setError('Failed to send email. Please try again later.');
+            await forgotPassword( {
+                email: email, 
+                message: message} );
+            console.log(`A temporary password ${tempPassword} has been sent to ${email}.`);
+        } catch (error) {
+            console.error('Failed to send email. Please try again later.');
         }
 
     }; //handleSubmit
