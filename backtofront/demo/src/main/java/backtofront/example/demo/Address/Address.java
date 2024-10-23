@@ -14,6 +14,9 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Column(name = "address_id")
+    private int address_id;
     
     @Column(name = "street_info")
     private String street_info;
@@ -27,4 +30,6 @@ public class Address {
     @Column(name = "zip_code")
     private String zip_code;
 
+    @Column(name = "user_id")
+    private int user_id;
 } 

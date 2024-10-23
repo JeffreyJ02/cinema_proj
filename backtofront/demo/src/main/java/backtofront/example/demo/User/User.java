@@ -1,7 +1,5 @@
 package backtofront.example.demo.User;
 
-import backtofront.example.demo.Address.Address;
-import backtofront.example.demo.CreditCard.CreditCard;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,13 +13,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<<<<<<< HEAD
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", unique = true, nullable = false)
     private int user_id; 
-=======
-    @Column(name = "user_id")
-    private int id;
->>>>>>> 8e59243c3b670a30ba2db7e3154d0042b9c2dea0
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -39,55 +32,18 @@ public class User {
     @Column(name = "register_for_promotions", nullable = false)
     private boolean registerForPromotions;
 
-    @Column(name = "card_type1", nullable = true)
-    private String card_type1;
-
-    @Column(name = "credit_card_number1", nullable = true)
-    private String creditCardNumber1; 
-
-    @Column(name = "expiration_date1", nullable = true)
-    private String expirationDate1; 
-
-    @Column(name = "cvv1", nullable = true)
-    private String cvv1;
-    
-    @Column(name = "card_type2", nullable = true)
-    private String card_type2;
-
-    @Column(name = "credit_card_number2", nullable = true)
-    private String creditCardNumber2; 
-
-    @Column(name = "expiration_date2", nullable = true)
-    private String expirationDate2; 
-
-    @Column(name = "cvv2", nullable = true)
-    private String cvv2;
-
-    @Column(name = "card_type3", nullable = true)
-    private String card_type3;
-
-    @Column(name = "credit_card_number3", nullable = true)
-    private String creditCardNumber3; 
-
-    @Column(name = "expiration_date3", nullable = true)
-    private String expirationDate3; 
-
-    @Column(name = "cvv3", nullable = true)
-    private String cvv3;
-
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "street", nullable = true)
-    private String street;
+    @Column(name = "card_id_1")
+    private int card_id_1;
 
-    @Column(name = "city", nullable = true)
-    private String city;
+    @Column(name = "card_id_2")
+    private int card_id_2;
 
-    @Column(name = "state", nullable = true)
-    private String state;
+    @Column(name = "card_id_3")
+    private int card_id_3;
 
-    @Column(name = "zipCode", nullable = true)
-    private String zipCode;
-
+    @Column(name = "address_id")
+    private int address_id;
 }

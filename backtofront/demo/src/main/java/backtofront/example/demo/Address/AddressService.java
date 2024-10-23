@@ -1,29 +1,33 @@
 package backtofront.example.demo.Address;
 
+//import org.apache.el.stream.Optional;
 import org.springframework.stereotype.Service;
-
-import backtofront.example.demo.User.*;
 
 @Service
 public class AddressService {
 
-    private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
 
-    public AddressService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AddressService(AddressRepository addressRepository) {
+        this.addressRepository = addressRepository;
     }
 
-    // Register a new address
-    public void registerUserAddress(Long id, String street_info, String city, String state, String zip_code) {
+    // Register user address
+    public void registerAddress(String street_info, String city, String state, String zip_code, int user_id) {
         Address address = new Address();
+        address.setAddress_id((int)addressRepository.count() + 1);
         address.setStreet_info(street_info);
         address.setCity(city);
         address.setState(state);
         address.setZip_code(zip_code);
+        address.setUser_id(user_id);
 
-        User user = userRepository.findById(id).get();
-        user.setHome_address(address);
-
-        // update info?
+        addressRepository.save(address);
     }
+
+    //error : Optional is not generic cannot use Address?
+    // Find address by user_id
+    //public Optional<Address> findByUserId(int user_id) {
+    //    return addressRepository.findByUserId(user_id);
+    //}
 }

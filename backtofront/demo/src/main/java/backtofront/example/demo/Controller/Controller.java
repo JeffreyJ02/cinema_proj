@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backtofront.example.demo.User.*;
-import backtofront.example.demo.CreditCard.*;
 import backtofront.example.demo.Address.*;
+import backtofront.example.demo.PaymentCard.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -22,16 +22,12 @@ import backtofront.example.demo.Address.*;
 public class Controller {
 
     private final UserService userService;
-<<<<<<< HEAD:backtofront/demo/src/main/java/backtofront/example/demo/Controller/Controller.java
-    private final CreditCardService creditCardService;
+    private final CardService cardService;
     private final AddressService addressService;
-=======
-   // private userId = 10;
->>>>>>> 8e59243c3b670a30ba2db7e3154d0042b9c2dea0:backtofront/demo/src/main/java/backtofront/example/demo/User/UserController.java
 
-    public Controller(UserService userService, CreditCardService creditCardService, AddressService addressService) {
+    public Controller(UserService userService, CardService cardService, AddressService addressService) {
         this.userService = userService;
-        this.creditCardService = creditCardService;
+        this.cardService = cardService;
         this.addressService = addressService;
     }
 
@@ -39,20 +35,11 @@ public class Controller {
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             userService.registerUser(
-
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.isRegisterForPromotions(), // Get the boolean value
-                user.getCard_type1(),           // Optional field
-                user.getCreditCardNumber1(),    // Optional field
-                user.getExpirationDate1(),      // Optional field
-                user.getCvv1(),                 // Optional field
-                user.getStreet(),               // Optional
-                user.getCity(),                 // Optional
-                user.getState(),                // Optional
-                user.getZipCode()               // Optional
+                user.isRegisterForPromotions() // Get the boolean value
             );
             return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -61,7 +48,43 @@ public class Controller {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
         }
     }
-        
+
+    @PostMapping("/register-address") 
+    public ResponseEntity<?> registerAddress(@RequestBody Address address) {
+        try {
+            addressService.registerAddress(
+                address.getStreet_info(),
+                address.getCity(),
+                address.getState(),
+                address.getZip_code(),
+                address.getUser_id()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Address registered successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+        }
+    }
+
+    @PostMapping("/register-card")
+    public ResponseEntity<?> registerCard(@RequestBody Card card) {
+        try {
+            cardService.registerCard(
+                card.getCard_type(),
+                card.getCard_number(),
+                card.getExpiration_date(),
+                card.getSecurity_code(),
+                card.getAddress_id(),
+                card.getUser_id()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Card registered successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+        }
+    }
 
     // User Login Endpoint
     @PostMapping("/login-user")
@@ -83,7 +106,7 @@ public class Controller {
         }
     }
 
-
+    // edit this
     @GetMapping("/user-profile")
     public ResponseEntity<Object> getUserProfile(@RequestParam String email) {
         try {
