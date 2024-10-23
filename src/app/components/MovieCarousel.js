@@ -32,7 +32,7 @@ const MovieCarousel = ({ movies, header }) => {
     <div>
       <h1>{header}</h1>
       <Slider {...settings}>
-        {movies.map((movie) => (
+        {movies./*filter((movie) => movie.playing === movie.header).*/map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}
       </Slider>

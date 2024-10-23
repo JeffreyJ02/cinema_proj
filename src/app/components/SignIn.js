@@ -114,17 +114,26 @@ export default function SignIn() {
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container 
+      maxWidth={false} 
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        width: "100vw", 
+      }}>
       <Box
         component="form"
         onSubmit={handleSubmit}
         noValidate
         sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 2,
+          width: "66%",
+          maxWidth: "500px",
+          padding: 4,
+          boxShadow: 3,
+          borderRadius: 2,
+          backgroundColor: "#fff",
         }}
       >
         <Typography component="h1" variant="h5">

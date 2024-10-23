@@ -1,9 +1,9 @@
 import { TextField } from '@mui/material';
+import Alert from '@mui/material/Alert';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { verificationCode } from '../../utils/email';
-import './SignUpPage.css';
 
 const SignUpPage = () => {
     const [formData, setFormData] = useState({
@@ -65,10 +65,14 @@ const SignUpPage = () => {
         if (verifyData.verificationCode === generatedCode) {
             setSuccessMessage('Account verified successfully!');
             setErrorMessage('');
-            await submitUserData(); // Submit user data after verification
-            window.location.href = '/sign-in'; // Navigate to sign-in page
+            await submitUserData(); // This submits the user data to the db AFTER
+            /*
+            NOTE THE LOGIC TO DO THIS IS CURRENTLY COMMENTED OUT
+            */
+            // window.location.href = '/sign-in'; // Use anchor navigation, next router issues
         } else {
             setErrorMessage('Invalid verification code');
+
         }
     };
 
@@ -181,6 +185,7 @@ const SignUpPage = () => {
                     <Button variant="primary" onClick={handleVerify}>
                         Verify
                     </Button>
+                    {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>

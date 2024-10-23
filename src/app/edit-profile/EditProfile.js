@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { editProfileEmail } from '../../utils/email';
+import { encrypt } from '../../utils/encryption';
 import './EditProfile.css';
 
 const EditProfile = () => {
@@ -83,6 +85,26 @@ useEffect(() => {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
+    //const encryptedPassword = btoa(newPassword);
+    //const encryptedCreditCard = btoa(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
+
+    const encryptedPassword = encrypt(newPassword);
+    const encryptedCreditCard = encrypt(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
+
+    console.log('Encrypted Password:', encryptedPassword);
+    console.log('Encrypted Credit Card:', encryptedCreditCard);
+    console.log('Address:', {
+      street,
+      city,
+      state,
+      zipCode,
+    });
+    try {
+      console.log('Sending editProfile email...');
+      editProfileEmail({email});
+    } catch (error) {
+      console.error('Error sending editProfile email:', error);
+    }
     try {
       // Update user profile
       const profileResponse = await fetch('http://localhost:8080/api/update-profile', {
