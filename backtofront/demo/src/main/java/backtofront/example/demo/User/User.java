@@ -43,6 +43,16 @@ public class User {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "verification_token", nullable = true)
-    private String verificationToken;
+    @Column(name = "street", nullable = true)
+    private String street;
+
+    @Column(name = "city", nullable = true)
+    private String city;
+
+    @Column(name = "state", nullable = true)
+    private String state;
+
+    @Column(name = "zipCode", nullable = true)
+    private String zipCode;
+
 }
