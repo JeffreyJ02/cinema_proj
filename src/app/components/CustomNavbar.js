@@ -16,7 +16,8 @@ const CustomNavbar = () => {
   };
 
   const logout = async () => {
-    // document.cookie = "token=; Max-Age=0; path=/;";
+    console.log("Document cookie:", document.cookie);
+    document.cookie = "token=; Max-Age=0; path=/;";
     try {
       const response = await fetch("http://localhost:8080/api/logout", {
         method: "POST",
