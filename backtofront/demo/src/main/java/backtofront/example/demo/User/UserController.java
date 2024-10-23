@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+   // private userId = 10;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -27,6 +28,7 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             userService.registerUser(
+
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
@@ -280,6 +282,7 @@ public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updat
 
 // Request classes for profile and password updates
 private static class UpdateProfileRequest {
+    private int id;
     private String email;
     private String firstName;
     private String lastName;
@@ -290,6 +293,10 @@ private static class UpdateProfileRequest {
     private boolean registerForPromotions;
 
     // Getters and Setters
+    /* public int setid(int id) {
+        this.id = id;
+    } */
+
     public String getEmail() {
         return email;
     }
