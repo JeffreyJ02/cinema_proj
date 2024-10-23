@@ -1,18 +1,13 @@
-'use client'
-{/* use client, components are server*/}
-
 import React from 'react';
-import CustomNavbar from '../components/CustomNavbar';
-import MovieCarousel from '../components/MovieCarousel';
-import LoginPage from './LoginPage';
+import SignIn from '../components/SignIn';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 
-export default function Home() {
-    return (
-        <div>
-            
-            <h1>Sign In</h1>
-            <LoginPage />
-        </div>
-    );
-}
-
+export default function HomePage() {
+  return (
+    <Card>
+      <SignIn />
+    </Card>
+  );
+};

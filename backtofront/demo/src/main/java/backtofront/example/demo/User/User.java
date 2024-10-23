@@ -19,33 +19,70 @@ public class User {
     private Long id;
 
     @Column(name = "first_name", nullable = false)
-    private String first_name;
+    private String firstName;
 
     @Column(name = "last_name", nullable = false)
-    private String last_name;
-
-    @Column(name = "phone_number", unique = true, nullable = false)
-    private String phone_number;
+    private String lastName;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     // encrypt
     @Column(name = "password", nullable = false)
-    private String password; //No Encryption
+    private String password;
 
-    // encrypt
-    @Column(name = "credit_card_1")
-    private CreditCard credit_card_1;
+    @Column(name = "register_for_promotions", nullable = false)
+    private boolean registerForPromotions;
 
-    // encrypt
-    @Column(name = "credit_card_2")
-    private CreditCard credit_card_2;
+    @Column(name = "card_type1", nullable = true)
+    private String card_type1;
 
-    // encrypt
-    @Column(name = "credit_card_3")
-    private CreditCard credit_card_3;
+    @Column(name = "credit_card_number1", nullable = true)
+    private String creditCardNumber1; 
 
-    @Column(name = "home_address")
-    private Address home_address;
-} 
+    @Column(name = "expiration_date1", nullable = true)
+    private String expirationDate1; 
+
+    @Column(name = "cvv1", nullable = true)
+    private String cvv1;
+    
+    @Column(name = "card_type2", nullable = true)
+    private String card_type2;
+
+    @Column(name = "credit_card_number2", nullable = true)
+    private String creditCardNumber2; 
+
+    @Column(name = "expiration_date2", nullable = true)
+    private String expirationDate2; 
+
+    @Column(name = "cvv2", nullable = true)
+    private String cvv2;
+
+    @Column(name = "card_type3", nullable = true)
+    private String card_type3;
+
+    @Column(name = "credit_card_number3", nullable = true)
+    private String creditCardNumber3; 
+
+    @Column(name = "expiration_date3", nullable = true)
+    private String expirationDate3; 
+
+    @Column(name = "cvv3", nullable = true)
+    private String cvv3;
+
+    @Column(name = "status", nullable = false)
+    private String status;
+
+    @Column(name = "street", nullable = true)
+    private String street;
+
+    @Column(name = "city", nullable = true)
+    private String city;
+
+    @Column(name = "state", nullable = true)
+    private String state;
+
+    @Column(name = "zipCode", nullable = true)
+    private String zipCode;
+
+}
