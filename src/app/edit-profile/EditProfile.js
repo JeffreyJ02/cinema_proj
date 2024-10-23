@@ -31,8 +31,22 @@ const EditProfile = () => {
   const validatePassword = (password) => 
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password);
 
+  // Send verification email
+  const sendEditProfileEmail = async (email) => {
+    try {
+        // Async function to send edited profile email code from email.js
+        await editProfileEmail({
+            email: email,
+        });
+        console.log('Profile edited email sent to:', email);
+    } catch (error) {
+        console.error('Error sending profile edited email:', error);
+    }
+  };
+
   // Function to handle form submission
-  const handleSubmit = (e) => {
+  // Connor added async to attempt to make edit email work
+  const handleSubmit = async (e) => {
     console.log('Submitting form...');
     e.preventDefault();
 
@@ -59,12 +73,8 @@ const EditProfile = () => {
       state,
       zipCode,
     });
-    try {
-      console.log('Sending editProfile email...');
-      editProfileEmail({email});
-    } catch (error) {
-      console.error('Error sending editProfile email:', error);
-    }
+    
+    await sendEditProfileEmail(email);
   };
 
   // Function to add a new credit card to stored cards

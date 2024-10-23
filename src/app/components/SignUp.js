@@ -78,7 +78,6 @@ const SignUpPage = () => {
             // window.location.href = '/sign-in'; // Use anchor navigation, next router issues
         } else {
             setErrorMessage('Invalid verification code');
-
         }
     };
 
