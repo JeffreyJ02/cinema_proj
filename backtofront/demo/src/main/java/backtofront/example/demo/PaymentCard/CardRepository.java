@@ -1,8 +1,8 @@
 package backtofront.example.demo.PaymentCard;
 
 import java.util.Optional;
+import java.util.List;
 
-import org.hibernate.mapping.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;

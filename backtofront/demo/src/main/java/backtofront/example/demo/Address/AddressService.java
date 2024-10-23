@@ -1,6 +1,6 @@
 package backtofront.example.demo.Address;
 
-//import org.apache.el.stream.Optional;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,9 +25,8 @@ public class AddressService {
         addressRepository.save(address);
     }
 
-    //error : Optional is not generic cannot use Address?
     // Find address by user_id
-    //public Optional<Address> findByUserId(int user_id) {
-    //    return addressRepository.findByUserId(user_id);
-    //}
+    public Optional<Address> findByUserId(int user_id) {
+        return addressRepository.findByUserId(user_id);
+    }
 }
