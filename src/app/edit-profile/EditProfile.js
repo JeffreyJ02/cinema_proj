@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './EditProfile.css';
 import { editProfileEmail } from '../../utils/email';
 import { encrypt } from '../../utils/encryption';
@@ -23,6 +23,31 @@ const EditProfile = () => {
   const [state, setState] = useState(''); // New state for state
   const [zipCode, setZipCode] = useState(''); // New state for zip code
   const [promotionalEmails, setPromotionalEmails] = useState(false); //set it to false
+
+  //fetch user data when page is ran
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/user/profile'); // Adjust the endpoint accordingly
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        const data = await response.json();
+        // Assuming the API returns an object with the necessary fields
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+        setEmail(data.email); // Prefill email
+        setAddress(data.address);
+        setStoredCards(data.savedCards || []); // Assuming the API returns saved cards
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+    
 
   // Function to validate email format
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
@@ -115,7 +140,7 @@ const EditProfile = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter email"
+          readOnly //user cannot edit email
         />
       </label>
       <br />
@@ -125,7 +150,7 @@ const EditProfile = () => {
           type="text"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          placeholder="Enter first name"
+          placeholder="First Name"
         />
       </label>
       <br />
@@ -135,7 +160,7 @@ const EditProfile = () => {
           type="text"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          placeholder="Enter last name"
+          placeholder="Last Name"
         />
       </label>
       <br />
@@ -287,3 +312,4 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
+
