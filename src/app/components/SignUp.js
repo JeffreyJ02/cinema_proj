@@ -13,6 +13,7 @@ const SignUpPage = () => {
         confirmEmail: '',
         password: '',
         confirmPassword: '',
+        address:'',
         registerForPromotions: false,
         creditCardNumber: '',
         expirationDate: '',
@@ -104,6 +105,7 @@ const SignUpPage = () => {
             lastName,
             email,
             password,
+            address,
             registerForPromotions,
             creditCardNumber,
             expirationDate,
@@ -119,6 +121,7 @@ const SignUpPage = () => {
                     lastName,
                     email,
                     password,
+                    address,
                     registerForPromotions,
                     creditCardNumber,
                     expirationDate,
@@ -146,6 +149,7 @@ const SignUpPage = () => {
                 password: '',
                 confirmPassword: '',
                 registerForPromotions: false,
+                address:'',
                 creditCardNumber: '',
                 expirationDate: '',
                 cvv: '',
@@ -173,6 +177,16 @@ const SignUpPage = () => {
                         />
                     </div>
                 ))}
+                <div className="signup-info">
+                    <input
+                        type="text"
+                        id="address"
+                        name="address"
+                        placeholder="Address"
+                        value={formData.address}
+                        onChange={handleChange}
+                    />
+                </div>
 
                 <div className="signup-info">
                     <input
