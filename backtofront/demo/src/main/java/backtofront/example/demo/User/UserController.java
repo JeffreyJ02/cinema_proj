@@ -23,7 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/register-user")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             userService.registerUser(
@@ -34,7 +34,11 @@ public class UserController {
                 user.isRegisterForPromotions(), // Get the boolean value
                 user.getCreditCardNumber(), // Optional field
                 user.getExpirationDate(), // Optional field
-                user.getCvv() // Optional field
+                user.getCvv(), // Optional field
+                user.getStreet(),
+                user.getCity(),
+                user.getState(),
+                user.getZipCode()
             );
             return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -43,19 +47,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
         }
     }
-    
-    @GetMapping("/verify")
-    public ResponseEntity<String> verifyUser(@RequestParam("token") String token) {
-        boolean isVerified = userService.verifyUser(token);
-        if (isVerified) {
-            return ResponseEntity.ok("Email verified successfully. You can now log in.");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired token.");
-        }
-    }
-
-
-    
+        
 
     // User Login Endpoint
     @PostMapping("/login-user")
@@ -78,17 +70,27 @@ public class UserController {
     }
 
 
-    @GetMapping("/user")
+    @GetMapping("/user-profile")
     public ResponseEntity<Object> getUserProfile(@RequestParam String email) {
-        User user = userService.findByEmail(email).orElse(null);
-        if (user != null) {
-            // Include the registerForPromotions field in the response
-            return ResponseEntity.ok(new UserProfileResponse(user.getFirstName(), user.getLastName(), user.getEmail(), user.isRegisterForPromotions()));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found"));
+        try {
+            User user = userService.getUserProfile(email);
+            UserProfileResponse response = new UserProfileResponse(
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.isRegisterForPromotions(),
+                user.getStreet(),
+                user.getCity(),
+                user.getState(),
+                user.getZipCode()
+            );
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
         }
     }
-    
 
     // Response classes
     private static class LoginResponse {
@@ -154,12 +156,25 @@ private static class UserProfileResponse {
     private String email;
     @SuppressWarnings("FieldMayBeFinal")
     private boolean registerForPromotions;
+    @SuppressWarnings("FieldMayBeFinal")
+    private String street;
+    @SuppressWarnings("FieldMayBeFinal")
+    private String city;
+    @SuppressWarnings("FieldMayBeFinal")
+    private String state;
+    @SuppressWarnings("FieldMayBeFinal")
+    private String zipCode;
 
-    public UserProfileResponse(String firstName, String lastName, String email, boolean registerForPromotions) {
+
+    public UserProfileResponse(String firstName, String lastName, String email, boolean registerForPromotions, String street, String city, String state, String zipCode) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.registerForPromotions = registerForPromotions;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
     }
 
     @SuppressWarnings("unused")
@@ -181,6 +196,196 @@ private static class UserProfileResponse {
     public boolean isRegisterForPromotions() {
         return registerForPromotions;
     }
+
+        @SuppressWarnings("unused")
+        public String getStreet() {
+            return street;
+        }
+
+        @SuppressWarnings("unused")
+        public void setStreet(String street) {
+            this.street = street;
+        }
+
+        @SuppressWarnings("unused")
+        public String getCity() {
+            return city;
+        }
+
+        @SuppressWarnings("unused")
+        public void setCity(String city) {
+            this.city = city;
+        }
+
+        @SuppressWarnings("unused")
+        public String getState() {
+            return state;
+        }
+
+        @SuppressWarnings("unused")
+        public void setState(String state) {
+            this.state = state;
+        }
+
+        @SuppressWarnings("unused")
+        public String getZipCode() {
+            return zipCode;
+        }
+
+        @SuppressWarnings("unused")
+        public void setZipCode(String zipCode) {
+            this.zipCode = zipCode;
+        }
+    }
+
+
+// Update user profile
+@PostMapping("/update-profile")
+public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileRequest) {
+    try {
+        userService.updateProfile(
+            updateProfileRequest.getEmail(),
+            updateProfileRequest.getFirstName(),
+            updateProfileRequest.getLastName(),
+            updateProfileRequest.getStreet(),
+            updateProfileRequest.getCity(),
+            updateProfileRequest.getState(),
+            updateProfileRequest.getZipCode(),
+            updateProfileRequest.isRegisterForPromotions()
+        );
+        return ResponseEntity.ok(new ResponseMessage("Profile updated successfully!"));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+    }
 }
+
+// Update user password
+@PostMapping("/update-password")
+public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+    try {
+        userService.updatePassword(
+            updatePasswordRequest.getEmail(),
+            updatePasswordRequest.getCurrentPassword(),
+            updatePasswordRequest.getNewPassword()
+        );
+        return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+    }
+}
+
+// Request classes for profile and password updates
+private static class UpdateProfileRequest {
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String street;
+    private String city;
+    private String state;
+    private String zipCode;
+    private boolean registerForPromotions;
+
+    // Getters and Setters
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public boolean isRegisterForPromotions() {
+        return registerForPromotions;
+    }
+
+    public void setRegisterForPromotions(boolean registerForPromotions) {
+        this.registerForPromotions = registerForPromotions;
+    }
+}
+
+private static class UpdatePasswordRequest {
+    private String email;
+    private String currentPassword;
+    private String newPassword;
+
+    // Getters and Setters
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
+
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+}
+
+
 
 }

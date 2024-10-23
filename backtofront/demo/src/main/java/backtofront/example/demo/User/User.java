@@ -31,18 +31,55 @@ public class User {
     @Column(name = "register_for_promotions", nullable = false)
     private boolean registerForPromotions;
 
-    @Column(name = "credit_card_number", nullable = true)
-    private String creditCardNumber; 
+    @Column(name = "card_type1", nullable = true)
+    private String card_type1;
 
-    @Column(name = "expiration_date", nullable = true)
-    private String expirationDate; 
+    @Column(name = "credit_card_number1", nullable = true)
+    private String creditCardNumber1; 
 
-    @Column(name = "cvv", nullable = true)
-    private String cvv; 
+    @Column(name = "expiration_date1", nullable = true)
+    private String expirationDate1; 
+
+    @Column(name = "cvv1", nullable = true)
+    private String cvv1;
+    
+    @Column(name = "card_type2", nullable = true)
+    private String card_type2;
+
+    @Column(name = "credit_card_number2", nullable = true)
+    private String creditCardNumber2; 
+
+    @Column(name = "expiration_date2", nullable = true)
+    private String expirationDate2; 
+
+    @Column(name = "cvv2", nullable = true)
+    private String cvv2;
+
+    @Column(name = "card_type3", nullable = true)
+    private String card_type3;
+
+    @Column(name = "credit_card_number3", nullable = true)
+    private String creditCardNumber3; 
+
+    @Column(name = "expiration_date3", nullable = true)
+    private String expirationDate3; 
+
+    @Column(name = "cvv3", nullable = true)
+    private String cvv3;
 
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "verification_token", nullable = true)
-    private String verificationToken;
+    @Column(name = "street", nullable = true)
+    private String street;
+
+    @Column(name = "city", nullable = true)
+    private String city;
+
+    @Column(name = "state", nullable = true)
+    private String state;
+
+    @Column(name = "zipCode", nullable = true)
+    private String zipCode;
+
 }

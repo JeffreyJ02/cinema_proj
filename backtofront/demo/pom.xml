@@ -87,6 +87,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+            <version>1.18.30</version>
             <!-- Set scope to compile or remove the scope -->
         </dependency>
 
@@ -102,7 +104,16 @@
                 <configuration>
                     <source>17</source> <!-- Ensure source matches target Java version -->
                     <target>17</target>
-                </configuration>
+                     
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                        <version>1.18.30</version>
+                    </path>
+                </annotationProcessorPaths>
+            </configuration>
+                
             </plugin>
 
             <plugin>
