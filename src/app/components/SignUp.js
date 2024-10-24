@@ -14,6 +14,13 @@ const SignUpPage = () => {
         password: '',
         confirmPassword: '',
         registerForPromotions: false,
+        creditcardnumber:'',
+        expirationdate:'',
+        cvv:'',
+        street:'',
+        city:'',
+        state:'',
+        zip:'',
     });
 
     const [verifyData, setVerifyData] = useState({ verificationCode: '' });
@@ -48,6 +55,12 @@ const SignUpPage = () => {
 
     // Send verification email
     const sendVerificationEmail = async (email_address) => {
+        if (!email_address || email_address.trim() === "") {
+            console.error("Email address is empty or invalid");
+            setErrorMessage("Email address is required for verification.");
+            return;
+        }
+    
         const code = generateVerificationCode();
         try {
             await verificationCode({
@@ -91,18 +104,25 @@ const SignUpPage = () => {
 
     // Submits user data to the database
     const submitUserData = async () => {
-        const { firstName, lastName, email, password, registerForPromotions } = formData;
+        const { firstName, lastName, email, password, registerForPromotions, creditcardnumber, expirationdate, cvv, street, city, state, zip,} = formData;
 
         try {
             const response = await fetch('http://localhost:8080/api/register-user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    firstName,
-                    lastName,
-                    email,
-                    password,
-                    registerForPromotions,
+                firstName,
+                lastName,
+                email,
+                password,
+                registerForPromotions,
+                creditCardNumber: creditcardnumber,
+                expirationDate: expirationdate,
+                cvv,
+                street,
+                city,
+                state,
+                zip: zip
                 }),
             });
 
@@ -126,6 +146,13 @@ const SignUpPage = () => {
                 password: '',
                 confirmPassword: '',
                 registerForPromotions: false,
+                creditcardnumber: '',
+                expirationdate: '',
+                cvv: '',
+                street: '',
+                city: '',
+                state: '',
+                zip: ''
             });
         } catch (error) {
             console.error('Registration error:', error);
@@ -140,13 +167,25 @@ const SignUpPage = () => {
                 {['firstName', 'lastName', 'email', 'confirmEmail', 'password', 'confirmPassword'].map((field) => (
                     <div key={field} className="signup-info">
                         <input
-                            type={field.includes('password') ? 'password' : 'text'}
+                            type={field.includes('password') || field.includes('confirmPassword') ? 'password' : 'text'}
                             id={field}
                             name={field}
                             placeholder={field.replace(/([A-Z])/g, ' $1')}
                             value={formData[field]}
                             onChange={handleChange}
                             required
+                        />
+                    </div>
+                ))}
+                    {['creditcardnumber', 'expirationdate', 'cvv', 'street', 'city', 'state', 'zip'].map((field) => (
+                    <div key={field} className="signup-info">
+                        <input
+                            type="text"
+                            id={field}
+                            name={field}
+                            placeholder={field.replace(/([A-Z])/g, ' $1')}
+                            value={formData[field]}
+                            onChange={handleChange}
                         />
                     </div>
                 ))}

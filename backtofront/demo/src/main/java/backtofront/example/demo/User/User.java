@@ -52,7 +52,7 @@ public class User {
     @Column(name = "state", nullable = true)
     private String state;
 
-    @Column(name = "zipCode", nullable = true)
+    @Column(name = "zip_code", nullable = true)
     private String zipCode;
 
 }

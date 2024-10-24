@@ -39,6 +39,7 @@ public class UserService {
             newUser.setCvv(cvv);
         }
 
+        System.out.println("Saving new User: " + newUser);
         userRepository.save(newUser);
     }
 

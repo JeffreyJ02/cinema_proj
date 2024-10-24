@@ -26,6 +26,14 @@ public class UserController {
     @PostMapping("/register-user")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
+
+            if (user.getFirstName() == null || user.getFirstName().isEmpty() ||
+            user.getLastName() == null || user.getLastName().isEmpty() ||
+            user.getEmail() == null || user.getEmail().isEmpty() ||
+            user.getPassword() == null || user.getPassword().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                 .body(new ErrorResponse("Missing required fields"));
+        }
             userService.registerUser(
                 user.getFirstName(),
                 user.getLastName(),
