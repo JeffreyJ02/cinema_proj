@@ -88,11 +88,10 @@ useEffect(() => {
     //const encryptedPassword = btoa(newPassword);
     //const encryptedCreditCard = btoa(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
 
-    const encryptedPassword = encrypt(newPassword);
+    const encryptedNewPassword = encrypt(newPassword);
+    const encryptedCurrentPassword = encrypt(currentPassword);
     const encryptedCreditCard = encrypt(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
 
-    console.log('Encrypted Password:', encryptedPassword);
-    console.log('Encrypted Credit Card:', encryptedCreditCard);
     console.log('Address:', {
       street,
       city,
@@ -131,8 +130,8 @@ useEffect(() => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            currentPassword,
-            newPassword,
+            currentPassword: encryptedCurrentPassword,
+            newPassword: encryptedNewPassword,
           }),
         });
 

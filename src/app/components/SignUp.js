@@ -11,6 +11,7 @@ import { Modal, Button } from "react-bootstrap";
 import { verificationCode } from "../../utils/email";
 import "./SignUpPage.css";
 import Grid from "@mui/material/Grid2";
+import { encrypt } from "../../utils/encryption";
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -101,7 +102,7 @@ const SignUpPage = () => {
   const handleVerify = async () => {
     console.log("handleVerify called");
     if (verifyData.verificationCode === generatedCode) {
-      setSuccessMessage("Account verified successfully!");
+      setSuccessMessage("Email verified successfully!");
       setErrorMessage("");
       await submitUserData(); // This submits the user data to the db AFTER
       //window.location.href = "/sign-in"; // Use anchor navigation, next router issues
@@ -117,6 +118,7 @@ const SignUpPage = () => {
       formData;
 
     try {
+      const encryptedPassword = encrypt(password);
       const response = await fetch("http://localhost:8080/api/register-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -124,7 +126,7 @@ const SignUpPage = () => {
           firstName,
           lastName,
           email,
-          password,
+          password: encryptedPassword,
           registerForPromotions,
         }),
       });
