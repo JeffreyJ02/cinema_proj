@@ -117,6 +117,7 @@ const SignUpPage = () => {
       formData;
 
     try {
+        console.log("submitUserData try block for Backend");
       const response = await fetch("http://localhost:8080/api/register-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
