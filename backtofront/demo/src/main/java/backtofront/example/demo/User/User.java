@@ -44,6 +44,6 @@ public class User {
     @Column(name = "card_id_3")
     private int card_id_3;
 
-    @Column(name = "address_id")
-    private int address_id;
+    @Column(name = "home_address_id")
+    private int home_address_id;
 }

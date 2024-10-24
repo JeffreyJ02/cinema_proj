@@ -31,7 +31,6 @@ const EditProfile = () => {
   const validatePassword = (password) =>
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password);
 
-<<<<<<< HEAD
   // Send verification email
   const sendEditProfileEmail = async (email) => {
     try {
@@ -50,12 +49,10 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     console.log('Submitting form...');
     e.preventDefault();
-=======
 // Fetch user profile on component mount
 useEffect(() => {
   const token = localStorage.getItem('token'); // Assuming token is stored in local storage
   const userEmail = localStorage.getItem('userEmail'); // Retrieve email from local storage or use context
->>>>>>> b70f95871167e4813e0b18e113cce784173ac0e1
 
   const fetchUserProfile = async (email) => {
     try {
@@ -120,10 +117,6 @@ useEffect(() => {
       state,
       zipCode,
     });
-<<<<<<< HEAD
-    
-    await sendEditProfileEmail(email);
-=======
     try {
       console.log('Sending editProfile email...');
       editProfileEmail({email});
@@ -170,7 +163,6 @@ useEffect(() => {
     } catch (error) {
       setErrors({ form: error.message });
     }
->>>>>>> b70f95871167e4813e0b18e113cce784173ac0e1
   };
 
   // Function to add a new credit card to stored cards
@@ -393,5 +385,5 @@ useEffect(() => {
     </form>
   );
 };
-
+}
 export default EditProfile;

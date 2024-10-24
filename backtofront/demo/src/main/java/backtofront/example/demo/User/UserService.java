@@ -13,7 +13,7 @@ public class UserService {
 
     // Updated registerUser method to include optional credit card fields
     public void registerUser(String firstName, String lastName, String email, 
-                             String password, boolean registerForPromotions) {
+                             String password, boolean registerForPromotions, int homeAddress) {
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email already exists");
         }
@@ -25,6 +25,7 @@ public class UserService {
         newUser.setPassword(password);
         newUser.setRegisterForPromotions(registerForPromotions);
         newUser.setStatus("Active");
+        newUser.setHome_address_id(homeAddress);
 
         userRepository.save(newUser);
     }

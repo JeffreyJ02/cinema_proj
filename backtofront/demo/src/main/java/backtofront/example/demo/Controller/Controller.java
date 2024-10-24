@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backtofront.example.demo.User.*;
-import backtofront.example.demo.Address.*;
-import backtofront.example.demo.PaymentCard.*;
+import backtofront.example.demo.Address.Address;
+import backtofront.example.demo.Address.AddressService;
+import backtofront.example.demo.PaymentCard.Card;
+import backtofront.example.demo.PaymentCard.CardService;
+import backtofront.example.demo.User.User;
+import backtofront.example.demo.User.UserService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -40,6 +43,7 @@ public class Controller {
                 user.getEmail(),
                 user.getPassword(),
                 user.isRegisterForPromotions() // Get the boolean value
+, 0
             );
             return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -115,11 +119,9 @@ public class Controller {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
+                user.getPassword(),
                 user.isRegisterForPromotions(),
-                user.getStreet(),
-                user.getCity(),
-                user.getState(),
-                user.getZipCode()
+                user.getHome_address_id()
             );
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
@@ -192,26 +194,20 @@ private static class UserProfileResponse {
     @SuppressWarnings("FieldMayBeFinal")
     private String email;
     @SuppressWarnings("FieldMayBeFinal")
+    private String password;
+    @SuppressWarnings("FieldMayBeFinal")
     private boolean registerForPromotions;
     @SuppressWarnings("FieldMayBeFinal")
-    private String street;
-    @SuppressWarnings("FieldMayBeFinal")
-    private String city;
-    @SuppressWarnings("FieldMayBeFinal")
-    private String state;
-    @SuppressWarnings("FieldMayBeFinal")
-    private String zipCode;
+    private int home_address_id;
 
-
-    public UserProfileResponse(String firstName, String lastName, String email, boolean registerForPromotions, String street, String city, String state, String zipCode) {
+    public UserProfileResponse(String firstName, String lastName, String email,String password, boolean registerForPromotions, int home_address_id ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
         this.registerForPromotions = registerForPromotions;
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
+        this.home_address_id = home_address_id;
+
     }
 
     @SuppressWarnings("unused")
@@ -230,50 +226,22 @@ private static class UserProfileResponse {
     }
 
     @SuppressWarnings("unused")
+    public String getPassword(){
+        return password;
+    }
+
+    @SuppressWarnings("unused")
     public boolean isRegisterForPromotions() {
         return registerForPromotions;
     }
 
-        @SuppressWarnings("unused")
-        public String getStreet() {
-            return street;
-        }
-
-        @SuppressWarnings("unused")
-        public void setStreet(String street) {
-            this.street = street;
-        }
-
-        @SuppressWarnings("unused")
-        public String getCity() {
-            return city;
-        }
-
-        @SuppressWarnings("unused")
-        public void setCity(String city) {
-            this.city = city;
-        }
-
-        @SuppressWarnings("unused")
-        public String getState() {
-            return state;
-        }
-
-        @SuppressWarnings("unused")
-        public void setState(String state) {
-            this.state = state;
-        }
-
-        @SuppressWarnings("unused")
-        public String getZipCode() {
-            return zipCode;
-        }
-
-        @SuppressWarnings("unused")
-        public void setZipCode(String zipCode) {
-            this.zipCode = zipCode;
-        }
+    @SuppressWarnings("unused")
+    public int getHome_address_id(){
+        return home_address_id;
     }
+    }
+
+    
 
 
 // Update user profile
