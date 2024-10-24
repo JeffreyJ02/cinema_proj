@@ -89,6 +89,7 @@ useEffect(() => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          email,
           firstName,
           lastName,
           street,
@@ -109,6 +110,7 @@ useEffect(() => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            email,
             currentPassword,
             newPassword,
           }),

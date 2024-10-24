@@ -31,10 +31,10 @@ public class UserController {
                 user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.isRegisterForPromotions(), // Get the boolean value
-                user.getCreditCardNumber(), // Optional field
-                user.getExpirationDate(), // Optional field
-                user.getCvv(), // Optional field
+                user.isRegisterForPromotions(),
+                user.getCreditCardNumber(),
+                user.getExpirationDate(),
+                user.getCvv(),
                 user.getStreet(),
                 user.getCity(),
                 user.getState(),
@@ -242,6 +242,7 @@ private static class UserProfileResponse {
 // Update user profile
 @PostMapping("/update-profile")
 public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileRequest) {
+    System.out.println("Received update profile request: " + updateProfileRequest);
     try {
         userService.updateProfile(
             updateProfileRequest.getEmail(),
@@ -264,6 +265,7 @@ public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateP
 // Update user password
 @PostMapping("/update-password")
 public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+    System.out.println("Received update profile request: " + updatePasswordRequest);
     try {
         userService.updatePassword(
             updatePasswordRequest.getEmail(),
