@@ -18,6 +18,7 @@ import backtofront.example.demo.PaymentCard.Card;
 import backtofront.example.demo.PaymentCard.CardService;
 import backtofront.example.demo.User.User;
 import backtofront.example.demo.User.UserService;
+import jakarta.persistence.Column;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -170,76 +171,208 @@ public class Controller {
 
 
     // ResponseMessage class
-private static class ResponseMessage {
-    @SuppressWarnings("FieldMayBeFinal")
-    private String message;
-
-    public ResponseMessage(String message) {
-        this.message = message;
+    private static class ResponseMessage {
+        @SuppressWarnings("FieldMayBeFinal")
+        private String message;
+    
+        public ResponseMessage(String message) {
+            this.message = message;
+        }
+    
+        @SuppressWarnings("unused")
+        public String getMessage() {
+            return message;
+        }
+    }
+    
+    // User profile response class
+    private static class UserProfileResponse {
+        @SuppressWarnings("FieldMayBeFinal")
+        private String firstName;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String lastName;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String email;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String password;
+        @SuppressWarnings("FieldMayBeFinal")
+        private boolean registerForPromotions;
+        @SuppressWarnings("FieldMayBeFinal")
+        private int home_address_id;
+    
+        public UserProfileResponse(String firstName, String lastName, String email, String password, boolean registerForPromotions, int home_address_id ) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.email = email;
+            this.password = password;
+            this.registerForPromotions = registerForPromotions;
+            this.home_address_id = home_address_id;
+    
+        }
+    
+        @SuppressWarnings("unused")
+        public String getFirstName() {
+            return firstName;
+        }
+    
+        @SuppressWarnings("unused")
+        public String getLastName() {
+            return lastName;
+        }
+    
+        @SuppressWarnings("unused")
+        public String getEmail() {
+            return email;
+        }
+    
+        @SuppressWarnings("unused")
+        public String getPassword(){
+            return password;
+        }
+    
+        @SuppressWarnings("unused")
+        public boolean isRegisterForPromotions() {
+            return registerForPromotions;
+        }
+    
+        @SuppressWarnings("unused")
+        public int getHome_address_id(){
+            return home_address_id;
+        }
     }
 
-    @SuppressWarnings("unused")
-    public String getMessage() {
-        return message;
+    // User profile response class
+    private static class CardProfileResponse {
+        @SuppressWarnings("FieldMayBeFinal")
+        private int card_id;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String card_type;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String card_number;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String expiration_date;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String security_code;
+        @SuppressWarnings("FieldMayBeFinal")
+        private int address_id;
+        @SuppressWarnings("FieldMayBeFinal")
+        private int user_id;
+
+
+        public CardProfileResponse(int card_id, String card_type, String card_number,
+                                String expiration_date, String security_code, int address_id,
+                                int user_id) {
+            this.card_id = card_id;
+            this.card_type = card_type;
+            this.card_number = card_number;
+            this.expiration_date = expiration_date;
+            this.security_code = security_code;
+            this.address_id = address_id;
+            this.user_id = user_id;
+        }
+
+        @SuppressWarnings("unused")
+        public int getCard_id() {
+            return card_id;
+        }
+
+        @SuppressWarnings("unused")
+        public String getCard_type() {
+            return card_type;
+        }
+
+        @SuppressWarnings("unused")
+        public String getCard_number() {
+            return card_number;
+        }
+
+        @SuppressWarnings("unused")
+        public String getExpiration_date(){
+            return expiration_date;
+        }
+
+        @SuppressWarnings("unused")
+        public String getSecurity_code() {
+            return security_code;
+        }
+
+        @SuppressWarnings("unused")
+        public int getAddress_id(){
+            return address_id;
+        }
+
+        @SuppressWarnings("unused")
+        public int getUser_id(){
+            return user_id;
+        }
     }
-}
+
+    // User profile response class
+    private static class CardProfileResponse {
+        @SuppressWarnings("FieldMayBeFinal")
+        private int card_id;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String card_type;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String card_number;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String expiration_date;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String security_code;
+        @SuppressWarnings("FieldMayBeFinal")
+        private int address_id;
+        @SuppressWarnings("FieldMayBeFinal")
+        private int user_id;
 
 
-// User profile response class
-private static class UserProfileResponse {
-    @SuppressWarnings("FieldMayBeFinal")
-    private String firstName;
-    @SuppressWarnings("FieldMayBeFinal")
-    private String lastName;
-    @SuppressWarnings("FieldMayBeFinal")
-    private String email;
-    @SuppressWarnings("FieldMayBeFinal")
-    private String password;
-    @SuppressWarnings("FieldMayBeFinal")
-    private boolean registerForPromotions;
-    @SuppressWarnings("FieldMayBeFinal")
-    private int home_address_id;
+        public CardProfileResponse(int card_id, String card_type, String card_number,
+                                String expiration_date, String security_code, int address_id,
+                                int user_id) {
+            this.card_id = card_id;
+            this.card_type = card_type;
+            this.card_number = card_number;
+            this.expiration_date = expiration_date;
+            this.security_code = security_code;
+            this.address_id = address_id;
+            this.user_id = user_id;
+        }
 
-    public UserProfileResponse(String firstName, String lastName, String email,String password, boolean registerForPromotions, int home_address_id ) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.registerForPromotions = registerForPromotions;
-        this.home_address_id = home_address_id;
+        @SuppressWarnings("unused")
+        public int getCard_id() {
+            return card_id;
+        }
 
+        @SuppressWarnings("unused")
+        public String getCard_type() {
+            return card_type;
+        }
+
+        @SuppressWarnings("unused")
+        public String getCard_number() {
+            return card_number;
+        }
+
+        @SuppressWarnings("unused")
+        public String getExpiration_date(){
+            return expiration_date;
+        }
+
+        @SuppressWarnings("unused")
+        public String getSecurity_code() {
+            return security_code;
+        }
+
+        @SuppressWarnings("unused")
+        public int getAddress_id(){
+            return address_id;
+        }
+
+        @SuppressWarnings("unused")
+        public int getUser_id(){
+            return user_id;
+        }
     }
 
-    @SuppressWarnings("unused")
-    public String getFirstName() {
-        return firstName;
-    }
-
-    @SuppressWarnings("unused")
-    public String getLastName() {
-        return lastName;
-    }
-
-    @SuppressWarnings("unused")
-    public String getEmail() {
-        return email;
-    }
-
-    @SuppressWarnings("unused")
-    public String getPassword(){
-        return password;
-    }
-
-    @SuppressWarnings("unused")
-    public boolean isRegisterForPromotions() {
-        return registerForPromotions;
-    }
-
-    @SuppressWarnings("unused")
-    public int getHome_address_id(){
-        return home_address_id;
-    }
-    }
 
     
 
