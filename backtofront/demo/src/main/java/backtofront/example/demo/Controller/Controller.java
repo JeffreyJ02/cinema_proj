@@ -241,7 +241,7 @@ public class Controller {
         }
     }
 
-    // User profile response class
+    // Card profile response class
     private static class CardProfileResponse {
         @SuppressWarnings("FieldMayBeFinal")
         private int card_id;
@@ -307,64 +307,55 @@ public class Controller {
         }
     }
 
-    // User profile response class
-    private static class CardProfileResponse {
-        @SuppressWarnings("FieldMayBeFinal")
-        private int card_id;
-        @SuppressWarnings("FieldMayBeFinal")
-        private String card_type;
-        @SuppressWarnings("FieldMayBeFinal")
-        private String card_number;
-        @SuppressWarnings("FieldMayBeFinal")
-        private String expiration_date;
-        @SuppressWarnings("FieldMayBeFinal")
-        private String security_code;
+    // Address profile response class
+    private static class AddressProfileResponse {
         @SuppressWarnings("FieldMayBeFinal")
         private int address_id;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String street;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String city;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String state;
+        @SuppressWarnings("FieldMayBeFinal")
+        private String zip_code;
         @SuppressWarnings("FieldMayBeFinal")
         private int user_id;
 
 
-        public CardProfileResponse(int card_id, String card_type, String card_number,
-                                String expiration_date, String security_code, int address_id,
-                                int user_id) {
-            this.card_id = card_id;
-            this.card_type = card_type;
-            this.card_number = card_number;
-            this.expiration_date = expiration_date;
-            this.security_code = security_code;
+        public AddressProfileResponse(int address_id, String street, String city,
+                                String state, String zip_code, int user_id) {
             this.address_id = address_id;
+            this.street = street;
+            this.city = city;
+            this.state = state;
+            this.zip_code = zip_code;
             this.user_id = user_id;
         }
 
         @SuppressWarnings("unused")
-        public int getCard_id() {
-            return card_id;
-        }
-
-        @SuppressWarnings("unused")
-        public String getCard_type() {
-            return card_type;
-        }
-
-        @SuppressWarnings("unused")
-        public String getCard_number() {
-            return card_number;
-        }
-
-        @SuppressWarnings("unused")
-        public String getExpiration_date(){
-            return expiration_date;
-        }
-
-        @SuppressWarnings("unused")
-        public String getSecurity_code() {
-            return security_code;
-        }
-
-        @SuppressWarnings("unused")
-        public int getAddress_id(){
+        public int getAddress_id() {
             return address_id;
+        }
+
+        @SuppressWarnings("unused")
+        public String getStreet() {
+            return street;
+        }
+
+        @SuppressWarnings("unused")
+        public String getCity() {
+            return city;
+        }
+
+        @SuppressWarnings("unused")
+        public String getState(){
+            return state;
+        }
+
+        @SuppressWarnings("unused")
+        public String getZip_code() {
+            return zip_code;
         }
 
         @SuppressWarnings("unused")

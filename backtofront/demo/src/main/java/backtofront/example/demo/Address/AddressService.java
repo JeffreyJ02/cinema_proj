@@ -13,10 +13,10 @@ public class AddressService {
     }
 
     // Register user address
-    public void registerAddress(String street_info, String city, String state, String zip_code, int user_id) {
+    public void registerAddress(String street, String city, String state, String zip_code, int user_id) {
         Address address = new Address();
         address.setAddress_id((int)addressRepository.count() + 1);
-        address.setStreet_info(street_info);
+        address.setStreet(street);
         address.setCity(city);
         address.setState(state);
         address.setZip_code(zip_code);

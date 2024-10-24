@@ -18,8 +18,8 @@ public class Address {
     @Column(name = "address_id")
     private int address_id;
     
-    @Column(name = "street_info")
-    private String street_info;
+    @Column(name = "street")
+    private String street;
 
     @Column(name = "city")
     private String city;
