@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
-    Optional<Address> findByUserId(int id); 
+    Optional<Address> findByUserId(int id);
 
     @Modifying
     @Query("update Address a set a.street = ?1, a.city = ?2, a.state = ?3, a.zipCode = ?4 where a.user_id = ?5")
