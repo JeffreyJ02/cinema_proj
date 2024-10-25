@@ -22,7 +22,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "user_id", unique = true, nullable = false)
     private int id; 
 
     @Column(name = "first_name", nullable = false)
@@ -43,10 +43,11 @@ public class User {
     @Column(name = "status", nullable = false)
     private String status;
 
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Card> cards;
     
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;
+    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
+    private Address address; 
 }
