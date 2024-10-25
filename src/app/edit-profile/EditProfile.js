@@ -70,60 +70,26 @@ useEffect(() => {
   fetchUserProfile(userEmail); // Call the fetch function with the user email
 }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSuccessMessage('');
-    const newErrors = {};
 
-    if (newPassword && !validatePassword(newPassword)) {
-      newErrors.newPassword = "Password must include upper, lower, number, symbol, and be at least 8 characters long";
-    }
-    if (newPassword && newPassword !== confirmNewPassword) {
-      newErrors.confirmNewPassword = "Passwords do not match";
-    }
-
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
-
-    //const encryptedPassword = btoa(newPassword);
-    //const encryptedCreditCard = btoa(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
-
-    const encryptedNewPassword = encrypt(newPassword);
-    const encryptedCurrentPassword = encrypt(currentPassword);
-    const encryptedCreditCard = encrypt(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
-
-    console.log('Address:', {
-      street,
-      city,
-      state,
-      zipCode,
-    });
+  const handleEditUser = async () =>{
+    console.log('handleEditUser');
     try {
-      console.log('Sending editProfile email...');
-      editProfileEmail({email});
-    } catch (error) {
-      console.error('Error sending editProfile email:', error);
-    }
-    try {
-      // Update user profile
       const profileResponse = await fetch('http://localhost:8080/api/update-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           firstName,
           lastName,
-          street,
-          city,
-          state,
-          zipCode,
           promotionalEmails,
         }),
-      });
+      });;
 
       if (!profileResponse.ok) {
         throw new Error('Failed to update profile');
       }
 
+      const encryptedNewPassword = encrypt(newPassword);
+      const encryptedCurrentPassword = encrypt(currentPassword);
       // Update password if provided
       if (newPassword) {
         const passwordResponse = await fetch('http://localhost:8080/api/update-password', {
@@ -144,6 +110,90 @@ useEffect(() => {
     } catch (error) {
       setErrors({ form: error.message });
     }
+    console.log('handleEditUser done');
+  };
+
+  const handleEditAddress = async () =>{
+    console.log('handleEditAddress');
+    const addressResponse = await fetch('http://localhost:8080/api/update-address', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        street, 
+        city, 
+        state, 
+        zipCode }),
+    });
+
+    if (!addressResponse.ok) {
+      throw new Error('Failed to update address');
+    }
+    console.log('handleEditAddress done');
+  };
+
+  const handleEditCard = async () => {
+    console.log('handleEditCard');
+    const encryptedCreditCard = encrypt(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
+
+    try {
+      const cardResponse = await fetch('http://localhost:8080/api/update-card', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          creditCardNumber: encryptedCard,
+          expirationDate,
+          cvv,
+          billingAddress: address,
+        }),
+      });
+
+      if (!cardResponse.ok) {
+        throw new Error('Failed to update card');
+      }
+    } catch (error) {
+      throw new Error('Failed to update card');
+    }
+    console.log('handleEditCard done');
+  };
+
+  const handleSubmit = async (e) => {
+    console.log('Submitting form...');
+    e.preventDefault();
+    setSuccessMessage('');
+    const newErrors = {};
+
+    console.log('1');
+    if (newPassword && !validatePassword(newPassword)) {
+      newErrors.newPassword = "Password must include upper, lower, number, symbol, and be at least 8 characters long";
+    }
+    if (newPassword && newPassword !== confirmNewPassword) {
+      newErrors.confirmNewPassword = "Passwords do not match";
+    }
+
+    console.log('2');
+    setErrors(newErrors);
+    // if (Object.keys(newErrors).length > 0) return; // Uncomment this line to prevent form submission if there are errors
+
+    console.log('Address:', {
+      street,
+      city,
+      state,
+      zipCode,
+    });
+    try {
+      console.log('Sending editProfile email...');
+      editProfileEmail({email});
+    } catch (error) {
+      console.error('Error sending editProfile email:', error);
+    }
+    try {
+      await handleEditUser();
+      await handleEditAddress();
+      await handleEditCard();
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+    console.log('Form submitted successfully');
   };
 
   // Function to add a new credit card to stored cards
