@@ -37,6 +37,7 @@ public class User {
     @Column(name = "promotions", nullable = false)
     private boolean registerForPromos;
 
+
     @Column(name = "status", nullable = false)
     private String status;
 }

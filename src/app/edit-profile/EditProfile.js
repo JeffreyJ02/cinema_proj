@@ -31,24 +31,6 @@ const EditProfile = () => {
   const validatePassword = (password) =>
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password);
 
-  // Send verification email
-  const sendEditProfileEmail = async (email) => {
-    try {
-        // Async function to send edited profile email code from email.js
-        await editProfileEmail({
-            email: email,
-        });
-        console.log('Profile edited email sent to:', email);
-    } catch (error) {
-        console.error('Error sending profile edited email:', error);
-    }
-  };
-
-  // Function to handle form submission
-  // Connor added async to attempt to make edit email work
-  const handleSubmit = async (e) => {
-    console.log('Submitting form...');
-    e.preventDefault();
 // Fetch user profile on component mount
 useEffect(() => {
   const token = localStorage.getItem('token'); // Assuming token is stored in local storage
@@ -106,11 +88,10 @@ useEffect(() => {
     //const encryptedPassword = btoa(newPassword);
     //const encryptedCreditCard = btoa(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
 
-    const encryptedPassword = encrypt(newPassword);
+    const encryptedNewPassword = encrypt(newPassword);
+    const encryptedCurrentPassword = encrypt(currentPassword);
     const encryptedCreditCard = encrypt(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
 
-    console.log('Encrypted Password:', encryptedPassword);
-    console.log('Encrypted Credit Card:', encryptedCreditCard);
     console.log('Address:', {
       street,
       city,
@@ -149,8 +130,8 @@ useEffect(() => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            currentPassword,
-            newPassword,
+            currentPassword: encryptedCurrentPassword,
+            newPassword: encryptedNewPassword,
           }),
         });
 
