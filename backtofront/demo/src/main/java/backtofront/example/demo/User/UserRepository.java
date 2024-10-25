@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
-    Optional<User> findById(Long id); 
+    Optional<User> findByUserId(Long id); 
 
     @Modifying  
     @Query("update User u set u.password = ?1, u.registerForPromos = ?2 where u.userId = ?3")
