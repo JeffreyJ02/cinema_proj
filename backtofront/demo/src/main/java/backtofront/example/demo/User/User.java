@@ -13,7 +13,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private int user_id;
 
     @Column(name = "first_name", nullable = false)
@@ -27,6 +27,9 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "phone_number", nullable = false)
+    private Long phoneNumber;
 
     @Column(name = "register_for_promotions", nullable = false)
     private boolean registerForPromotions;

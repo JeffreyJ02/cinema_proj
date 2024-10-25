@@ -39,6 +39,7 @@ public class UserController {
                 user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getPhoneNumber(),
                 user.isRegisterForPromotions(),
                 user.getCreditCardNumber(),
                 user.getExpirationDate(),
@@ -86,6 +87,7 @@ public class UserController {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
+                user.getPhoneNumber(),
                 user.isRegisterForPromotions(),
                 user.getStreet(),
                 user.getCity(),
@@ -163,6 +165,8 @@ private static class UserProfileResponse {
     @SuppressWarnings("FieldMayBeFinal")
     private String email;
     @SuppressWarnings("FieldMayBeFinal")
+    private Long phoneNumber;
+    @SuppressWarnings("FieldMayBeFinal")
     private boolean registerForPromotions;
     @SuppressWarnings("FieldMayBeFinal")
     private String street;
@@ -174,10 +178,11 @@ private static class UserProfileResponse {
     private String zipCode;
 
 
-    public UserProfileResponse(String firstName, String lastName, String email, boolean registerForPromotions, String street, String city, String state, String zipCode) {
+    public UserProfileResponse(String firstName, String lastName, String email, Long phoneNumber, boolean registerForPromotions, String street, String city, String state, String zipCode) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.registerForPromotions = registerForPromotions;
         this.street = street;
         this.city = city;
@@ -256,6 +261,7 @@ public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateP
             updateProfileRequest.getEmail(),
             updateProfileRequest.getFirstName(),
             updateProfileRequest.getLastName(),
+            updateProfileRequest.getPhoneNumber(),
             updateProfileRequest.getStreet(),
             updateProfileRequest.getCity(),
             updateProfileRequest.getState(),
@@ -293,6 +299,7 @@ private static class UpdateProfileRequest {
     private String email;
     private String firstName;
     private String lastName;
+    private Long phoneNumber;
     private String street;
     private String city;
     private String state;
@@ -363,7 +370,15 @@ private static class UpdateProfileRequest {
     public void setRegisterForPromotions(boolean registerForPromotions) {
         this.registerForPromotions = registerForPromotions;
     }
-}
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    }
 
 private static class UpdatePasswordRequest {
     private String email;

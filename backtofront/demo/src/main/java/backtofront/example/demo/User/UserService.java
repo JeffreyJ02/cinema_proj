@@ -12,7 +12,7 @@ public class UserService {
     private UserRepository userRepository;
 
     // Updated registerUser method to include optional credit card fields
-    public void registerUser(String firstName, String lastName, String email, String password, boolean registerForPromotions, String creditCardNumber, String expirationDate, String cvv, String street, String city, String state, String zipCode) {
+    public void registerUser(String firstName, String lastName, String email, String password, long phone_number, boolean registerForPromotions, String creditCardNumber, String expirationDate, String cvv, String street, String city, String state, String zipCode) {
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email already exists");
         }
@@ -22,6 +22,7 @@ public class UserService {
         newUser.setLastName(lastName);
         newUser.setEmail(email);
         newUser.setPassword(password);
+        newUser.setPhoneNumber(phone_number);
         newUser.setRegisterForPromotions(registerForPromotions);
         newUser.setStatus("Active");
         newUser.setStreet(street);
@@ -75,7 +76,7 @@ public class UserService {
         }
     }
 
-    public void updateProfile(String email, String firstName, String lastName, String street, String city, String state, String zipCode, Boolean registerForPromotions) {
+    public void updateProfile(String email, String firstName, String lastName,  Long PhoneNumber, String street, String city, String state, String zipCode, Boolean registerForPromotions) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // Update fields only if they are provided (not null or empty)
@@ -84,6 +85,9 @@ public class UserService {
         }
         if (lastName != null && !lastName.isEmpty()) {
             user.setLastName(lastName);
+        }
+        if(PhoneNumber != null){
+            user.setPhoneNumber(PhoneNumber);
         }
         if (street != null && !street.isEmpty()) {
             user.setStreet(street);

@@ -13,6 +13,7 @@ const SignUpPage = () => {
         confirmEmail: '',
         password: '',
         confirmPassword: '',
+        phoneNumber:'',
         registerForPromotions: false,
         creditcardnumber:'',
         expirationdate:'',
@@ -104,7 +105,7 @@ const SignUpPage = () => {
 
     // Submits user data to the database
     const submitUserData = async () => {
-        const { firstName, lastName, email, password, registerForPromotions, creditcardnumber, expirationdate, cvv, street, city, state, zip,} = formData;
+        const { firstName, lastName, email, password, phoneNumber, registerForPromotions, creditcardnumber, expirationdate, cvv, street, city, state, zip,} = formData;
 
         try {
             const response = await fetch('http://localhost:8080/api/register-user', {
@@ -115,6 +116,7 @@ const SignUpPage = () => {
                 lastName,
                 email,
                 password,
+                phoneNumber,
                 registerForPromotions,
                 creditCardNumber: creditcardnumber,
                 expirationDate: expirationdate,
@@ -145,6 +147,7 @@ const SignUpPage = () => {
                 confirmEmail: '',
                 password: '',
                 confirmPassword: '',
+                phoneNumber:'',
                 registerForPromotions: false,
                 creditcardnumber: '',
                 expirationdate: '',
@@ -177,7 +180,7 @@ const SignUpPage = () => {
                         />
                     </div>
                 ))}
-                    {['creditcardnumber', 'expirationdate', 'cvv', 'street', 'city', 'state', 'zip'].map((field) => (
+                    {['phoneNumber','creditcardnumber', 'expirationdate', 'cvv', 'street', 'city', 'state', 'zip'].map((field) => (
                     <div key={field} className="signup-info">
                         <input
                             type="text"

@@ -8,6 +8,7 @@ const EditProfile = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [creditCardNumber, setCreditCardNumber] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [cvv, setCvv] = useState('');
@@ -52,6 +53,7 @@ useEffect(() => {
       // Update state with user data
       setFirstName(userData.firstName);
       setLastName(userData.lastName);
+      setPhoneNumber(userData.phoneNumber);
       setEmail(userData.email);
       setStreet(userData.street);
       setCity(userData.city);
@@ -92,6 +94,7 @@ useEffect(() => {
           email,
           firstName,
           lastName,
+          phoneNumber,
           street,
           city,
           state,
