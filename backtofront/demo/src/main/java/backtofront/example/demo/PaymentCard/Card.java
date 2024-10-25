@@ -22,25 +22,25 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "card_id", unique = true)
-    private int id;
+    private int cardId;
 
-    @Column(name = "type")
-    private String type;
+    @Column(name = "card_type")
+    private String card_type;
 
-    @Column(name = "number")
-    private String number;
+    @Column(name = "card_number")
+    private String card_number;
 
-    @Column(name = "expirationDate")
+    @Column(name = "expiration_date")
     private String expirationDate;
 
-    @Column(name = "securityCode")
+    @Column(name = "security_code")
     private String securityCode;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address", referencedColumnName = "address_id")
+    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private Address address;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user", referencedColumnName = "user_id")
-    private User user;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User userId;
 } 

@@ -2,6 +2,7 @@ package backtofront.example.demo.PaymentCard;
 
 import org.springframework.stereotype.Service;
 
+import backtofront.example.demo.Address.Address;
 import backtofront.example.demo.User.User;
 
 @Service
@@ -15,14 +16,16 @@ public class CardService {
 
     // Register a new credit card
     public void registerCard(String type, String number, String expiration_date, 
-                             String security_code, User user) {
+                             String security_code, Address address, User user) {
         Card card = new Card();
-        card.setId((int)cardRepository.count() + 1);
-        card.setType(type);
-        card.setNumber(number);
+        card.setCardId((int)cardRepository.count() + 1);
+        card.setCard_type(type);
+        card.setCard_number(number);
         card.setExpirationDate(expiration_date);
         card.setSecurityCode(security_code);
-        card.setUser(user);
+        card.setAddress(address);
+        card.setUserId(user);
+
         cardRepository.save(card);
     }
 }
