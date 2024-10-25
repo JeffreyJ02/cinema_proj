@@ -16,7 +16,7 @@ public class AddressService {
     }
 
     // Register user address
-    public void registerUserAddress(String street, String city, String state, 
+    public void registerAddress(String street, String city, String state, 
                                 String zip_code, User user) {
         Address address = new Address();
         address.setId((int)addressRepository.count() + 1);
@@ -24,28 +24,14 @@ public class AddressService {
         address.setCity(city);
         address.setState(state);
         address.setZipCode(zip_code);
-        address.setUser(user);
-
-        addressRepository.save(address);
-    }
-
-    // Register user address
-    public void registerCardAddress(String street, String city, String state, 
-                                String zip_code, Card card) {
-        Address address = new Address();
-        address.setId((int)addressRepository.count() + 1);
-        address.setStreet(street);
-        address.setCity(city);
-        address.setState(state);
-        address.setZipCode(zip_code);
-        address.setCard(card);
+        address.setUserId(user);
 
         addressRepository.save(address);
     }
 
 
     // Find address by user_id
-    public Optional<Address> findByUserId(int user_id) {
-        return addressRepository.findByUserId(user_id);
+    public Optional<Address> findByUserId(User user) {
+        return addressRepository.findByUserId(user);
     }
 }

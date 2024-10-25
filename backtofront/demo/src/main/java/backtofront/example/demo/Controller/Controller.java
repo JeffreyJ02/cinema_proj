@@ -41,6 +41,7 @@ public class Controller {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
+                user.getPhone_number(),
                 user.getPassword(),
                 user.isRegisterForPromos() // Get the boolean value
             );
@@ -52,35 +53,17 @@ public class Controller {
         }
     }
 
-    @PostMapping("/register-user-address") 
+    @PostMapping("/register-address") 
     public ResponseEntity<?> registerUserAddress(@RequestBody Address address) {
         try {
-            addressService.registerUserAddress(
+            addressService.registerAddress(
                 address.getStreet(),
                 address.getCity(),
                 address.getState(),
                 address.getZipCode(),
-                address.getUser()
+                address.getUserId()
             );
             return ResponseEntity.ok(new ResponseMessage("User address registered successfully!"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
-        }
-    }
-
-    @PostMapping("/register-card-address") 
-    public ResponseEntity<?> registerCardAddress(@RequestBody Address address) {
-        try {
-            addressService.registerCardAddress(
-                address.getStreet(),
-                address.getCity(),
-                address.getState(),
-                address.getZipCode(),
-                address.getCard()
-            );
-            return ResponseEntity.ok(new ResponseMessage("Card address registered successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
@@ -92,11 +75,12 @@ public class Controller {
     public ResponseEntity<?> registerCard(@RequestBody Card card) {
         try {
             cardService.registerCard(
-                card.getType(),
-                card.getNumber(),
+                card.getCard_type(),
+                card.getCard_number(),
                 card.getExpirationDate(),
                 card.getSecurityCode(),
-                card.getUser()
+                card.getAddress(),
+                card.getUserId()
             );
             return ResponseEntity.ok(new ResponseMessage("Card registered successfully!"));
         } catch (IllegalArgumentException e) {
