@@ -47,6 +47,6 @@ public class User {
     private List<Card> cards;
     
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "home_address_id", referencedColumnName = "id")
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 }

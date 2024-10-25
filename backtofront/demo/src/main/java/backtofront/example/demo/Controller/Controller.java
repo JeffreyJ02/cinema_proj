@@ -52,16 +52,35 @@ public class Controller {
         }
     }
 
-    @PostMapping("/register-address") 
-    public ResponseEntity<?> registerAddress(@RequestBody Address address) {
+    @PostMapping("/register-user-address") 
+    public ResponseEntity<?> registerUserAddress(@RequestBody Address address) {
         try {
-            addressService.registerAddress(
+            addressService.registerUserAddress(
                 address.getStreet(),
                 address.getCity(),
                 address.getState(),
-                address.getZipCode()
+                address.getZipCode(),
+                address.getUser()
             );
-            return ResponseEntity.ok(new ResponseMessage("Address registered successfully!"));
+            return ResponseEntity.ok(new ResponseMessage("User address registered successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+        }
+    }
+
+    @PostMapping("/register-card-address") 
+    public ResponseEntity<?> registerCardAddress(@RequestBody Address address) {
+        try {
+            addressService.registerCardAddress(
+                address.getStreet(),
+                address.getCity(),
+                address.getState(),
+                address.getZipCode(),
+                address.getCard()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Card address registered successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
@@ -76,7 +95,8 @@ public class Controller {
                 card.getType(),
                 card.getNumber(),
                 card.getExpirationDate(),
-                card.getSecurityCode()
+                card.getSecurityCode(),
+                card.getUser()
             );
             return ResponseEntity.ok(new ResponseMessage("Card registered successfully!"));
         } catch (IllegalArgumentException e) {

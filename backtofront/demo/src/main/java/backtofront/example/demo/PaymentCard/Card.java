@@ -2,6 +2,7 @@ package backtofront.example.demo.PaymentCard;
 
 import backtofront.example.demo.Address.Address;
 import backtofront.example.demo.User.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,8 +36,8 @@ public class Card {
     @Column(name = "securityCode")
     private String securityCode;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address", referencedColumnName = "id")
     private Address address;
 
     @ManyToOne(fetch = FetchType.LAZY)

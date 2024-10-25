@@ -1,6 +1,7 @@
 package backtofront.example.demo.Address;
 
 
+import backtofront.example.demo.PaymentCard.Card;
 import backtofront.example.demo.User.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,4 +34,7 @@ public class Address {
 
     @OneToOne(mappedBy = "address")
     private User user;
+
+    @OneToOne(mappedBy = "address")
+    private Card card;
 } 
