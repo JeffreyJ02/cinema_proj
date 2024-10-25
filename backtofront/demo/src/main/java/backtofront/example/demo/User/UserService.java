@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserService {
 
@@ -12,31 +14,20 @@ public class UserService {
     private UserRepository userRepository;
 
     // Updated registerUser method to include optional credit card fields
-    public void registerUser(String firstName, String lastName, String email, String password, boolean registerForPromotions, String creditCardNumber, String expirationDate, String cvv, String street, String city, String state, String zipCode) {
-        if (userRepository.existsByEmail(email)) {
+    @Transactional
+    public void registerUser(String firstName, String lastName, String email, 
+                             String password, boolean registerForPromotions) {
+       /*  if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email already exists");
-        }
+        } */
         User newUser = new User();
+        //newUser.setId((int)userRepository.count() + 1);
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
         newUser.setEmail(email);
         newUser.setPassword(password);
-        newUser.setRegisterForPromotions(registerForPromotions);
+        newUser.setRegisterForPromos(registerForPromotions);
         newUser.setStatus("Active");
-        newUser.setStreet(street);
-        newUser.setCity(city);
-        newUser.setZipCode(zipCode);
-
-        // Set the credit card information only if provided
-        if (creditCardNumber != null && !creditCardNumber.isEmpty()) {
-            newUser.setCreditCardNumber(creditCardNumber);
-        }
-        if (expirationDate != null && !expirationDate.isEmpty()) {
-            newUser.setExpirationDate(expirationDate);
-        }
-        if (cvv != null && !cvv.isEmpty()) {
-            newUser.setCvv(cvv);
-        }
 
         userRepository.save(newUser);
     }
@@ -46,7 +37,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    // Update user information
+    /*// Update user information
     public void updateUser(User user) {
         if (user == null || user.getEmail() == null) {
             throw new IllegalArgumentException("User or email cannot be null");
@@ -101,6 +92,8 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    */
 
     public void updatePassword(String email, String currentPassword, String newPassword) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));

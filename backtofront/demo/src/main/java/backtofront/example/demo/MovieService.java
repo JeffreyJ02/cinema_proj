@@ -39,7 +39,7 @@ public class MovieService {
     }
 
     
-    public boolean deleteMovieById(Long id) {
+    public boolean deleteMovieById(Integer id) {
         if (movieRepository.existsById(id)) {
             movieRepository.deleteById(id);
             logger.info("Deleted movie with ID: {}", id);

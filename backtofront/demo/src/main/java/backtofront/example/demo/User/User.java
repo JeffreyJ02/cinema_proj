@@ -1,10 +1,19 @@
 package backtofront.example.demo.User;
 
+import backtofront.example.demo.PaymentCard.Card;
+import backtofront.example.demo.Address.Address;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Data
@@ -13,8 +22,9 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "user_id", unique = true, nullable = false)
+    private int id; 
+
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -29,30 +39,17 @@ public class User {
     private String password;
 
     @Column(name = "register_for_promotions", nullable = false)
-    private boolean registerForPromotions;
+    private boolean registerForPromos;
 
-    @Column(name = "credit_card_number", nullable = true)
-    private String creditCardNumber; 
-
-    @Column(name = "expiration_date", nullable = true)
-    private String expirationDate; 
-
-    @Column(name = "cvv", nullable = true)
-    private String cvv; 
 
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "street", nullable = true)
-    private String street;
 
-    @Column(name = "city", nullable = true)
-    private String city;
-
-    @Column(name = "state", nullable = true)
-    private String state;
-
-    @Column(name = "zipCode", nullable = true)
-    private String zipCode;
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Card> cards;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
+    private Address address; 
 }

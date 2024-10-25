@@ -366,5 +366,5 @@ useEffect(() => {
     </form>
   );
 };
-
+}
 export default EditProfile;
