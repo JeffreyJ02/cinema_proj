@@ -1,10 +1,19 @@
 package backtofront.example.demo.User;
 
+import backtofront.example.demo.PaymentCard.Card;
+import backtofront.example.demo.Address.Address;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Data
@@ -13,8 +22,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", unique = true, nullable = false)
-    private int user_id; 
+    @Column(name = "id", unique = true, nullable = false)
+    private int id; 
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -25,25 +34,19 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    // encrypt
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "register_for_promotions", nullable = false)
-    private boolean registerForPromotions;
+    @Column(name = "registerForPromos", nullable = false)
+    private boolean registerForPromos;
 
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "card_id_1")
-    private int card_id_1;
-
-    @Column(name = "card_id_2")
-    private int card_id_2;
-
-    @Column(name = "card_id_3")
-    private int card_id_3;
-
-    @Column(name = "home_address_id")
-    private int home_address_id;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Card> cards;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "home_address_id", referencedColumnName = "id")
+    private Address address;
 }

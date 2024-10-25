@@ -14,15 +14,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findById(int id); 
 
     @Modifying  
-    @Query("update User u set u.password = ?1, u.resigster_for_promotions = ?2 where u.user_id = ?3")
-    void editUserById(String password, boolean register_for_promos, Long id); 
+    @Query("update User u set u.password = ?1, u.registerForPromos = ?2 where u.id = ?3")
+    void editUserById(String password, boolean registerForPromos, int user_id); 
 
     @Modifying
-    @Query("update User u set u.password = ?1, u.user_id = ?2")
+    @Query("update User u set u.password = ?1, u.id = ?2")
     void tempPassUpdate(String password, int user_id);
 
     boolean existsByEmail(String email);
-    List<User> findByRegisterForPromotions(boolean registerForPromotions);
+    List<User> findByRegisterForPromos(boolean registerForPromos);
     Optional<User> findByFirstNameAndLastName(String firstName, String lastName);
     void deleteByEmail(String email);
 

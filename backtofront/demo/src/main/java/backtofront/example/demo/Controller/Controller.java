@@ -18,7 +18,6 @@ import backtofront.example.demo.PaymentCard.Card;
 import backtofront.example.demo.PaymentCard.CardService;
 import backtofront.example.demo.User.User;
 import backtofront.example.demo.User.UserService;
-import jakarta.persistence.Column;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -43,8 +42,7 @@ public class Controller {
                 user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.isRegisterForPromotions() // Get the boolean value
-, 0
+                user.isRegisterForPromos() // Get the boolean value
             );
             return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -58,11 +56,10 @@ public class Controller {
     public ResponseEntity<?> registerAddress(@RequestBody Address address) {
         try {
             addressService.registerAddress(
-                address.getStreet_info(),
+                address.getStreet(),
                 address.getCity(),
                 address.getState(),
-                address.getZip_code(),
-                address.getUser_id()
+                address.getZipCode()
             );
             return ResponseEntity.ok(new ResponseMessage("Address registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -76,12 +73,10 @@ public class Controller {
     public ResponseEntity<?> registerCard(@RequestBody Card card) {
         try {
             cardService.registerCard(
-                card.getCard_type(),
-                card.getCard_number(),
-                card.getExpiration_date(),
-                card.getSecurity_code(),
-                card.getAddress_id(),
-                card.getUser_id()
+                card.getType(),
+                card.getNumber(),
+                card.getExpirationDate(),
+                card.getSecurityCode()
             );
             return ResponseEntity.ok(new ResponseMessage("Card registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -121,8 +116,7 @@ public class Controller {
                 user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.isRegisterForPromotions(),
-                user.getHome_address_id()
+                user.isRegisterForPromos()
             );
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
@@ -196,18 +190,14 @@ public class Controller {
         @SuppressWarnings("FieldMayBeFinal")
         private String password;
         @SuppressWarnings("FieldMayBeFinal")
-        private boolean registerForPromotions;
-        @SuppressWarnings("FieldMayBeFinal")
-        private int home_address_id;
+        private boolean registerForPromos;
     
-        public UserProfileResponse(String firstName, String lastName, String email, String password, boolean registerForPromotions, int home_address_id ) {
+        public UserProfileResponse(String firstName, String lastName, String email, String password, boolean registerForPromos ) {
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
             this.password = password;
-            this.registerForPromotions = registerForPromotions;
-            this.home_address_id = home_address_id;
-    
+            this.registerForPromos = registerForPromos;    
         }
     
         @SuppressWarnings("unused")
@@ -232,13 +222,8 @@ public class Controller {
     
         @SuppressWarnings("unused")
         public boolean isRegisterForPromotions() {
-            return registerForPromotions;
-        }
-    
-        @SuppressWarnings("unused")
-        public int getHome_address_id(){
-            return home_address_id;
-        }
+            return registerForPromos;
+        }    
     }
 
     // Card profile response class
@@ -253,22 +238,14 @@ public class Controller {
         private String expiration_date;
         @SuppressWarnings("FieldMayBeFinal")
         private String security_code;
-        @SuppressWarnings("FieldMayBeFinal")
-        private int address_id;
-        @SuppressWarnings("FieldMayBeFinal")
-        private int user_id;
-
 
         public CardProfileResponse(int card_id, String card_type, String card_number,
-                                String expiration_date, String security_code, int address_id,
-                                int user_id) {
+                                String expiration_date, String security_code) {
             this.card_id = card_id;
             this.card_type = card_type;
             this.card_number = card_number;
             this.expiration_date = expiration_date;
             this.security_code = security_code;
-            this.address_id = address_id;
-            this.user_id = user_id;
         }
 
         @SuppressWarnings("unused")
@@ -295,16 +272,6 @@ public class Controller {
         public String getSecurity_code() {
             return security_code;
         }
-
-        @SuppressWarnings("unused")
-        public int getAddress_id(){
-            return address_id;
-        }
-
-        @SuppressWarnings("unused")
-        public int getUser_id(){
-            return user_id;
-        }
     }
 
     // Address profile response class
@@ -319,18 +286,14 @@ public class Controller {
         private String state;
         @SuppressWarnings("FieldMayBeFinal")
         private String zip_code;
-        @SuppressWarnings("FieldMayBeFinal")
-        private int user_id;
-
 
         public AddressProfileResponse(int address_id, String street, String city,
-                                String state, String zip_code, int user_id) {
+                                String state, String zip_code) {
             this.address_id = address_id;
             this.street = street;
             this.city = city;
             this.state = state;
             this.zip_code = zip_code;
-            this.user_id = user_id;
         }
 
         @SuppressWarnings("unused")
@@ -357,15 +320,8 @@ public class Controller {
         public String getZip_code() {
             return zip_code;
         }
-
-        @SuppressWarnings("unused")
-        public int getUser_id(){
-            return user_id;
-        }
     }
 
-
-    
 
 
 // Update user profile

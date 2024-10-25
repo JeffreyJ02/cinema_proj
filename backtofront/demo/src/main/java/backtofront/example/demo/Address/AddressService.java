@@ -3,6 +3,8 @@ package backtofront.example.demo.Address;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
+import backtofront.example.demo.User.User;
+
 @Service
 public class AddressService {
 
@@ -13,20 +15,19 @@ public class AddressService {
     }
 
     // Register user address
-    public void registerAddress(String street, String city, String state, String zip_code, int user_id) {
+    public void registerAddress(String street, String city, String state, String zip_code) {
         Address address = new Address();
-        address.setAddress_id((int)addressRepository.count() + 1);
+        address.setId((int)addressRepository.count() + 1);
         address.setStreet(street);
         address.setCity(city);
         address.setState(state);
-        address.setZip_code(zip_code);
-        address.setUser_id(user_id);
+        address.setZipCode(zip_code);
 
         addressRepository.save(address);
     }
 
     // Find address by user_id
-    public Optional<Address> findByUserId(int user_id) {
-        return addressRepository.findByUserId(user_id);
+    public Optional<Address> findByUser_id(User user) {
+        return addressRepository.findByUser(user);
     }
 }

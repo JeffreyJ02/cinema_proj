@@ -1,10 +1,16 @@
 package backtofront.example.demo.PaymentCard;
 
+import backtofront.example.demo.Address.Address;
+import backtofront.example.demo.User.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Data
@@ -14,24 +20,26 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @Column(name = "card_id")
-    private int card_id;
+    @Column(name = "id", unique = true)
+    private int id;
 
-    @Column(name = "card_type")
-    private String card_type;
+    @Column(name = "type")
+    private String type;
 
-    @Column(name = "card_number")
-    private String card_number;
+    @Column(name = "number")
+    private String number;
 
-    @Column(name = "expiration_date")
-    private String expiration_date;
+    @Column(name = "expirationDate")
+    private String expirationDate;
 
-    @Column(name = "security_code")
-    private String security_code;
+    @Column(name = "securityCode")
+    private String securityCode;
 
-    @Column(name = "address_id")
-    private int address_id;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address")
+    private Address address;
 
-    @Column(name = "user_id")
-    private int user_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user", referencedColumnName = "id")
+    private User user;
 } 
