@@ -25,6 +25,7 @@ public class User {
     @Column(name = "user_id", unique = true, nullable = false)
     private int id; 
 
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -37,8 +38,9 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "registerForPromos", nullable = false)
+    @Column(name = "register_for_promotions", nullable = false)
     private boolean registerForPromos;
+
 
     @Column(name = "status", nullable = false)
     private String status;

@@ -1,7 +1,7 @@
 import emailjs from '@emailjs/browser';
 emailjs.init('aLH3Qp8VUhQqJf1nk');
 
-export function optInPromoEmails( {email} ) {
+function optInPromoEmails( {email} ) {
     let parms = {
         subject: "Promotional Opt-In",
         user_email: email,
@@ -20,7 +20,7 @@ export function editProfileEmail( {email} ) {
     emailjs.send("service_4brc417", "template_r3h3fid", parms)
 }
 
-export function forgotPassword( {email, message} ) {
+function forgotPassword( {email, message} ) {
     let parms = {
         user_email: email,
         message: message
