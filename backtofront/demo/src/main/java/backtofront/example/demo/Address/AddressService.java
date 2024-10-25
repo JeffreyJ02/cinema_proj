@@ -3,8 +3,6 @@ package backtofront.example.demo.Address;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
-import backtofront.example.demo.User.User;
-
 @Service
 public class AddressService {
 
