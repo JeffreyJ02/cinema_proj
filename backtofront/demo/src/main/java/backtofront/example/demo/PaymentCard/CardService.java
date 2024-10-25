@@ -15,7 +15,7 @@ public class CardService {
 
     // Register a new credit card
     public void registerCard(String type, String number, String expiration_date, 
-                             String security_code, User user, ) {
+                             String security_code, User user) {
         Card card = new Card();
         card.setId((int)cardRepository.count() + 1);
         card.setType(type);
@@ -23,7 +23,6 @@ public class CardService {
         card.setExpirationDate(expiration_date);
         card.setSecurityCode(security_code);
         card.setUser(user);
-
         cardRepository.save(card);
     }
 }

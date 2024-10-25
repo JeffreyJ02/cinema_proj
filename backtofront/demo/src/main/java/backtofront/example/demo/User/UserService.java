@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserService {
 
@@ -12,13 +14,14 @@ public class UserService {
     private UserRepository userRepository;
 
     // Updated registerUser method to include optional credit card fields
+    @Transactional
     public void registerUser(String firstName, String lastName, String email, 
                              String password, boolean registerForPromotions) {
-        if (userRepository.existsByEmail(email)) {
+       /*  if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email already exists");
-        }
+        } */
         User newUser = new User();
-        newUser.setId((int)userRepository.count() + 1);
+        //newUser.setId((int)userRepository.count() + 1);
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
         newUser.setEmail(email);

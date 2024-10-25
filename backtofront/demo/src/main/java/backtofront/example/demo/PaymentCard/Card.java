@@ -21,7 +21,7 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @Column(name = "id", unique = true)
+    @Column(name = "card_id", unique = true)
     private int id;
 
     @Column(name = "type")
@@ -37,10 +37,10 @@ public class Card {
     private String securityCode;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address", referencedColumnName = "id")
+    @JoinColumn(name = "address", referencedColumnName = "address_id")
     private Address address;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user", referencedColumnName = "id")
+    @JoinColumn(name = "user", referencedColumnName = "user_id")
     private User user;
 } 
