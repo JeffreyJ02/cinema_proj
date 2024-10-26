@@ -152,6 +152,7 @@ const SignUpPage = () => {
       setSuccessMessage("Email verified successfully!");
       setErrorMessage("");
       await submitUserData(); // This submits the user data to the db AFTER
+      handleClose();
       //window.location.href = "/sign-in"; // Use anchor navigation, next router issues
     } else {
       setErrorMessage("Invalid verification code");
