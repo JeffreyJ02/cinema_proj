@@ -12,6 +12,7 @@ import { verificationCode } from "../../utils/email";
 import "./SignUpPage.css";
 import Grid from "@mui/material/Grid2";
 import { encrypt } from "../../utils/encryption";
+//import { register } from "module";
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -94,6 +95,8 @@ const SignUpPage = () => {
       return;
     }
 
+    
+
     if (creditCardNumber) {
       // Validate credit card number
       if (!/^\d{16}$/.test(creditCardNumber)) {
@@ -147,6 +150,8 @@ const SignUpPage = () => {
     console.log("submitUserData called");
     const { firstName, lastName, email, password, registerForPromotions } =
       formData;
+      const promos = registerForPromotions ? 1 : 0;
+      console.log("Reg for Promo: ", promos);
 
     try {
       const encryptedPassword = encrypt(password);
@@ -158,7 +163,7 @@ const SignUpPage = () => {
           lastName,
           email,
           password: encryptedPassword,
-          registerForPromotions,
+          promos,
         }),
       });
 
