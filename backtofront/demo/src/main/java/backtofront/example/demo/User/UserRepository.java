@@ -22,8 +22,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     void tempPassUpdate(String password, int user_id);
 
     boolean existsByEmail(String email);
-    List<User> findByRegisterForPromos(boolean registerForPromos);
-    Optional<User> findByFirstNameAndLastName(String firstName, String lastName);
-    void deleteByEmail(String email);
 
+    // for valid login
+    Optional<User> findByEmailAndPassword(String email, String password);
+
+    // query?
+    List<User> findByRegisterForPromos(boolean registerForPromos);
+
+    Optional<User> findByFirstNameAndLastName(String firstName, String lastName);
+    
+    void deleteByEmail(String email);
 }
