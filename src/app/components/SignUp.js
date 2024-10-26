@@ -13,6 +13,7 @@ import { optInPromoEmails } from "../../utils/email";
 import "./SignUpPage.css";
 import Grid from "@mui/material/Grid2";
 import { encrypt } from "../../utils/encryption";
+import { hash } from '../../utils/encryption';
 //import { register } from "module";
 
 const SignUpPage = () => {
