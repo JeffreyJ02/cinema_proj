@@ -28,8 +28,7 @@ function LoginForm() {
         e.preventDefault();
         const { email, password } = formData;
         const encryptedPassword = password;
-        console.log('Encrypted Password:', encryptedPassword);
-        console.log('Form Submitted:', formData);
+
         fetch('http://localhost:8082/login-user', {
             method: 'POST',
             crossDomain: true,
