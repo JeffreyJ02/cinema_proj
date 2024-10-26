@@ -332,13 +332,6 @@ const states = [
           margin="normal"
         />
         <TextField
-          label="City"
-          name="billingCity"
-          value={formData.billingCity}
-          onChange={handleChange}
-          margin="normal"
-        />
-        <TextField
           id="state-select"
           select
           label="State"
