@@ -1,8 +1,7 @@
 "use client";
-import { useUser } from "../../context/UserContext";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useUser } from "../../context/UserContext";
 
 const CustomNavbar = () => {
   const router = useRouter();
@@ -17,7 +16,8 @@ const CustomNavbar = () => {
   };
 
   const logout = async () => {
-    // document.cookie = "token=; Max-Age=0; path=/;";
+    console.log("Document cookie:", document.cookie);
+    document.cookie = "token=; Max-Age=0; path=/;";
     try {
       const response = await fetch("http://localhost:8080/api/logout", {
         method: "POST",

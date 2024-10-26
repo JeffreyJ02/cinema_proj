@@ -13,8 +13,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "user_id", unique = true, nullable = false)
+    private int userId; 
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -22,27 +22,22 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "phone_number")
+    private String phone_number;
+    
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "register_for_promotions", nullable = false)
-    private boolean registerForPromotions;
+    @Column(name = "administrator")
+    private boolean admin = false;
 
-    @Column(name = "credit_card_number", nullable = true)
-    private String creditCardNumber; 
+    @Column(name = "promotions", nullable = false)
+    private boolean registerForPromos;
 
-    @Column(name = "expiration_date", nullable = true)
-    private String expirationDate; 
-
-    @Column(name = "cvv", nullable = true)
-    private String cvv; 
 
     @Column(name = "status", nullable = false)
     private String status;
-
-    @Column(name = "verification_token", nullable = true)
-    private String verificationToken;
 }
