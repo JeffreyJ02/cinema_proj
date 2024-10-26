@@ -97,6 +97,8 @@ public class Controller {
         Optional<User> existingUser = userService.findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
             // Verify the password
+            System.out.println("Received Encrypted Password: " + user.getPassword()); // Log the received password
+        System.out.println("Stored Encrypted Password: " + existingUser.get().getPassword()); // Log the stored password
             if (existingUser.get().getPassword().equals(user.getPassword())) {
                 // Login successful, return a JSON object
                 return ResponseEntity.ok(new LoginResponse("Login successful", existingUser.get().getEmail()));

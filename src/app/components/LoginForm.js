@@ -27,6 +27,8 @@ function LoginForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const { email, password } = formData;
+        const encryptedPassword = password;
+        console.log('Encrypted Password:', encryptedPassword);
         console.log('Form Submitted:', formData);
         fetch('http://localhost:8082/login-user', {
             method: 'POST',
@@ -38,7 +40,7 @@ function LoginForm() {
             },
             body: JSON.stringify({
                 email,
-                password,
+                password: encryptedPassword,
             }),
         })
             .then((res) => res.json())
@@ -49,10 +51,14 @@ function LoginForm() {
                     window.localStorage.setItem('token', data.data);
                     router.push('/App-Page'); 
                 } else {
+                    console.log('Encrypted Password:', encryptedPassword);
+                console.log('Form Submitted:', formData);
                     alert(data.error);
                 }
             })
             .catch((error) => {
+                console.log('Encrypted Password:', encryptedPassword);
+                console.log('Form Submitted:', formData);
                 console.error('Error:', error);
             });
     };

@@ -1,15 +1,19 @@
 import CryptoJS from 'crypto-js';
 const key = 'teamB8';
+const salt = 'encryptionstuff';
 
-export function encrypt(password) {
-    console.log("Running Encrypt");
-    const secretPass = CryptoJS.AES.encrypt(password, key).toString();
+export function hash(password) {
+    const secretPass = CryptoJS.SHA256(password + salt).toString();
     return secretPass;
 };
 
-export function decrypt() {
-    console.log("Running Decrypt");
-    let secretPass = document.getElementById("pass").value;
-    const password = CryptoJS.AES.decrypt(secretPass, key).toString(CryptoJS.enc.Utf8);
-    document.getElementById("pass").value = password;
+export function encrypt(password) {
+    const secretPass = CryptoJS.AES.encrypt(password).toString();
+    return secretPass;
+};
+
+
+export function decrypt(secretPass) {
+    const password = CryptoJS.AES.decrypt(secretPass).toString(CryptoJS.enc.Utf8);
+    return password;
 };

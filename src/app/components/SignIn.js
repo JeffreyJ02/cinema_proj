@@ -80,7 +80,9 @@ export default function SignIn() {
     });
     console.log("Dummy JWT set") */
     try {
-      const encryptedPassword = encrypt(password);
+      const encryptedPassword = hash(password);
+      console.log('Encrypted Password:', encryptedPassword);
+        console.log('Form Submitted:', formData);
       // Sending API call to login endpoint
       const response = await fetch("http://localhost:8080/api/login-user", {
         method: "POST",

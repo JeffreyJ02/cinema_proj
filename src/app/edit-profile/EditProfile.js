@@ -88,8 +88,8 @@ useEffect(() => {
     //const encryptedPassword = btoa(newPassword);
     //const encryptedCreditCard = btoa(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
 
-    const encryptedNewPassword = encrypt(newPassword);
-    const encryptedCurrentPassword = encrypt(currentPassword);
+    const encryptedNewPassword = hash(newPassword);
+    const encryptedCurrentPassword = hash(currentPassword);
     const encryptedCreditCard = encrypt(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
 
     console.log('Address:', {
@@ -194,6 +194,7 @@ useEffect(() => {
         <input
           type="email"
           value={email}
+          placeholder = "curtisleonard03@gmail.com"
           readOnly // Make email read-only
         />
       </label>
@@ -366,5 +367,5 @@ useEffect(() => {
     </form>
   );
 };
-}
+
 export default EditProfile;

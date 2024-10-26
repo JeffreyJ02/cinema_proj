@@ -1,13 +1,12 @@
 const key = 'teamB8';
+const salt = 'encryptionstuff';
 
-function encrypt() {
-    let password = document.getElementById("pass").value;
-    const secretPass = CryptoJS.AES.encrypt(password, key);
-    document.getElementById("pass").value = secretPass;
+export function encrypt(password) {
+    const secretPass = CryptoJS.SHA256.encrypt(password + salt).toString();
+    return secretPass;
 };
 
-function decrypt() {
-    let secretPass = document.getElementById("pass").value;
-    const password = CryptoJS.AES.decrypt(secretPass, key).toString(CryptoJS.enc.Utf8);
-    document.getElementById("pass").value = password;
+export function decrypt(secretPass) {
+    const password = CryptoJS.SHA256.decrypt(secretPass).toString(CryptoJS.enc.Utf8);
+    return password;
 };

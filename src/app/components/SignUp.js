@@ -118,7 +118,7 @@ const SignUpPage = () => {
       formData;
 
     try {
-      const encryptedPassword = encrypt(password);
+      const encryptedPassword = hash(password);
       const response = await fetch("http://localhost:8080/api/register-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
