@@ -14,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", unique = true, nullable = false)
-    private int userId; 
+    private int userId;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -24,7 +24,7 @@ public class User {
 
     @Column(name = "phone_number")
     private String phone_number;
-    
+
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
@@ -35,8 +35,7 @@ public class User {
     private boolean admin = false;
 
     @Column(name = "promotions", nullable = false)
-    private boolean registerForPromos;
-
+    private int registerForPromos;
 
     @Column(name = "status", nullable = false)
     private String status;

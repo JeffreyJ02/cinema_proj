@@ -9,9 +9,11 @@ import {
 } from "@mui/material";
 import { Modal, Button } from "react-bootstrap";
 import { verificationCode } from "../../utils/email";
+import { optInPromoEmails } from "../../utils/email";
 import "./SignUpPage.css";
 import Grid from "@mui/material/Grid2";
 import { encrypt } from "../../utils/encryption";
+//import { register } from "module";
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -80,10 +82,21 @@ const SignUpPage = () => {
     }
   };
 
+  // Send opt-in email
+  const sendOptInEmail = async (emailAddress) => {
+    console.log("sendOptInEmail called");
+    try {
+        // Async function to send verification code from email.js
+      optInPromoEmails( {email: emailAddress} );
+    } catch (error) {
+      console.error("Error sending opt-in email:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     console.log("handleSubmit called");
     e.preventDefault();
-    const { email, confirmEmail, password, confirmPassword } = formData;
+    const { email, confirmEmail, password, confirmPassword, creditCardNumber, expirationDate, cvv } = formData;
 
     if (email !== confirmEmail) {
       setErrorMessage("Email addresses do not match.");
@@ -94,6 +107,39 @@ const SignUpPage = () => {
       return;
     }
 
+    
+
+    if (creditCardNumber) {
+      // Validate credit card number
+      if (!/^\d{16}$/.test(creditCardNumber)) {
+        setErrorMessage("Credit card number must be exactly 16 digits.");
+        return; // Stops execution if validation fails
+      }
+    }
+    
+    if (expirationDate) {
+      // Validate expiration date
+      const [month, year] = expirationDate.split("/");
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1; // Months are 0-based
+      const currentYear = currentDate.getFullYear() % 100; // Get last two digits of the year
+    
+      if (!/^\d{2}\/\d{2}$/.test(expirationDate) || 
+          (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth))) {
+        setErrorMessage("Expiration date must be in MM/YY format and not expired.");
+        return; // Stops execution if validation fails
+      }
+    }
+    
+    if (cvv) {
+      // Validate CVV
+      if (!/^\d{3,4}$/.test(cvv)) {
+        setErrorMessage("CVV must be 3 or 4 digits.");
+        return; // Stops execution if validation fails
+      }
+    }
+    
+    // If all validations pass or credit card fields are empty, continue to send verification email
     await sendVerificationEmail(email); // Send verification email
     handleShow(); // Open the verification modal
   };
@@ -116,6 +162,8 @@ const SignUpPage = () => {
     console.log("submitUserData called");
     const { firstName, lastName, email, password, registerForPromotions } =
       formData;
+      const promos = registerForPromotions ? 1 : 0;
+      console.log("Reg for Promo: ", promos);
 
     try {
       const encryptedPassword = hash(password);
@@ -127,7 +175,7 @@ const SignUpPage = () => {
           lastName,
           email,
           password: encryptedPassword,
-          registerForPromotions,
+          registerForPromos: promos,
         }),
       });
 
@@ -140,6 +188,8 @@ const SignUpPage = () => {
         }
         return;
       }
+
+      if (promos == 1) sendOptInEmail(email);
 
       setSuccessMessage("Registration successful!");
       // Reset form
@@ -328,13 +378,6 @@ const states = [
           label="Zip or Postal Code"
           name="billingZip"
           value={formData.billingZip}
-          onChange={handleChange}
-          margin="normal"
-        />
-        <TextField
-          label="City"
-          name="billingCity"
-          value={formData.billingCity}
           onChange={handleChange}
           margin="normal"
         />

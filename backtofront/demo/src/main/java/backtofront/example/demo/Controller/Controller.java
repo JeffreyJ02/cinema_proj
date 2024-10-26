@@ -43,7 +43,7 @@ public class Controller {
                 user.getEmail(),
                 user.getPhone_number(),
                 user.getPassword(),
-                user.isRegisterForPromos() // Get the boolean value
+                user.getRegisterForPromos() // Get the boolean value
             );
             return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -121,7 +121,7 @@ public class Controller {
                 user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.isRegisterForPromos()
+                user.getRegisterForPromos()
             );
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
@@ -168,7 +168,6 @@ public class Controller {
         }
     }
 
-
     // ResponseMessage class
     private static class ResponseMessage {
         @SuppressWarnings("FieldMayBeFinal")
@@ -195,9 +194,9 @@ public class Controller {
         @SuppressWarnings("FieldMayBeFinal")
         private String password;
         @SuppressWarnings("FieldMayBeFinal")
-        private boolean registerForPromos;
+        private int registerForPromos;
     
-        public UserProfileResponse(String firstName, String lastName, String email, String password, boolean registerForPromos ) {
+        public UserProfileResponse(String firstName, String lastName, String email, String password, int registerForPromos ) {
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
@@ -226,7 +225,7 @@ public class Controller {
         }
     
         @SuppressWarnings("unused")
-        public boolean isRegisterForPromotions() {
+        public int getRegisterForPromos() {
             return registerForPromos;
         }    
     }

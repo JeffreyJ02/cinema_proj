@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import {forgotPassword } from '../../utils/email.js';
 import './passwordReset.css';
 
 function PasswordReset() {
@@ -46,14 +47,14 @@ function PasswordReset() {
         }
         // still need to find way to check for valid email in DB
 
-
         const tempPassword = generatePassword();
 
         // Here you would send the email with the temporary password
         // For now, I am just logging it to the console
         console.log(`Sending email to ${email} with temporary password: ${tempPassword}`);
-
-        // Simulate sending email (replace this with your actual email sending logic)
+        const message = `You've requested a password reset. Here is your temporary password: ${tempPassword}`;
+        forgotPassword({email, message});
+        
         try {
             // Example: await sendEmail(email, tempPassword);
             setMessage(`A temporary password has been sent to ${email}.`);

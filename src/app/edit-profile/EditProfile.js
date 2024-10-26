@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react';
+<<<<<<< HEAD
+import './EditProfile.css';
+=======
+>>>>>>> edfb770c71c1cf274003362c8acdae61aea16144
 import { editProfileEmail } from '../../utils/email';
 import { encrypt } from '../../utils/encryption';
 import './EditProfile.css';
@@ -23,6 +27,34 @@ const EditProfile = () => {
   const [zipCode, setZipCode] = useState('');
   const [promotionalEmails, setPromotionalEmails] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+<<<<<<< HEAD
+
+  //fetch user data when page is ran
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/user/profile'); // Adjust the endpoint accordingly
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        const data = await response.json();
+        // Assuming the API returns an object with the necessary fields
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+        setEmail(data.email); // Prefill email
+        setAddress(data.address);
+        setStoredCards(data.savedCards || []); // Assuming the API returns saved cards
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+    
+=======
+>>>>>>> edfb770c71c1cf274003362c8acdae61aea16144
 
   // Function to validate email format
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
@@ -35,6 +67,7 @@ const EditProfile = () => {
 useEffect(() => {
   const token = localStorage.getItem('token'); // Assuming token is stored in local storage
   const userEmail = localStorage.getItem('userEmail'); // Retrieve email from local storage or use context
+<<<<<<< HEAD
 
   const fetchUserProfile = async (email) => {
     try {
@@ -46,6 +79,19 @@ useEffect(() => {
         }
       });
 
+=======
+
+  const fetchUserProfile = async (email) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/user-profile?email=${email}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // If you are using token-based authentication
+        }
+      });
+
+>>>>>>> edfb770c71c1cf274003362c8acdae61aea16144
       if (!response.ok) {
         throw new Error('Failed to fetch user profile');
       }
@@ -130,8 +176,13 @@ useEffect(() => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+<<<<<<< HEAD
+            currentPassword,
+            newPassword,
+=======
             currentPassword: encryptedCurrentPassword,
             newPassword: encryptedNewPassword,
+>>>>>>> edfb770c71c1cf274003362c8acdae61aea16144
           }),
         });
 
@@ -194,8 +245,12 @@ useEffect(() => {
         <input
           type="email"
           value={email}
-          placeholder = "curtisleonard03@gmail.com"
+<<<<<<< HEAD
+          onChange={(e) => setEmail(e.target.value)}
+          readOnly //user cannot edit email
+=======
           readOnly // Make email read-only
+>>>>>>> edfb770c71c1cf274003362c8acdae61aea16144
         />
       </label>
       <br />
@@ -205,7 +260,7 @@ useEffect(() => {
           type="text"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          placeholder="Enter first name"
+          placeholder="First Name"
         />
       </label>
       <br />
@@ -215,7 +270,7 @@ useEffect(() => {
           type="text"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          placeholder="Enter last name"
+          placeholder="Last Name"
         />
       </label>
       <br />
@@ -367,5 +422,9 @@ useEffect(() => {
     </form>
   );
 };
+<<<<<<< HEAD
 
+=======
+}
+>>>>>>> edfb770c71c1cf274003362c8acdae61aea16144
 export default EditProfile;
