@@ -163,7 +163,7 @@ const SignUpPage = () => {
           lastName,
           email,
           password: encryptedPassword,
-          promos,
+          registerForPromos: promos,
         }),
       });
 
