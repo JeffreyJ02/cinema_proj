@@ -167,7 +167,6 @@ public class Controller {
         }
     }
 
-
     // ResponseMessage class
     private static class ResponseMessage {
         @SuppressWarnings("FieldMayBeFinal")

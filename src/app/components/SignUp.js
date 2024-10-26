@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { Modal, Button } from "react-bootstrap";
 import { verificationCode } from "../../utils/email";
+import { optInPromoEmails } from "../../utils/email";
 import "./SignUpPage.css";
 import Grid from "@mui/material/Grid2";
 import { encrypt } from "../../utils/encryption";
@@ -78,6 +79,17 @@ const SignUpPage = () => {
       console.log("Verification email sent to:", emailAddress);
     } catch (error) {
       console.error("Error sending verification email:", error);
+    }
+  };
+
+  // Send opt-in email
+  const sendOptInEmail = async (emailAddress) => {
+    console.log("sendOptInEmail called");
+    try {
+        // Async function to send verification code from email.js
+      optInPromoEmails( {email: emailAddress} );
+    } catch (error) {
+      console.error("Error sending opt-in email:", error);
     }
   };
 
@@ -176,6 +188,8 @@ const SignUpPage = () => {
         }
         return;
       }
+
+      if (promos == 1) sendOptInEmail(email);
 
       setSuccessMessage("Registration successful!");
       // Reset form
