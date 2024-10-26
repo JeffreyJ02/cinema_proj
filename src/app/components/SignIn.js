@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { encrypt } from '../../utils/encryption';
+import { hash } from '../../utils/encryption';
 
 // This component is adapted from the Material-UI example at: https://mui.com/material-ui/getting-started/templates/sign-in/
 export default function SignIn() {
