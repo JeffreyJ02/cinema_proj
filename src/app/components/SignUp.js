@@ -24,6 +24,7 @@ const SignUpPage = () => {
     confirmEmail: "",
     password: "",
     confirmPassword: "",
+    phoneNumber: "",
     creditCardNumber: "",
     expirationDate: "",
     cvv: "",
@@ -97,7 +98,7 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     console.log("handleSubmit called");
     e.preventDefault();
-    const { email, confirmEmail, password, confirmPassword, creditCardNumber, expirationDate, cvv } = formData;
+    const { email, confirmEmail, password, confirmPassword, phoneNumber, creditCardNumber, expirationDate, cvv } = formData;
 
     if (email !== confirmEmail) {
       setErrorMessage("Email addresses do not match.");
@@ -108,6 +109,10 @@ const SignUpPage = () => {
       return;
     }
 
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      setErrorMessage("Phone number must be exactly 10 digits.");
+      return; // Stops execution if validation fails
+    }
     
 
     if (creditCardNumber) {
@@ -162,10 +167,11 @@ const SignUpPage = () => {
   // Submits user to the DB
   const submitUserData = async () => {
     console.log("submitUserData called");
-    const { firstName, lastName, email, password, registerForPromotions } =
+    const { firstName, lastName, email, password, phoneNumber, registerForPromotions } =
       formData;
       const promos = registerForPromotions ? 1 : 0;
       console.log("Reg for Promo: ", promos);
+      console.log("Input Phone Number: " + phoneNumber);
 
     try {
       const encryptedPassword = hash(password);
@@ -177,6 +183,7 @@ const SignUpPage = () => {
           lastName,
           email,
           password: encryptedPassword,
+          phoneNumber,
           registerForPromos: promos,
         }),
       });
@@ -202,6 +209,7 @@ const SignUpPage = () => {
         confirmEmail: "",
         password: "",
         confirmPassword: "",
+        phoneNumber: "",
         creditCardNumber: "",
         expirationDate: "",
         cvv: "",
@@ -307,6 +315,20 @@ const states = [
           required
           fullWidth
           margin="normal"
+        />
+        <TextField
+        label="Phone Number"
+        name="phoneNumber"
+        type="tel"
+        inputMode="numeric"
+        pattern="\d{10}" // Ensure exactly 10 digits
+        maxLength="10" // Limit to 10 characters
+        value={formData.phoneNumber}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        placeholder="(xxx) xxx - xxxx" // Placeholder for phone number
+        required // Make this field required
         />
         <TextField
           label="Credit Card Number"
