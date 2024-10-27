@@ -24,6 +24,7 @@ const EditProfile = () => {
   const [zipCode, setZipCode] = useState('');
   const [promotionalEmails, setPromotionalEmails] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   //fetch user data when page is ran
   useEffect(() => {
@@ -38,6 +39,7 @@ const EditProfile = () => {
         setFirstName(data.firstName);
         setLastName(data.lastName);
         setEmail(data.email); // Prefill email
+        setPhoneNumber(data.phoneNumber);
         setAddress(data.address);
         setStoredCards(data.savedCards || []); // Assuming the API returns saved cards
       } catch (error) {
@@ -107,6 +109,9 @@ useEffect(() => {
     if (newPassword && newPassword !== confirmNewPassword) {
       newErrors.confirmNewPassword = "Passwords do not match";
     }
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      newErrors.phoneNumber = "Phone number must be exactly 10 digits.";
+    }
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
@@ -138,6 +143,7 @@ useEffect(() => {
         body: JSON.stringify({
           firstName,
           lastName,
+          phoneNumber,
           street,
           city,
           state,
@@ -272,6 +278,18 @@ useEffect(() => {
           value={confirmNewPassword}
           onChange={(e) => setConfirmNewPassword(e.target.value)}
           placeholder="Confirm new password"
+        />
+      </label>
+      <br />
+      <label>
+        Phone Number:
+        <input
+          type="text"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          placeholder="1234567890" // Placeholder for phone number
+          pattern="\d{10}" // Ensure exactly 10 digits
+          maxLength="10" // Limit to 10 characters
         />
       </label>
       <br />
