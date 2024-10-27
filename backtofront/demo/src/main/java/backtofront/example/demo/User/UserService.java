@@ -36,67 +36,59 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    /*
-     * // Update user information
-     * public void updateUser(User user) {
-     * if (user == null || user.getEmail() == null) {
-     * throw new IllegalArgumentException("User or email cannot be null");
-     * }
-     * 
-     * Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
-     * 
-     * if (existingUserOpt.isPresent()) {
-     * User existingUser = existingUserOpt.get();
-     * 
-     * if (user.getFirstName() != null) {
-     * existingUser.setFirstName(user.getFirstName());
-     * }
-     * if (user.getLastName() != null) {
-     * existingUser.setLastName(user.getLastName());
-     * }
-     * if (user.getPassword() != null) {
-     * existingUser.setPassword(user.getPassword());
-     * }
-     * // Save the updated user
-     * userRepository.save(existingUser);
-     * } else {
-     * throw new IllegalArgumentException("User not found");
-     * }
-     * }
-     * 
-     * public void updateProfile(String email, String firstName, String lastName,
-     * String street, String city, String state, String zipCode, Boolean
-     * registerForPromotions) {
-     * User user = userRepository.findByEmail(email).orElseThrow(() -> new
-     * IllegalArgumentException("User not found"));
-     * 
-     * // Update fields only if they are provided (not null or empty)
-     * if (firstName != null && !firstName.isEmpty()) {
-     * user.setFirstName(firstName);
-     * }
-     * if (lastName != null && !lastName.isEmpty()) {
-     * user.setLastName(lastName);
-     * }
-     * if (street != null && !street.isEmpty()) {
-     * user.setStreet(street);
-     * }
-     * if (city != null && !city.isEmpty()) {
-     * user.setCity(city);
-     * }
-     * if (state != null && !state.isEmpty()) {
-     * user.setState(state);
-     * }
-     * if (zipCode != null && !zipCode.isEmpty()) {
-     * user.setZipCode(zipCode);
-     * }
-     * if (registerForPromotions != null) {
-     * user.setRegisterForPromotions(registerForPromotions);
-     * }
-     * 
-     * userRepository.save(user);
-     * }
-     * 
-     */
+// Update user information
+public void updateUser(User user) {
+    if (user == null || user.getEmail() == null) {
+        throw new IllegalArgumentException("User or email cannot be null");
+    }
+
+
+    Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
+
+
+    if (existingUserOpt.isPresent()) {
+        User existingUser = existingUserOpt.get();
+
+
+        if (user.getFirstName() != null) {
+            existingUser.setFirstName(user.getFirstName());
+        }
+        if (user.getLastName() != null) {
+            existingUser.setLastName(user.getLastName());
+        }
+        if (user.getPassword() != null) {
+            existingUser.setPassword(user.getPassword());
+        }
+        // Save the updated user
+        userRepository.save(existingUser);
+    } else {
+        throw new IllegalArgumentException("User not found");
+    }
+}
+
+
+public void updateProfile(String email, String firstName, String lastName,  String phoneNumber, Integer registerForPromotions) {
+    User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+
+    // Update fields only if they are provided (not null or empty)
+    if (firstName != null && !firstName.isEmpty()) {
+        user.setFirstName(firstName);
+    }
+    if (lastName != null && !lastName.isEmpty()) {
+        user.setLastName(lastName);
+    }
+    if(phoneNumber != null){
+        user.setPhone_number(phoneNumber);
+    }
+    if (registerForPromotions != null) {
+        user.setRegisterForPromos(registerForPromotions);
+    }
+
+
+    userRepository.save(user);
+}
+
 
     public void updatePassword(String email, String currentPassword, String newPassword) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));

@@ -8,12 +8,12 @@ export function hash(password) {
 };
 
 export function encrypt(password) {
-    const secretPass = CryptoJS.AES.encrypt(password).toString();
+    const secretPass = CryptoJS.AES.encrypt(password, key).toString();
     return secretPass;
 };
 
 
 export function decrypt(secretPass) {
-    const password = CryptoJS.AES.decrypt(secretPass).toString(CryptoJS.enc.Utf8);
+    const password = CryptoJS.AES.decrypt(secretPass, key).toString(CryptoJS.enc.Utf8);
     return password;
 };
