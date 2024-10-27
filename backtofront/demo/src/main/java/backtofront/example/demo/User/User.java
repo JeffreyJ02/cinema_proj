@@ -31,11 +31,11 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "administrator")
-    private boolean admin = false;
+    @Column(name = "administrator", nullable = false)
+    private int admin = 0;
 
     @Column(name = "promotions", nullable = false)
-    private int registerForPromos;
+    private int registerForPromos = 0;
 
     @Column(name = "status", nullable = false)
     private String status;

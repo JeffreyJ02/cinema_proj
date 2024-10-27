@@ -98,7 +98,7 @@ useEffect(() => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccessMessage('');
+    setSuccessMessage('User information successfully updated');
     const newErrors = {};
 
     if (newPassword && !validatePassword(newPassword)) {

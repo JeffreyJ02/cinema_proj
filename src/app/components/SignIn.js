@@ -16,7 +16,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { encrypt } from '../../utils/encryption';
-import { hash } from '../../utils/encryption';
 
 // This component is adapted from the Material-UI example at: https://mui.com/material-ui/getting-started/templates/sign-in/
 export default function SignIn() {
@@ -81,9 +80,7 @@ export default function SignIn() {
     });
     console.log("Dummy JWT set") */
     try {
-      const encryptedPassword = hash(password);
-      console.log('Encrypted Password:', encryptedPassword);
-        console.log('Form Submitted:', formData);
+      const encryptedPassword = encrypt(password);
       // Sending API call to login endpoint
       const response = await fetch("http://localhost:8080/api/login-user", {
         method: "POST",
