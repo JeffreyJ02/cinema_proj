@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { editProfileEmail } from '../../utils/email';
-import { encrypt } from '../../utils/encryption';
-import { hash } from '../../utils/encryption';
+import { encrypt, hash } from '../../utils/encryption';
 import './EditProfile.css';
 
 const EditProfile = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState(''); // Will be fetched
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -25,30 +25,6 @@ const EditProfile = () => {
   const [promotionalEmails, setPromotionalEmails] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  //fetch user data when page is ran
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/api/user/profile'); // Adjust the endpoint accordingly
-        if (!response.ok) {
-          throw new Error('Failed to fetch user data');
-        }
-        const data = await response.json();
-        // Assuming the API returns an object with the necessary fields
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-        setEmail(data.email); // Prefill email
-        setAddress(data.address);
-        setStoredCards(data.savedCards || []); // Assuming the API returns saved cards
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-    
 
   // Function to validate email format
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
@@ -81,6 +57,7 @@ useEffect(() => {
       setFirstName(userData.firstName);
       setLastName(userData.lastName);
       setEmail(userData.email);
+      setPhoneNumber(userData.phoneNumber);
       setStreet(userData.street);
       setCity(userData.city);
       setState(userData.state);
@@ -136,12 +113,10 @@ useEffect(() => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          email,
           firstName,
           lastName,
-          street,
-          city,
-          state,
-          zipCode,
+          phoneNumber,
           promotionalEmails,
         }),
       });
@@ -156,6 +131,7 @@ useEffect(() => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            email,
             currentPassword: encryptedCurrentPassword,
             newPassword: encryptedNewPassword,
           }),
@@ -242,6 +218,16 @@ useEffect(() => {
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           placeholder="Last Name"
+        />
+      </label>
+      <br />
+      <label>
+        Phone Number:
+        <input
+          type="text"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          placeholder="Phone Number"
         />
       </label>
       <br />

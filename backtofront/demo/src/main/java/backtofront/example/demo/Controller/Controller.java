@@ -120,6 +120,7 @@ public class Controller {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
+                user.getPhone_number(),
                 user.getPassword(),
                 user.getRegisterForPromos()
             );
@@ -192,14 +193,17 @@ public class Controller {
         @SuppressWarnings("FieldMayBeFinal")
         private String email;
         @SuppressWarnings("FieldMayBeFinal")
+        private String phoneNumber;
+        @SuppressWarnings("FieldMayBeFinal")
         private String password;
         @SuppressWarnings("FieldMayBeFinal")
         private int registerForPromos;
     
-        public UserProfileResponse(String firstName, String lastName, String email, String password, int registerForPromos ) {
+        public UserProfileResponse(String firstName, String lastName, String email, String phoneNumber, String password, int registerForPromos ) {
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
+            this.phoneNumber = phoneNumber;
             this.password = password;
             this.registerForPromos = registerForPromos;    
         }
@@ -217,6 +221,11 @@ public class Controller {
         @SuppressWarnings("unused")
         public String getEmail() {
             return email;
+        }
+
+        @SuppressWarnings("unused")
+        public String getPhoneNumber(){
+            return phoneNumber;
         }
     
         @SuppressWarnings("unused")
@@ -328,8 +337,7 @@ public class Controller {
 
 
 
-// Update user profile
-/*
+
 @PostMapping("/update-profile")
 public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileRequest) {
     try {
@@ -337,10 +345,7 @@ public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateP
             updateProfileRequest.getEmail(),
             updateProfileRequest.getFirstName(),
             updateProfileRequest.getLastName(),
-            updateProfileRequest.getStreet(),
-            updateProfileRequest.getCity(),
-            updateProfileRequest.getState(),
-            updateProfileRequest.getZipCode(),
+            updateProfileRequest.getPhoneNumber(),
             updateProfileRequest.isRegisterForPromotions()
         );
         return ResponseEntity.ok(new ResponseMessage("Profile updated successfully!"));
@@ -370,18 +375,99 @@ public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updat
 
 // Request classes for profile and password updates
 private static class UpdateProfileRequest {
-    private int id;
     private String email;
     private String firstName;
     private String lastName;
-    private String street;
-    private String city;
-    private String state;
-    private String zipCode;
-    private boolean registerForPromotions;
+    private String phoneNumber;
+    private Integer registerForPromotions;
+
 
     // Getters and Setters
-    /* public int setid(int id) {
-        this.id = id;
-    } */
+    public String getEmail() {
+        return email;
+    }
+
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+
+    public String getLastName() {
+        return lastName;
+    }
+
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Integer isRegisterForPromotions() {
+        return registerForPromotions;
+    }
+
+
+    public void setRegisterForPromotions(Integer registerForPromotions) {
+        this.registerForPromotions = registerForPromotions;
+    }
+
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    }
+
+
+private static class UpdatePasswordRequest {
+    private String email;
+    private String currentPassword;
+    private String newPassword;
+
+
+    // Getters and Setters
+    public String getEmail() {
+        return email;
+    }
+
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
+
+
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
+    }
+
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+}
+
 }
