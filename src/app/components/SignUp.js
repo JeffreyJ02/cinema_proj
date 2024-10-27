@@ -110,34 +110,21 @@ const SignUpPage = () => {
 
     
 
-    if (creditCardNumber) {
-      // Validate credit card number
-      if (!/^\d{16}$/.test(creditCardNumber)) {
-        setErrorMessage("Credit card number must be exactly 16 digits.");
-        return; // Stops execution if validation fails
-      }
+    const cardNumberPattern = /^\d{4}-\d{4}-\d{4}-\d{4}$/;
+    if (!cardNumberPattern.test(creditCardNumber)) {
+      alert("Invalid credit card number format. Please use xxxx-xxxx-xxxx-xxxx.");
+      return;
     }
-    
-    if (expirationDate) {
-      // Validate expiration date
-      const [month, year] = expirationDate.split("/");
-      const currentDate = new Date();
-      const currentMonth = currentDate.getMonth() + 1; // Months are 0-based
-      const currentYear = currentDate.getFullYear() % 100; // Get last two digits of the year
-    
-      if (!/^\d{2}\/\d{2}$/.test(expirationDate) || 
-          (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth))) {
-        setErrorMessage("Expiration date must be in MM/YY format and not expired.");
-        return; // Stops execution if validation fails
-      }
+
+    const expirationPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!expirationPattern.test(expirationDate)) {
+      alert("Invalid expiration date format. Please use MM/YY.");
+      return;
     }
-    
-    if (cvv) {
-      // Validate CVV
-      if (!/^\d{3,4}$/.test(cvv)) {
-        setErrorMessage("CVV must be 3 or 4 digits.");
-        return; // Stops execution if validation fails
-      }
+
+    if (!/^\d{3,4}$/.test(cvv)) {
+      alert("CVV must be 3 or 4 digits.");
+      return;
     }
     
     // If all validations pass or credit card fields are empty, continue to send verification email
@@ -169,7 +156,7 @@ const SignUpPage = () => {
 
     try {
       const encryptedPassword = hash(password);
-      const response = await fetch("http://localhost:8080/api/register-user", {
+      const userResponse = await fetch("http://localhost:8080/api/register-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -181,7 +168,7 @@ const SignUpPage = () => {
         }),
       });
 
-      if (!response.ok) {
+      if (!userResponse.ok) {
         const errorData = await response.json();
         if (response.status === 409) {
           setErrorMessage("An account with this email already exists.");
@@ -190,6 +177,35 @@ const SignUpPage = () => {
         }
         return;
       }
+
+      console.log("User registered successfully!");
+
+      // Logic for payment cards
+      try {
+        console.log("Card registration start");
+        const encryptedCardNumber = encrypt(formData.cardNumber);
+        const encryptedExpirationDate = encrypt(formData.expirationDate);
+        const encryptedSecurityCode = encrypt(formData.cvv);
+        // Send data to backend
+        const cardResponse = await fetch('http://localhost:8080/api/register-card', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            card_number: encryptedCardNumber,
+            expirationDate: encryptedExpirationDate,
+            securityCode: encryptedSecurityCode,
+          }),
+        });
+  
+        if (!cardResponse.ok) {
+          const errorData = await response.json();
+          setErrorMessage(errorData.error || 'Registration failed.');
+        }
+        console.log("Card registrated successfully!");
+    } catch (error) {
+      setErrorMessage("A card registration error occurred.");
+      console.error("Card registration error:", error);
+    }
 
       if (promos == 1) sendOptInEmail(email);
 

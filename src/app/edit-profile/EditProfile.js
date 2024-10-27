@@ -149,38 +149,60 @@ useEffect(() => {
   };
 
   // Function to add a new credit card to stored cards
-  const handleAddCard = () => {
+  const handleAddCard = async () => {
     const cardNumberPattern = /^\d{4}-\d{4}-\d{4}-\d{4}$/;
     if (!cardNumberPattern.test(creditCardNumber)) {
       alert("Invalid credit card number format. Please use xxxx-xxxx-xxxx-xxxx.");
       return;
     }
-
+  
     const expirationPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
     if (!expirationPattern.test(expirationDate)) {
       alert("Invalid expiration date format. Please use MM/YY.");
       return;
     }
-
+  
     if (!/^\d{3,4}$/.test(cvv)) {
       alert("CVV must be 3 or 4 digits.");
       return;
     }
-
-    if (storedCards.length < 3) {
-      const card = {
-        number: creditCardNumber,
-        cvv,
-        expirationDate,
-        billingAddress: address,
-      };
-      setStoredCards([...storedCards, card]);
+  
+    try {
+      console.log("Starting card registration");
+  
+      // Encrypt before sending to backend
+      const encryptedCardNumber = encrypt(creditCardNumber);
+      const encryptedExpirationDate = encrypt(expirationDate);
+      const encryptedCVV = encrypt(cvv);
+  
+      const response = await fetch('http://localhost:8080/api/register-card', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          card_number: encryptedCardNumber,
+          expirationDate: encryptedExpirationDate,
+          securityCode: encryptedCVV,
+        }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.error || 'Card registration failed.');
+        return;
+      }
+  
+      console.log("Card registered successfully!");
+      setStoredCards([...storedCards, { number: creditCardNumber, expirationDate }]);
       setCreditCardNumber('');
       setCvv('');
       setExpirationDate('');
       setShowAddCard(false);
+    } catch (error) {
+      console.error("Card registration error:", error);
+      setErrors({ form: "A card registration error occurred." });
     }
   };
+  
 
   const handleDeleteCard = (index) => {
     const newCards = storedCards.filter((_, i) => i !== index);
