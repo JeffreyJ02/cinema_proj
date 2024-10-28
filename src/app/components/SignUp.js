@@ -24,7 +24,8 @@ const SignUpPage = () => {
     confirmEmail: "",
     password: "",
     confirmPassword: "",
-    //creditCardType: "",
+    phone_number: "",
+    creditCardType: "",
     creditCardNumber: "",
     expirationDate: "",
     cvv: "",
@@ -98,7 +99,7 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     console.log("handleSubmit called");
     e.preventDefault();
-    const { email, confirmEmail, password, confirmPassword, creditCardNumber, expirationDate, cvv } = formData;
+    const { email, confirmEmail, password, confirmPassword, phone_number, creditCardNumber, expirationDate, cvv } = formData;
 
     if (email !== confirmEmail) {
       setErrorMessage("Email addresses do not match.");
@@ -107,7 +108,15 @@ const SignUpPage = () => {
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match.");
       return;
-    }    
+    }   
+    
+    if (phone_number) {
+      // Validate phone number (example: must be 10 digits)
+      if (!/^\d{10}$/.test(formData.phone_number)) {
+        setErrorMessage("Phone number must be exactly 10 digits.");
+        return; // Stops execution if validation fails
+      }
+    }
 
     if (creditCardNumber) {
       // Validate credit card number
@@ -116,6 +125,7 @@ const SignUpPage = () => {
         return; // Stops execution if validation fails
       }
     }
+    
     
     if (expirationDate) {
       // Validate expiration date
@@ -164,10 +174,12 @@ const SignUpPage = () => {
   // Submits user to the DB
   const submitUserData = async () => {
     console.log("submitUserData called");
-    const { firstName, lastName, email, password, registerForPromotions } =
+    const { firstName, lastName, email, password, phone_number, registerForPromotions } =
       formData;
       const promos = registerForPromotions ? 1 : 0;
       console.log("Reg for Promo: ", promos);
+      console.log("Phone Number Submit: ", phone_number);
+      console.log("Form Data: ", formData);
 
     try {
       const encryptedPassword = hash(password);
@@ -178,6 +190,7 @@ const SignUpPage = () => {
           firstName,
           lastName,
           email,
+          phone_number,
           password: encryptedPassword,
           registerForPromos: promos,
         }),
@@ -204,6 +217,7 @@ const SignUpPage = () => {
         confirmEmail: "",
         password: "",
         confirmPassword: "",
+        phone_number: "",
         registerForPromotions: false,
       });
     } catch (error) {
@@ -392,6 +406,16 @@ const SignUpPage = () => {
           value={formData.confirmPassword}
           onChange={handleChange}
           required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Phone Number"
+          name="phone_number"
+          type="tel"
+          required
+          value={formData.phone_number}
+          onChange={handleChange}
           fullWidth
           margin="normal"
         />
