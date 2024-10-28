@@ -103,7 +103,7 @@ export default function SignIn() {
         const errorData = await response.json();
         throw new Error(errorData.message || "Unknown Login Error");
       } else {
-        const token = generateToken(email);
+        const token = tokenGenerator(email);
         localStorage.setItem("token", token);
         setCookie("token", token, {
           path: "/",
