@@ -11,7 +11,7 @@ import { Router } from "next/router";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { optInPromoEmails, verificationCode } from "../../utils/email";
-import { hash } from '../../utils/encryption';
+import { encrypt, hash } from '../../utils/encryption';
 //import { register } from "module";
 
 const SignUpPage = () => {
@@ -23,7 +23,6 @@ const SignUpPage = () => {
     password: "",
     confirmPassword: "",
     phone_number: "",
-    creditCardType: "",
     card_number: "",
     card_type: "",
     expirationDate: "",
@@ -117,7 +116,6 @@ const SignUpPage = () => {
       }
     }
     
-
     if (card_number) {
       // Validate credit card number
       if (!/^\d{16}$/.test(card_number)) {
@@ -170,7 +168,7 @@ const SignUpPage = () => {
   // Submits user to the DB
   const submitUserData = async () => {
     console.log("submitUserData called");
-    const { firstName, lastName, email, password,phone_number, registerForPromotions, billingName, billingAddress, billingCity, billingState, billingZip, card_number, expirationDate, securityCode } =
+    const { firstName, lastName, email, password, phone_number, registerForPromotions, billingName, billingAddress, billingCity, billingState, billingZip, card_number, card_type, expirationDate, securityCode } =
       formData;
       const promos = registerForPromotions ? 1 : 0;
       console.log("Reg for Promo: ", promos);
@@ -205,11 +203,11 @@ const SignUpPage = () => {
       const userData = await response.json();
       const userId = userData?.Id;
 
-      if(card_number){
-        await registerCard(userId, card_number, expirationDate, securityCode);
-      }
+      if(card_number)
+        await registerCard(userId, encrypt(card_type), encrypt(card_number), encrypt(expirationDate), encrypt(securityCode));
 
-      await registerAddress(userId, billingAddress, billingCity, billingZip, billingState);
+      if (billingName)
+        await registerAddress(userId, billingName, billingAddress, billingCity, billingZip, billingState);
 
 
       if (promos == 1) sendOptInEmail(email);
@@ -224,12 +222,18 @@ const SignUpPage = () => {
     console.log("submitUserData end");
   };
 
-  const registerCard = async (userId, card_number, expirationDate, securityCode) => {
+  const registerCard = async (userId, card_type, card_number, expirationDate, securityCode) => {
     try {
       await fetch("http://localhost:8080/api/register-card", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, card_number, expirationDate, securityCode}),
+        body: JSON.stringify({ 
+          userId, 
+          card_type: encrypt(card_type),
+          card_number: encrypt(card_number),
+          expirationDate: encrypt(expirationDate), 
+          securityCode: encrypt(securityCode)
+        })
       });
       console.log("Credit card registered successfully");
     } catch (error) {
@@ -239,12 +243,19 @@ const SignUpPage = () => {
   };
 
   // Function to register the address
-const registerAddress = async (userId, address, city, zip, state) => {
+const registerAddress = async (userId, billingName, billingAddress, billingCity, billingZip, billingState) => {
   try {
     await fetch("http://localhost:8080/api/register-address", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, address, city, zipCode, state }),
+      body: JSON.stringify({ 
+        name: billingName,
+        street_info: billingAddress,
+        city: billingCity,
+        state: billingState,
+        zipCode: billingZip,
+        userId 
+      })
     });
     console.log("Address registered successfully");
   } catch (error) {

@@ -57,6 +57,7 @@ public class Controller {
     public ResponseEntity<?> registerUserAddress(@RequestBody Address address) {
         try {
             addressService.registerAddress(
+                address.getName(),
                 address.getStreet(),
                 address.getCity(),
                 address.getState(),
@@ -364,6 +365,22 @@ public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updat
         userService.updatePassword(
             updatePasswordRequest.getEmail(),
             updatePasswordRequest.getCurrentPassword(),
+            updatePasswordRequest.getNewPassword()
+        );
+        return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+    }
+}
+
+// set temp password when forgotten
+@PostMapping("/temp-password")
+public ResponseEntity<?> setTempPassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+    try {
+        userService.setTempPassword(
+            updatePasswordRequest.getEmail(),
             updatePasswordRequest.getNewPassword()
         );
         return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
