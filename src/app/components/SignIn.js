@@ -16,7 +16,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { hash } from '../../utils/encryption';
-import jwt from "jsonwebtoken";
 
 // This component is adapted from the Material-UI example at: https://mui.com/material-ui/getting-started/templates/sign-in/
 export default function SignIn() {
@@ -95,25 +94,15 @@ export default function SignIn() {
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Unknown Login Error");
-      } else {
-        const token = jwt.sign({ email, role: "user" }, "abc123");
-        localStorage.setItem("token", token);
-        setCookie("token", token, {
-          path: "/",
-          maxAge: 3600,
-          secure: true,
-          sameSite: "strict",
-        });
       }
 
       const data = await response.json();
       setSuccessMessage("Login successful! Redirecting..."); // Set success message
-
       localStorage.setItem('userEmail', email);
 
       // Check if this is correct for the admin page
-      console.log("data.administrator: ", data.administrator);
-      if (data.administrator == 1) {
+      console.log("data.admin: ", data.admin);
+      if (data.admin == 1) {
         router.push("/admin");
       } else {
         router.push("/");

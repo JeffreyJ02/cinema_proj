@@ -54,7 +54,7 @@ const CustomNavbar = () => {
               id="basic-nav-dropdown"
               align="end"
             >
-              <NavDropdown.Item>{`Hello, ${user?.email || "Guest"}`}</NavDropdown.Item>
+              <NavDropdown.Item>{`Hello, ${localStorage.getItem('userEmail') || "Guest"}`}</NavDropdown.Item>
               <NavDropdown.Item href="admin">Admin</NavDropdown.Item>
               <NavDropdown.Item href="edit-profile">
                 Edit Profile
@@ -65,7 +65,7 @@ const CustomNavbar = () => {
               <NavDropdown.Item href="#action/2">
                 View Order History
               </NavDropdown.Item>
-              {user && ( // Conditionally render logout based on state
+              {localStorage.getItem('userEmail') && ( // Conditionally render logout based on state
                 <div>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={logout}>Sign Out</NavDropdown.Item>
@@ -74,7 +74,7 @@ const CustomNavbar = () => {
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
-        {!user && (
+        {!localStorage.getItem('userEmail') && (
           <Button variant="primary" onClick={signInButton}>
             Sign In
           </Button>
