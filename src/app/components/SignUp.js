@@ -23,6 +23,8 @@ const SignUpPage = () => {
     password: "",
     confirmPassword: "",
     card_number: "",
+    phone_number: "",
+    creditCardType: "",
     expirationDate: "",
     securityCode: "",
     registerForPromotions: false,
@@ -95,7 +97,7 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     console.log("handleSubmit called");
     e.preventDefault();
-    const { email, confirmEmail, password, confirmPassword, card_number, expirationDate, securityCode } = formData;
+    const { email, confirmEmail, password, confirmPassword, phone_number, card_number, expirationDate, securityCode } = formData;
 
     if (email !== confirmEmail) {
       setErrorMessage("Email addresses do not match.");
@@ -104,9 +106,15 @@ const SignUpPage = () => {
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match.");
       return;
-    }
-
+    }   
     
+    if (phone_number) {
+      // Validate phone number (example: must be 10 digits)
+      if (!/^\d{10}$/.test(formData.phone_number)) {
+        setErrorMessage("Phone number must be exactly 10 digits.");
+        return; // Stops execution if validation fails
+      }
+    }
 
     if (card_number) {
       // Validate credit card number
@@ -115,6 +123,7 @@ const SignUpPage = () => {
         return; // Stops execution if validation fails
       }
     }
+    
     
     if (expirationDate) {
       // Validate expiration date
@@ -139,17 +148,20 @@ const SignUpPage = () => {
     }
     
     // If all validations pass or credit card fields are empty, continue to send verification email
-    await sendVerificationEmail(email); // Send verification email
+    //await sendVerificationEmail(email); // Send verification email
     handleShow(); // Open the verification modal
   };
 
   // Verify the code entered by the user
   const handleVerify = async () => {
     console.log("handleVerify called");
-    if (verifyData.verificationCode === generatedCode) {
+    // 000000 switch to generatedCode
+    if (verifyData.verificationCode === "000000") {
       setSuccessMessage("Email verified successfully!");
       setErrorMessage("");
       await submitUserData(); // This submits the user data to the db AFTER
+      await submitCardData(); // This submits the card data to the db AFTER
+      await submitAddressData(); // This submits the address data to the db AFTER
       handleClose();
       //window.location.href = "/sign-in"; // Use anchor navigation, next router issues
     } else {
@@ -160,10 +172,12 @@ const SignUpPage = () => {
   // Submits user to the DB
   const submitUserData = async () => {
     console.log("submitUserData called");
-    const { firstName, lastName, email, password, registerForPromotions, billingName, billingAddress, billingCity, billingState, billingZip, card_number, expirationDate, securityCode } =
+    const { firstName, lastName, email, password, phone_number, registerForPromotions, billingName, billingAddress, billingCity, billingState, billingZip, card_number, expirationDate, securityCode } =
       formData;
       const promos = registerForPromotions ? 1 : 0;
       console.log("Reg for Promo: ", promos);
+      console.log("Phone Number Submit: ", phone_number);
+      console.log("Form Data: ", formData);
 
     try {
       const encryptedPassword = hash(password);
@@ -174,6 +188,7 @@ const SignUpPage = () => {
           firstName,
           lastName,
           email,
+          phone_number,
           password: encryptedPassword,
           registerForPromos: promos,
         }),
@@ -213,12 +228,8 @@ const SignUpPage = () => {
         card_number: "",
         expirationDate: "",
         securityCode: "",
+        phone_number:" ",
         registerForPromotions: false,
-        billingName: "",
-        billingAddress: "",
-        billingCity: "",
-        billingZip: "",
-        billingState: "",
       });
     } catch (error) {
       console.error("Registration error:", error);
@@ -227,12 +238,12 @@ const SignUpPage = () => {
     console.log("submitUserData end");
   };
 
-  const registerCard = async (userId, card_number, expirationDate, securityCode) => {
+  const registerCard = async (userId, creditCardType, card_number, expirationDate, securityCode) => {
     try {
       await fetch("http://localhost:8080/api/register-card", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, card_number, expirationDate, securityCode}),
+        body: JSON.stringify({ userId, creditCardType: "credit", card_number, expirationDate, securityCode}),
       });
       console.log("Credit card registered successfully");
     } catch (error) {
@@ -342,6 +353,16 @@ const states = [
           value={formData.confirmPassword}
           onChange={handleChange}
           required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Phone Number"
+          name="phone_number"
+          type="tel"
+          required
+          value={formData.phone_number}
+          onChange={handleChange}
           fullWidth
           margin="normal"
         />
