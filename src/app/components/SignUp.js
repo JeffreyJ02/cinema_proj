@@ -14,6 +14,7 @@ import "./SignUpPage.css";
 import Grid from "@mui/material/Grid2";
 import { encrypt } from "../../utils/encryption";
 import { hash } from '../../utils/encryption';
+import { Router } from "next/router";
 //import { register } from "module";
 
 const SignUpPage = () => {
@@ -209,17 +210,7 @@ const SignUpPage = () => {
       if (promos == 1) sendOptInEmail(email);
 
       setSuccessMessage("Registration successful!");
-      // Reset form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        confirmEmail: "",
-        password: "",
-        confirmPassword: "",
-        phone_number: "",
-        registerForPromotions: false,
-      });
+      Router.push("/sign-in");
     } catch (error) {
       console.error("Registration error:", error);
       setErrorMessage(error.message);
