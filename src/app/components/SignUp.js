@@ -24,6 +24,7 @@ const SignUpPage = () => {
     confirmEmail: "",
     password: "",
     confirmPassword: "",
+    //creditCardType: "",
     creditCardNumber: "",
     expirationDate: "",
     cvv: "",
@@ -106,9 +107,7 @@ const SignUpPage = () => {
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match.");
       return;
-    }
-
-    
+    }    
 
     if (creditCardNumber) {
       // Validate credit card number
@@ -141,17 +140,20 @@ const SignUpPage = () => {
     }
     
     // If all validations pass or credit card fields are empty, continue to send verification email
-    await sendVerificationEmail(email); // Send verification email
+    //await sendVerificationEmail(email); // Send verification email
     handleShow(); // Open the verification modal
   };
 
   // Verify the code entered by the user
   const handleVerify = async () => {
     console.log("handleVerify called");
-    if (verifyData.verificationCode === generatedCode) {
+    // 000000 switch to generatedCode
+    if (verifyData.verificationCode === "000000") {
       setSuccessMessage("Email verified successfully!");
       setErrorMessage("");
       await submitUserData(); // This submits the user data to the db AFTER
+      await submitCardData(); // This submits the card data to the db AFTER
+      await submitAddressData(); // This submits the address data to the db AFTER
       handleClose();
       //window.location.href = "/sign-in"; // Use anchor navigation, next router issues
     } else {
@@ -202,15 +204,7 @@ const SignUpPage = () => {
         confirmEmail: "",
         password: "",
         confirmPassword: "",
-        creditCardNumber: "",
-        expirationDate: "",
-        cvv: "",
         registerForPromotions: false,
-        billingName: "",
-        billingAddress: "",
-        billingCity: "",
-        billingZip: "",
-        billingState: "",
       });
     } catch (error) {
       console.error("Registration error:", error);
@@ -219,7 +213,100 @@ const SignUpPage = () => {
     console.log("submitUserData end");
   };
 
-const states = [
+  // Submits card to the DB
+  const submitCardData = async () => {
+    console.log("submitCardData called");
+    // add creditCardType instead of credit
+    const { creditCardType, creditCardNumber, expirationDate, cvv } =
+      formData;
+
+    try {
+      const response = await fetch("http://localhost:8080/api/register-card", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          card_type: "credit",
+          card_number: creditCardNumber,
+          expiration_date: expirationDate,
+          security_code: cvv
+          // user?
+          // address?
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (response.status === 409) {
+          //setErrorMessage("An account with this email already exists.");
+        } else {
+          throw new Error(errorData.message || "Unknown Registration Error");
+        }
+        return;
+      }
+
+      setSuccessMessage("Card added successfully!");
+      // Reset form
+      setFormData({
+        creditCardType: "",
+        creditCardNumber: "",
+        expirationDate: "",
+        cvv: "",
+      });
+    } catch (error) {
+      console.error("Error adding card: ", error);
+      setErrorMessage(error.message);
+    }
+    console.log("submitCreditData end");
+  };
+
+  // Submits address to the DB
+  const submitAddressData = async () => {
+    console.log("submitAddressData called");
+    const { billingName, billingAddress, billingCity, billingZip, billingState } =
+      formData;
+
+    try {
+      const response = await fetch("http://localhost:8080/api/register-address", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: billingName,
+          city: billingCity,
+          state: billingState,
+          zip_code: billingZip,
+          street_info: billingAddress,
+          // name?
+          // user?
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (response.status === 409) {
+          //setErrorMessage("An account with this email already exists.");
+        } else {
+          throw new Error(errorData.message || "Unknown Registration Error");
+        }
+        return;
+      }
+
+      setSuccessMessage("Address added successfully!");
+      // Reset form
+      setFormData({
+        billingAddress: "",
+        billingCity: "",
+        billingState: "",
+        billingZip: "",
+        billingName: ""
+      });
+    } catch (error) {
+      console.error("Error adding address: ", error);
+      setErrorMessage(error.message);
+    }
+    console.log("submitAddressData end");
+  };
+
+  const states = [
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
     "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
     "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",

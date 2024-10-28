@@ -57,6 +57,7 @@ public class Controller {
     public ResponseEntity<?> registerUserAddress(@RequestBody Address address) {
         try {
             addressService.registerAddress(
+                address.getName(),
                 address.getStreet(),
                 address.getCity(),
                 address.getState(),
@@ -254,7 +255,7 @@ public class Controller {
         private String security_code;
 
         public CardProfileResponse(int card_id, String card_type, String card_number,
-                                String expiration_date, String security_code) {
+                                   String expiration_date, String security_code) {
             this.card_id = card_id;
             this.card_type = card_type;
             this.card_number = card_number;
