@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { hash } from '../../utils/encryption';
+import jwt from "jsonwebtoken";
 
 // This component is adapted from the Material-UI example at: https://mui.com/material-ui/getting-started/templates/sign-in/
 export default function SignIn() {
@@ -66,6 +67,13 @@ export default function SignIn() {
     return isValid;
   };
 
+  const tokenGenerator = (email) => {
+    const payload = { email, role: "user" };
+    const secret = "abc123";
+    const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+    return token;
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password, rememberMe } = formData;
@@ -94,6 +102,15 @@ export default function SignIn() {
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Unknown Login Error");
+      } else {
+        const token = generateToken(email);
+        localStorage.setItem("token", token);
+        setCookie("token", token, {
+          path: "/",
+          maxAge: 3600,
+          secure: true,
+          sameSite: "strict",
+        });
       }
 
       const data = await response.json();
