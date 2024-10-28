@@ -25,6 +25,7 @@ const SignUpPage = () => {
     phone_number: "",
     creditCardType: "",
     card_number: "",
+    card_type: "",
     expirationDate: "",
     securityCode: "",
     registerForPromotions: false,
@@ -160,8 +161,7 @@ const SignUpPage = () => {
       setErrorMessage("");
       await submitUserData(); // This submits the user data to the db AFTER
       handleClose();
-      router.push("/sign-in");
-      //window.location.href = "/sign-in"; // Use anchor navigation, next router issues
+      window.location.href = "/sign-in"; // Use anchor navigation, next router issues
     } else {
       setErrorMessage("Invalid verification code");
     }
@@ -209,7 +209,7 @@ const SignUpPage = () => {
         await registerCard(userId, card_number, expirationDate, securityCode);
       }
 
-      await registerAddress(userId, billingName, billingAddress, billingCity, billingState, billingZip);
+      await registerAddress(userId, billingAddress, billingCity, billingZip, billingState);
 
 
       if (promos == 1) sendOptInEmail(email);
@@ -239,12 +239,12 @@ const SignUpPage = () => {
   };
 
   // Function to register the address
-const registerAddress = async (userId, name, address, city, zip, state) => {
+const registerAddress = async (userId, address, city, zip, state) => {
   try {
     await fetch("http://localhost:8080/api/register-address", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, name, address, city, zip, state }),
+      body: JSON.stringify({ userId, address, city, zipCode, state }),
     });
     console.log("Address registered successfully");
   } catch (error) {
@@ -260,6 +260,8 @@ const states = [
     "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
     "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
 ];
+
+const cardTypes = ["Visa", "MasterCard", "American Express", "Discover"];
 
   return (
     <Container
@@ -353,6 +355,22 @@ const states = [
           margin="normal"
         />
         <TextField
+          id="type-select"
+          select
+          label="Card Type"
+          value={formData.card_type}
+          fullWidth
+          onChange={(e) =>
+            handleChange({ target: { name: "card_type", value: e.target.value } })
+          }        
+        >
+          {cardTypes.map((ctype) => (
+            <MenuItem key={ctype} value={ctype}>
+              {ctype}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
           label="Credit Card Number"
           name="card_number"
           type="tel"
@@ -432,7 +450,9 @@ const states = [
           select
           label="State"
           value={formData.billingState}
-          onChange={handleChange}
+          onChange={(e) =>
+            handleChange({ target: { name: "billingState", value: e.target.value } })
+          }        
         >
           {states.map((state) => (
             <MenuItem key={state} value={state}>
