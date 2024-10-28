@@ -67,13 +67,6 @@ export default function SignIn() {
     return isValid;
   };
 
-  const tokenGenerator = (email) => {
-    const payload = { email, role: "user" };
-    const secret = "abc123";
-    const token = jwt.sign(payload, secret, { expiresIn: "1h" });
-    return token;
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password, rememberMe } = formData;
@@ -103,7 +96,7 @@ export default function SignIn() {
         const errorData = await response.json();
         throw new Error(errorData.message || "Unknown Login Error");
       } else {
-        const token = tokenGenerator(email);
+        const token = jwt.sign({ email, role: "user" }, "abc123");
         localStorage.setItem("token", token);
         setCookie("token", token, {
           path: "/",
