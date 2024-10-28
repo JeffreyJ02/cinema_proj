@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { Router } from "next/router";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { optInPromoEmails, verificationCode } from "../../utils/email";
@@ -232,7 +231,6 @@ const SignUpPage = () => {
         phone_number:" ",
         registerForPromotions: false,
       });
-      Router.push("/sign-in");
     } catch (error) {
       console.error("Registration error:", error);
       setErrorMessage(error.message);
