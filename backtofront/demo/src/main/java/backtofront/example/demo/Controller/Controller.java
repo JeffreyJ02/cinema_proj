@@ -57,6 +57,7 @@ public class Controller {
     public ResponseEntity<?> registerUserAddress(@RequestBody Address address) {
         try {
             addressService.registerAddress(
+                address.getName(),
                 address.getStreet(),
                 address.getCity(),
                 address.getState(),

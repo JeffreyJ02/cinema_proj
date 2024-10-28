@@ -10,7 +10,7 @@ import Grid from "@mui/material/Grid2";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { optInPromoEmails, verificationCode } from "../../utils/email";
-import { hash } from '../../utils/encryption';
+import { encrypt, hash } from '../../utils/encryption';
 import "./SignUpPage.css";
 //import { register } from "module";
 
@@ -232,7 +232,13 @@ const SignUpPage = () => {
       await fetch("http://localhost:8080/api/register-card", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, card_number, expirationDate, securityCode}),
+        body: JSON.stringify({ 
+          userId, 
+          card_type: "credit", 
+          card_number: encrypt(card_number), 
+          expirationDate: encrypt(expirationDate), 
+          securityCode: encrypt(securityCode)
+        }),
       });
       console.log("Credit card registered successfully");
     } catch (error) {
@@ -247,7 +253,14 @@ const registerAddress = async (userId, name, address, city, zip, state) => {
     await fetch("http://localhost:8080/api/register-address", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, name, address, city, zip, state }),
+      body: JSON.stringify({ 
+        user_id: userId, 
+        name, 
+        street_info: address, 
+        city, 
+        zip_code: zip, 
+        state 
+      }),
     });
     console.log("Address registered successfully");
   } catch (error) {
