@@ -240,7 +240,8 @@ const SignUpPage = () => {
     console.log("submitUserData end");
   };
 
-  const registerCard = async (userId, creditCardType, card_number, expirationDate, securityCode) => {
+  // add creditCardType
+  const registerCard = async (userId, card_number, expirationDate, securityCode) => {
     try {
       await fetch("http://localhost:8080/api/register-card", {
         method: "POST",
