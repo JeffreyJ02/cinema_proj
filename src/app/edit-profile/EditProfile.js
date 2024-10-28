@@ -271,6 +271,15 @@ useEffect(() => {
           placeholder="Enter street"
         />
       </label>
+      <label>
+        Street:
+        <input
+          type="text"
+          value={street}
+          onChange={(e) => setStreet(e.target.value)}
+          placeholder="Enter street"
+        />
+      </label>
       <br />
       <label>
         City:
