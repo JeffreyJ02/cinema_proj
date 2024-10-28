@@ -98,11 +98,12 @@ export default function SignIn() {
 
       const data = await response.json();
       setSuccessMessage("Login successful! Redirecting..."); // Set success message
+
       localStorage.setItem('userEmail', email);
 
       // Check if this is correct for the admin page
-      console.log("data.admin: ", data.admin);
-      if (data.admin == 1) {
+      console.log("data.administrator: ", data.administrator);
+      if (data.administrator == 1) {
         router.push("/admin");
       } else {
         router.push("/");

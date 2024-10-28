@@ -21,9 +21,6 @@ public class Address {
     @Column(name = "address_id")
     private int id;
 
-    @Column(name = "name")
-    private String name;
-
     @Column(name = "city")
     private String city;
 
