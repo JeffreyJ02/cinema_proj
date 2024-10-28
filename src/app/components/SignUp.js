@@ -7,11 +7,13 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import { Router } from "next/router";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { optInPromoEmails, verificationCode } from "../../utils/email";
 import { encrypt, hash } from '../../utils/encryption';
 import "./SignUpPage.css";
+import { hash } from '../../utils/encryption';
 //import { register } from "module";
 
 const SignUpPage = () => {
@@ -22,6 +24,8 @@ const SignUpPage = () => {
     confirmEmail: "",
     password: "",
     confirmPassword: "",
+    phone_number: "",
+    creditCardType: "",
     card_number: "",
     expirationDate: "",
     securityCode: "",
@@ -95,7 +99,7 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     console.log("handleSubmit called");
     e.preventDefault();
-    const { email, confirmEmail, password, confirmPassword, card_number, expirationDate, securityCode } = formData;
+    const { email, confirmEmail, password, confirmPassword, phone_number, card_number, expirationDate, securityCode } = formData;
 
     if (email !== confirmEmail) {
       setErrorMessage("Email addresses do not match.");
@@ -106,6 +110,13 @@ const SignUpPage = () => {
       return;
     }
 
+    if (phone_number) {
+      // Validate phone number (example: must be 10 digits)
+      if (!/^\d{10}$/.test(formData.phone_number)) {
+        setErrorMessage("Phone number must be exactly 10 digits.");
+        return; // Stops execution if validation fails
+      }
+    }
     
 
     if (card_number) {
@@ -151,6 +162,7 @@ const SignUpPage = () => {
       setErrorMessage("");
       await submitUserData(); // This submits the user data to the db AFTER
       handleClose();
+      router.push("/sign-in");
       //window.location.href = "/sign-in"; // Use anchor navigation, next router issues
     } else {
       setErrorMessage("Invalid verification code");
@@ -160,10 +172,12 @@ const SignUpPage = () => {
   // Submits user to the DB
   const submitUserData = async () => {
     console.log("submitUserData called");
-    const { firstName, lastName, email, password, registerForPromotions, billingName, billingAddress, billingCity, billingState, billingZip, card_number, expirationDate, securityCode } =
+    const { firstName, lastName, email, password,phone_number, registerForPromotions, billingName, billingAddress, billingCity, billingState, billingZip, card_number, expirationDate, securityCode } =
       formData;
       const promos = registerForPromotions ? 1 : 0;
       console.log("Reg for Promo: ", promos);
+      console.log("Phone Number Submit: ", phone_number);
+      console.log("Form Data: ", formData);
 
     try {
       const encryptedPassword = hash(password);
@@ -174,6 +188,7 @@ const SignUpPage = () => {
           firstName,
           lastName,
           email,
+          phone_number,
           password: encryptedPassword,
           registerForPromos: promos,
         }),
@@ -203,23 +218,7 @@ const SignUpPage = () => {
 
       setSuccessMessage("Registration successful!");
       // Reset form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        confirmEmail: "",
-        password: "",
-        confirmPassword: "",
-        card_number: "",
-        expirationDate: "",
-        securityCode: "",
-        registerForPromotions: false,
-        billingName: "",
-        billingAddress: "",
-        billingCity: "",
-        billingZip: "",
-        billingState: "",
-      });
+      Router.push("/sign-in");
     } catch (error) {
       console.error("Registration error:", error);
       setErrorMessage(error.message);
@@ -355,6 +354,16 @@ const states = [
           value={formData.confirmPassword}
           onChange={handleChange}
           required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Phone Number"
+          name="phone_number"
+          type="tel"
+          required
+          value={formData.phone_number}
+          onChange={handleChange}
           fullWidth
           margin="normal"
         />

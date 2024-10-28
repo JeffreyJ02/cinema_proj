@@ -54,7 +54,7 @@ const CustomNavbar = () => {
               id="basic-nav-dropdown"
               align="end"
             >
-              <NavDropdown.Item>{`Hello, ${user?.name || "Guest"}`}</NavDropdown.Item>
+              <NavDropdown.Item>{`Hello, ${user?.email || "Guest"}`}</NavDropdown.Item>
               <NavDropdown.Item href="admin">Admin</NavDropdown.Item>
               <NavDropdown.Item href="edit-profile">
                 Edit Profile
