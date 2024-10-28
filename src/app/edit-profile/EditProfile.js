@@ -53,6 +53,7 @@ useEffect(() => {
       }
 
       const userData = await response.json();
+      console.log("User Data: ", userData);
       // Update state with user data
       setFirstName(userData.firstName);
       setLastName(userData.lastName);
