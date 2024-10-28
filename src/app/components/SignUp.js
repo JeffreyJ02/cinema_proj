@@ -1,20 +1,17 @@
-import React, { useState } from "react";
 import {
-  TextField,
   Alert,
-  Typography,
-  MenuItem,
-  Container,
   Box,
+  Container,
+  MenuItem,
+  TextField,
+  Typography,
 } from "@mui/material";
-import { Modal, Button } from "react-bootstrap";
-import { verificationCode } from "../../utils/email";
-import { optInPromoEmails } from "../../utils/email";
-import "./SignUpPage.css";
 import Grid from "@mui/material/Grid2";
-import { encrypt } from "../../utils/encryption";
+import { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
+import { optInPromoEmails, verificationCode } from "../../utils/email";
 import { hash } from '../../utils/encryption';
-import { Router } from "next/router";
+import "./SignUpPage.css";
 //import { register } from "module";
 
 const SignUpPage = () => {
@@ -25,11 +22,9 @@ const SignUpPage = () => {
     confirmEmail: "",
     password: "",
     confirmPassword: "",
-    phone_number: "",
-    creditCardType: "",
-    creditCardNumber: "",
+    card_number: "",
     expirationDate: "",
-    cvv: "",
+    securityCode: "",
     registerForPromotions: false,
     billingName: "",
     billingAddress: "",
@@ -100,7 +95,7 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     console.log("handleSubmit called");
     e.preventDefault();
-    const { email, confirmEmail, password, confirmPassword, phone_number, creditCardNumber, expirationDate, cvv } = formData;
+    const { email, confirmEmail, password, confirmPassword, card_number, expirationDate, securityCode } = formData;
 
     if (email !== confirmEmail) {
       setErrorMessage("Email addresses do not match.");
@@ -109,24 +104,17 @@ const SignUpPage = () => {
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match.");
       return;
-    }   
-    
-    if (phone_number) {
-      // Validate phone number (example: must be 10 digits)
-      if (!/^\d{10}$/.test(formData.phone_number)) {
-        setErrorMessage("Phone number must be exactly 10 digits.");
-        return; // Stops execution if validation fails
-      }
     }
 
-    if (creditCardNumber) {
+    
+
+    if (card_number) {
       // Validate credit card number
-      if (!/^\d{16}$/.test(creditCardNumber)) {
+      if (!/^\d{16}$/.test(card_number)) {
         setErrorMessage("Credit card number must be exactly 16 digits.");
         return; // Stops execution if validation fails
       }
     }
-    
     
     if (expirationDate) {
       // Validate expiration date
@@ -142,29 +130,26 @@ const SignUpPage = () => {
       }
     }
     
-    if (cvv) {
+    if (securityCode) {
       // Validate CVV
-      if (!/^\d{3,4}$/.test(cvv)) {
+      if (!/^\d{3,4}$/.test(securityCode)) {
         setErrorMessage("CVV must be 3 or 4 digits.");
         return; // Stops execution if validation fails
       }
     }
     
     // If all validations pass or credit card fields are empty, continue to send verification email
-    //await sendVerificationEmail(email); // Send verification email
+    await sendVerificationEmail(email); // Send verification email
     handleShow(); // Open the verification modal
   };
 
   // Verify the code entered by the user
   const handleVerify = async () => {
     console.log("handleVerify called");
-    // 000000 switch to generatedCode
-    if (verifyData.verificationCode === "000000") {
+    if (verifyData.verificationCode === generatedCode) {
       setSuccessMessage("Email verified successfully!");
       setErrorMessage("");
       await submitUserData(); // This submits the user data to the db AFTER
-      await submitCardData(); // This submits the card data to the db AFTER
-      await submitAddressData(); // This submits the address data to the db AFTER
       handleClose();
       //window.location.href = "/sign-in"; // Use anchor navigation, next router issues
     } else {
@@ -175,12 +160,10 @@ const SignUpPage = () => {
   // Submits user to the DB
   const submitUserData = async () => {
     console.log("submitUserData called");
-    const { firstName, lastName, email, password, phone_number, registerForPromotions } =
+    const { firstName, lastName, email, password, registerForPromotions, billingName, billingAddress, billingCity, billingState, billingZip, card_number, expirationDate, securityCode } =
       formData;
       const promos = registerForPromotions ? 1 : 0;
       console.log("Reg for Promo: ", promos);
-      console.log("Phone Number Submit: ", phone_number);
-      console.log("Form Data: ", formData);
 
     try {
       const encryptedPassword = hash(password);
@@ -191,7 +174,6 @@ const SignUpPage = () => {
           firstName,
           lastName,
           email,
-          phone_number,
           password: encryptedPassword,
           registerForPromos: promos,
         }),
@@ -207,10 +189,37 @@ const SignUpPage = () => {
         return;
       }
 
+      const userData = await response.json();
+      const userId = userData?.Id;
+
+      if(card_number){
+        await registerCard(userId, card_number, expirationDate, securityCode);
+      }
+
+      await registerAddress(userId, billingName, billingAddress, billingCity, billingState, billingZip);
+
+
       if (promos == 1) sendOptInEmail(email);
 
       setSuccessMessage("Registration successful!");
-      Router.push("/sign-in");
+      // Reset form
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        confirmEmail: "",
+        password: "",
+        confirmPassword: "",
+        card_number: "",
+        expirationDate: "",
+        securityCode: "",
+        registerForPromotions: false,
+        billingName: "",
+        billingAddress: "",
+        billingCity: "",
+        billingZip: "",
+        billingState: "",
+      });
     } catch (error) {
       console.error("Registration error:", error);
       setErrorMessage(error.message);
@@ -218,100 +227,36 @@ const SignUpPage = () => {
     console.log("submitUserData end");
   };
 
-  // Submits card to the DB
-  const submitCardData = async () => {
-    console.log("submitCardData called");
-    // add creditCardType instead of credit
-    const { creditCardType, creditCardNumber, expirationDate, cvv } =
-      formData;
-
+  const registerCard = async (userId, card_number, expirationDate, securityCode) => {
     try {
-      const response = await fetch("http://localhost:8080/api/register-card", {
+      await fetch("http://localhost:8080/api/register-card", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          card_type: "credit",
-          card_number: creditCardNumber,
-          expiration_date: expirationDate,
-          security_code: cvv
-          // user?
-          // address?
-        }),
+        body: JSON.stringify({ userId, card_number, expirationDate, securityCode}),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (response.status === 409) {
-          //setErrorMessage("An account with this email already exists.");
-        } else {
-          throw new Error(errorData.message || "Unknown Registration Error");
-        }
-        return;
-      }
-
-      setSuccessMessage("Card added successfully!");
-      // Reset form
-      setFormData({
-        creditCardType: "",
-        creditCardNumber: "",
-        expirationDate: "",
-        cvv: "",
-      });
+      console.log("Credit card registered successfully");
     } catch (error) {
-      console.error("Error adding card: ", error);
-      setErrorMessage(error.message);
+      console.error("Error registering card:", error);
+      throw error; // Rethrow to handle in submitUserData
     }
-    console.log("submitCreditData end");
   };
 
-  // Submits address to the DB
-  const submitAddressData = async () => {
-    console.log("submitAddressData called");
-    const { billingName, billingAddress, billingCity, billingZip, billingState } =
-      formData;
+  // Function to register the address
+const registerAddress = async (userId, name, address, city, zip, state) => {
+  try {
+    await fetch("http://localhost:8080/api/register-address", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, name, address, city, zip, state }),
+    });
+    console.log("Address registered successfully");
+  } catch (error) {
+    console.error("Error registering address:", error);
+    throw error; // Rethrow to handle in submitUserData
+  }
+};
 
-    try {
-      const response = await fetch("http://localhost:8080/api/register-address", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: billingName,
-          city: billingCity,
-          state: billingState,
-          zip_code: billingZip,
-          street_info: billingAddress,
-          // name?
-          // user?
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (response.status === 409) {
-          //setErrorMessage("An account with this email already exists.");
-        } else {
-          throw new Error(errorData.message || "Unknown Registration Error");
-        }
-        return;
-      }
-
-      setSuccessMessage("Address added successfully!");
-      // Reset form
-      setFormData({
-        billingAddress: "",
-        billingCity: "",
-        billingState: "",
-        billingZip: "",
-        billingName: ""
-      });
-    } catch (error) {
-      console.error("Error adding address: ", error);
-      setErrorMessage(error.message);
-    }
-    console.log("submitAddressData end");
-  };
-
-  const states = [
+const states = [
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
     "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
     "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
@@ -401,25 +346,15 @@ const SignUpPage = () => {
           margin="normal"
         />
         <TextField
-          label="Phone Number"
-          name="phone_number"
-          type="tel"
-          required
-          value={formData.phone_number}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
           label="Credit Card Number"
-          name="creditCardNumber"
+          name="card_number"
           type="tel"
           inputMode="numeric"
           pattern="[0-9\s]{13,19}"
           autoComplete="cc-number"
           maxLength="19"
           placeholder="xxxx xxxx xxxx xxxx"
-          value={formData.creditCardNumber}
+          value={formData.card_number}
           onChange={handleChange}
           fullWidth
           margin="normal"
@@ -439,13 +374,13 @@ const SignUpPage = () => {
         />
         <TextField
           label="CVV"
-          name="cvv"
+          name="securityCode"
           type="tel"
           inputMode="numeric"
           pattern="[0-9]{3-4}"
           maxLength="4"
           placeholder="123"
-          value={formData.cvv}
+          value={formData.securityCode}
           onChange={handleChange}
           fullWidth
           margin="normal"
