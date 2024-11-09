@@ -32,6 +32,10 @@ public class MovieService {
         return movies;
     }
 
+    public Movie findMovieById(Long id) {
+        return movieRepository.findByMovieId(id)
+                .orElseThrow(() -> new IllegalArgumentException("Movie not found"));
+    }
     
     public void addMovie(Movie movie) {
         movieRepository.save(movie);

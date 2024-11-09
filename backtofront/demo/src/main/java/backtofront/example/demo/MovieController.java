@@ -37,12 +37,18 @@ public class MovieController {
     
 
     // Search for movies by title
-    @GetMapping("/search")
+    @GetMapping("/search-by-title")
     public List<Movie> getMovieByTitle(@RequestParam(required = false) String title) {
         if (title == null || title.isEmpty()) {
             return new ArrayList<>();  // Return an empty list if no title is provided
         }
         return movieService.findMoviesByTitle(title);  // Use movieService for the search
+    }
+
+    // Search for movies by title
+    @GetMapping("/search-by-id")
+    public Movie getMovieById(@RequestParam(required = false) Long id) {
+        return movieService.findMovieById(id);  // Use movieService for the search
     }
 
     @GetMapping("/test")
