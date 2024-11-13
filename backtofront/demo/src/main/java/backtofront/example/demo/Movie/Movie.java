@@ -1,4 +1,4 @@
-package backtofront.example.demo;
+package backtofront.example.demo.Movie;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
