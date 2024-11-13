@@ -255,7 +255,7 @@ public class Controller {
         private String security_code;
 
         public CardProfileResponse(int card_id, String card_type, String card_number,
-                                   String expiration_date, String security_code) {
+                                String expiration_date, String security_code) {
             this.card_id = card_id;
             this.card_type = card_type;
             this.card_number = card_number;
@@ -365,6 +365,22 @@ public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updat
         userService.updatePassword(
             updatePasswordRequest.getEmail(),
             updatePasswordRequest.getCurrentPassword(),
+            updatePasswordRequest.getNewPassword()
+        );
+        return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+    }
+}
+
+// set temp password when forgotten
+@PostMapping("/temp-password")
+public ResponseEntity<?> setTempPassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+    try {
+        userService.setTempPassword(
+            updatePasswordRequest.getEmail(),
             updatePasswordRequest.getNewPassword()
         );
         return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));

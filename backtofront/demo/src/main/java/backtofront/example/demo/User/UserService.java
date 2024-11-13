@@ -36,59 +36,57 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-// Update user information
-public void updateUser(User user) {
-    if (user == null || user.getEmail() == null) {
-        throw new IllegalArgumentException("User or email cannot be null");
-    }
-
-
-    Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
-
-
-    if (existingUserOpt.isPresent()) {
-        User existingUser = existingUserOpt.get();
-
-
-        if (user.getFirstName() != null) {
-            existingUser.setFirstName(user.getFirstName());
+    // Update user information
+    public void updateUser(User user) {
+        if (user == null || user.getEmail() == null) {
+            throw new IllegalArgumentException("User or email cannot be null");
         }
-        if (user.getLastName() != null) {
-            existingUser.setLastName(user.getLastName());
+
+
+        Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
+
+
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+
+
+            if (user.getFirstName() != null) {
+                existingUser.setFirstName(user.getFirstName());
+            }
+            if (user.getLastName() != null) {
+                existingUser.setLastName(user.getLastName());
+            }
+            if (user.getPassword() != null) {
+                existingUser.setPassword(user.getPassword());
+            }
+            // Save the updated user
+            userRepository.save(existingUser);
+        } else {
+            throw new IllegalArgumentException("User not found");
         }
-        if (user.getPassword() != null) {
-            existingUser.setPassword(user.getPassword());
+    }
+
+
+    public void updateProfile(String email, String firstName, String lastName,  String phoneNumber, Integer registerForPromotions) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+
+        // Update fields only if they are provided (not null or empty)
+        if (firstName != null && !firstName.isEmpty()) {
+            user.setFirstName(firstName);
         }
-        // Save the updated user
-        userRepository.save(existingUser);
-    } else {
-        throw new IllegalArgumentException("User not found");
+        if (lastName != null && !lastName.isEmpty()) {
+            user.setLastName(lastName);
+        }
+        if(phoneNumber != null){
+            user.setPhone_number(phoneNumber);
+        }
+        if (registerForPromotions != null) {
+            user.setRegisterForPromos(registerForPromotions);
+        }
+
+        userRepository.save(user);
     }
-}
-
-
-public void updateProfile(String email, String firstName, String lastName,  String phoneNumber, Integer registerForPromotions) {
-    User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-
-    // Update fields only if they are provided (not null or empty)
-    if (firstName != null && !firstName.isEmpty()) {
-        user.setFirstName(firstName);
-    }
-    if (lastName != null && !lastName.isEmpty()) {
-        user.setLastName(lastName);
-    }
-    if(phoneNumber != null){
-        user.setPhone_number(phoneNumber);
-    }
-    if (registerForPromotions != null) {
-        user.setRegisterForPromos(registerForPromotions);
-    }
-
-
-    userRepository.save(user);
-}
-
 
     public void updatePassword(String email, String currentPassword, String newPassword) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -96,6 +94,12 @@ public void updateProfile(String email, String firstName, String lastName,  Stri
             throw new IllegalArgumentException("Current password is incorrect");
         }
         user.setPassword(newPassword);
+        userRepository.save(user);
+    }
+
+    public void setTempPassword(String email, String tempPassword) {
+        User user = userRepository.findByEmail(email).get();
+        user.setPassword(tempPassword);
         userRepository.save(user);
     }
 

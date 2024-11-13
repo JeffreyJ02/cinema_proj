@@ -108,6 +108,9 @@ useEffect(() => {
     } catch (error) {
       console.error('Error sending editProfile email:', error);
     }
+
+    await editProfileEmail( {email} );
+
     try {
       // Update user profile
       const profileResponse = await fetch('http://localhost:8080/api/update-profile', {
@@ -262,6 +265,15 @@ useEffect(() => {
         />
       </label>
       <br />
+      <label>
+        Street:
+        <input
+          type="text"
+          value={street}
+          onChange={(e) => setStreet(e.target.value)}
+          placeholder="Enter street"
+        />
+      </label>
       <label>
         Street:
         <input

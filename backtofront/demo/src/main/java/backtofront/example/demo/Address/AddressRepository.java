@@ -16,5 +16,5 @@ public interface AddressRepository extends JpaRepository<Address, Integer> {
     // for updating user address
     @Modifying
     @Query("update Address a set a.street = ?1, a.city = ?2, a.state = ?3, a.zipCode = ?4, a.name = ?5 where a.userId = ?6")
-    void updateAddress(String street, String city, String state, String zip, String name, User user);
+    void updateAddress(String street, String city, String state, String zip, User user);
 }

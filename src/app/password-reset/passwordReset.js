@@ -33,7 +33,7 @@ function PasswordReset() {
 
         // Shuffle the password to ensure randomness
         return password.split('').sort(() => Math.random() - 0.5).join('');
-    }; //generatePassword
+    };
 
     const handleSubmit = async (e)  => {
         e.preventDefault();
@@ -53,16 +53,30 @@ function PasswordReset() {
         // For now, I am just logging it to the console
         console.log(`Sending email to ${email} with temporary password: ${tempPassword}`);
         const message = `You've requested a password reset. Here is your temporary password: ${tempPassword}`;
-        forgotPassword({email, message});
+        //forgotPassword({email, message});
         
         try {
-            // Example: await sendEmail(email, tempPassword);
+            await forgotPassword( {email, tempPassword} );
             setMessage(`A temporary password has been sent to ${email}.`);
         } catch (err) {
             setError('Failed to send email. Please try again later.');
         }
+        try {
+            // Update user password
+            await fetch('http://localhost:8080/api/temp-password', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email,
+                tempPassword
+              }),
+            });
+        }
+        catch(error) {
+            console.error("Could not set temporary password");
+        }
+    };
 
-    }; //handleSubmit
     console.log('Component Rendered');
     return (
         <div className="passwordReset-container">
