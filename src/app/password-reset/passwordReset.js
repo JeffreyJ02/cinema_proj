@@ -53,7 +53,7 @@ function PasswordReset() {
         // For now, I am just logging it to the console
         console.log(`Sending email to ${email} with temporary password: ${tempPassword}`);
         const message = `You've requested a password reset. Here is your temporary password: ${tempPassword}`;
-        forgotPassword({email, message});
+        //forgotPassword({email, message});
         
         try {
             await forgotPassword( {email, tempPassword} );
