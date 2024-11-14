@@ -1,29 +1,26 @@
 'use client';
 
-import React, { useState } from 'react';
-import CustomNavbar from '../components/CustomNavbar';
-import DateCarousel from '../components/DateCarousel';
-import ShowtimeButtons from '../components/ShowtimeButtons';
-import MovieInfo from '../components/MovieInfo';
-import styles from './page.css';
-import TicketView from '../components/TicketView';
+import React, { useState, useEffect } from 'react';
+import CustomNavbar from '../../components/CustomNavbar';
+import DateCarousel from '../../components/DateCarousel';
+import ShowtimeButtons from '../../components/ShowtimeButtons';
+import MovieInfo from '../../components/MovieInfo';
+import TicketView from '../../components/TicketView';
 import Button from '@mui/material/Button';
-import SeatGrid from '../components/SeatGrid';
+import SeatGrid from '../../components/SeatGrid';
 
-export default function Home() {
+export default function Home({ params }) {
+  const { movieId } = params;
+
   const [activeTab, setActiveTab] = useState('home');
+  const [movie, setMovie] = useState();
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [movieShowtimes, setMovieShowtimes] = useState({});
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
-  const [ticketCounts, setTicketCounts] = useState({
-    adult: 0,
-    child: 0,
-    senior: 0,
-  });
-
-  // JS Object for a movie
   const placeholderMovie = {
     img: 'https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg',
     id: 1,
@@ -35,19 +32,27 @@ export default function Home() {
     cast: ['Actor 1', 'Actor 2', 'Actor 3'],
   };
 
+  useEffect(() => {
+    setMovie(placeholderMovie);
+  }, [movieId]);
+
+  const handleDateSelect = (date) => {
+    const formattedDate = date.toISOString().split('T')[0];
+    setSelectedDate(formattedDate);
+    console.log("Selected date:", formattedDate); 
+  };
+
+  if (!movie) return <div>Loading movie details...</div>;
+
   return (
     <div>
       <CustomNavbar />
       <div className="main-content">
-        {/* Main content with movie details on the right and user content on the left */}
         <div className="content-layout">
-          {/* Movie Info component */}
           <div className="movie-details">
-            <MovieInfo movie={placeholderMovie} />
+            <MovieInfo movie={movie} />
           </div>
-          {/* Main container for the interactive content */}
           <div className="user-interactable-content">
-            {/* Navtab component */}
             <ul className="nav nav-tabs" id="myTab" role="tablist">
               <li className="nav-item" role="presentation">
                 <button
@@ -89,44 +94,27 @@ export default function Home() {
                 </button>
               </li>
             </ul>
-            {/* Tab content */}
             <div className="tab-content" id="myTabContent">
-              <div
-                className={`tab-pane fade ${activeTab === 'home' ? 'show active' : ''}`}
-                id="home"
-                role="tabpanel"
-                aria-labelledby="home-tab"
-              >
+              <div className={`tab-pane fade ${activeTab === 'home' ? 'show active' : ''}`} id="home" role="tabpanel" aria-labelledby="home-tab">
                 <div className="showtime-content">
-                  <DateCarousel />
-                  <ShowtimeButtons />
+                  <DateCarousel onDateSelect={handleDateSelect} /> {/* Pass handleDateSelect */}
+                  <ShowtimeButtons showtimes={movieShowtimes[selectedDate] || []} />
                 </div>
               </div>
-              <div
-                className={`tab-pane fade ${activeTab === 'profile' ? 'show active' : ''}`}
-                id="profile"
-                role="tabpanel"
-                aria-labelledby="profile-tab"
-              >
+              <div className={`tab-pane fade ${activeTab === 'profile' ? 'show active' : ''}`} id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div className="seats-content">
-                    <div className="screen-svg">
-                        <img src="./screen.svg" alt="Seats SVG" />
-                        <h6 className='screen-text'>SCREEN</h6>
-                    </div>
-                    <SeatGrid nSeats={5} />
+                  <div className="screen-svg">
+                    <img src="./screen.svg" alt="Seats SVG" />
+                    <h6 className='screen-text'>SCREEN</h6>
+                  </div>
+                  <SeatGrid nSeats={5} />
                 </div>
               </div>
-              <div
-                className={`tab-pane fade ${activeTab === 'contact' ? 'show active' : ''}`}
-                id="contact"
-                role="tabpanel"
-                aria-labelledby="contact-tab"
-              >
+              <div className={`tab-pane fade ${activeTab === 'contact' ? 'show active' : ''}`} id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 <TicketView />
               </div>
             </div>
           </div>
-          {/* Checkout button */}
           <Button variant="contained" color="primary" className="checkout">
             Continue to Checkout
           </Button>
