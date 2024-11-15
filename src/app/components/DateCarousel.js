@@ -3,14 +3,15 @@ import Slider from "react-slick";
 import DateCard from "./DateCard";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Box from "@mui/material/Box";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 function PrevArrow(props) {
   const { onClick, className } = props;
   return (
-    <div onClick={onClick} className={`arrow ${className}`}>
-      <ArrowBackIcon style={{ color: "white" }} />
+    <div onClick={onClick} className={className} style={{ display: "flex" }}>
+      <ArrowBackIcon style={{ color: "white" }} onClick={onClick} />
     </div>
   );
 }
@@ -18,44 +19,56 @@ function PrevArrow(props) {
 function NextArrow(props) {
   const { onClick, className } = props;
   return (
-    <div onClick={onClick} className={`arrow ${className}`}>
-      <ArrowForwardIcon style={{ color: "white" }} />
+    <div onClick={onClick} className={className} style={{ display: "flex" }}>
+      <ArrowForwardIcon style={{ color: "white" }} onClick={onClick} />
     </div>
   );
 }
 
-function DateCarousel({ onDateSelect }) {
+function DateCarousel({ onDateSelect, dates }) {
   const settings = {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToShow: Math.min(4, dates.length),
+    slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    responsive: [
+      { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 1 } },
+      { breakpoint: 600, settings: { slidesToShow: 2, slidesToScroll: 1 } },
+      { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
+    ],
   };
 
-  const pDates = Array.from({ length: 7 }, (_, i) => new Date(new Date().setDate(new Date().getDate() + i)));
-  const [selectedDate, setSelectedDate] = useState(pDates[0]);
+  const [selectedDate, setSelectedDate] = useState(dates[0]);
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
-    onDateSelect(date);
+    onDateSelect(new Date(date));
   };
 
   return (
-    <div className="slider-container">
-      <Slider {...settings}>
-        {pDates.map((date, index) => (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        maxWidth: "100%",
+        padding: "20px",
+      }}
+    >
+      <Slider {...settings} style={{ width: "100%", maxWidth: "600px" }}>
+        {dates.map((date, index) => (
           <DateCard
             key={index}
             current={date}
             isSelected={selectedDate.getTime() === date.getTime()}
-            onDateSelect={handleDateSelect} // Pass handleDateSelect to DateCard
+            onDateSelect={handleDateSelect}
           />
         ))}
       </Slider>
-    </div>
+    </Box>
   );
 }
 

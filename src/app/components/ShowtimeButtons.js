@@ -1,24 +1,25 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
-function ShowtimeButtons({ showtimes }) {
+import { Box, Button } from "@mui/material";
+
+function ShowtimeButtons({ showtimes, onShowtimeSelect, selectedShowtime }) {
   return (
-    <div className="showtime-buttons">
-      {showtimes?.length > 0 ? (
-        showtimes.map((time, index) => (
+    <Box display="flex" flexWrap="wrap" justifyContent="center" gap={2} padding={2}>
+      {showtimes.length > 0 ? (
+        showtimes.map((showtime) => (
           <Button
-            key={index}
-            variant="contained"
+            key={showtime.id}
+            variant={selectedShowtime?.id === showtime.id ? "contained" : "outlined"}
             color="primary"
-            className="showtime-button"
-            style={{ margin: "5px" }}
+            onClick={() => onShowtimeSelect(showtime)}
           >
-            {time}
+            {showtime.time}
           </Button>
         ))
       ) : (
         <p>No showtimes available for this date.</p>
       )}
-    </div>
+    </Box>
   );
 }
+
 export default ShowtimeButtons;
