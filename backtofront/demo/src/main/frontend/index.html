@@ -94,6 +94,20 @@
             }
         }
 
+        async function fetchShowtimes(movieId) {
+    const response = await fetch(`http://localhost:8080/api/showtimes/${movieId}`);
+    const showtimes = await response.json();
+    displayShowtimes(showtimes);
+}
+
+function displayShowtimes(showtimes) {
+    const showtimeContainer = document.getElementById('showtimeContainer');
+    showtimeContainer.innerHTML = showtimes.map(showtime => `
+        <button onclick="selectShowtime(${showtime.id})">
+            ${showtime.date} - ${showtime.startTime}
+        </button>
+    `).join('');
+}
         function displayMovies(movies) {
             const movieList = document.getElementById('movieList');
             movieList.innerHTML = '';

@@ -9,9 +9,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import backtofront.example.demo.Showtime.Showing;
+import backtofront.example.demo.Showtime.ShowingService;
 
 
 @RestController
@@ -69,6 +74,20 @@ public ResponseEntity<String> deleteMovie(@PathVariable Integer id) {
     }
 }
 
+@RequestMapping("/api/showings")
+public class ShowingController {
+
+    private final ShowingService showingService;
+
+    public ShowingController(ShowingService showingService) {
+        this.showingService = showingService;
+    }
+
+    @PostMapping
+    public Showing addShowing(@RequestBody Showing showing) {
+        return showingService.addShowing(showing);
+    }
+}
 
     
 }
