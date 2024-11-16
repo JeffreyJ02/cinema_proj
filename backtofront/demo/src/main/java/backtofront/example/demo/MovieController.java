@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:5500"})
 @RequestMapping("/api")
 public class MovieController {
 
@@ -51,9 +51,12 @@ public class MovieController {
         return movieService.findMovieById(id);  // Use movieService for the search
     }
 
-    @GetMapping("/test")
-public ResponseEntity<String> testEndpoint() {
-    return ResponseEntity.ok("API is working!");
+    @GetMapping("/movies-by-genre")
+public List<Movie> getMoviesByGenre(@RequestParam String genre) {
+    if (genre == null || genre.isEmpty()) {
+        return new ArrayList<>();  // Return an empty list if no genre is provided
+    }
+    return movieService.findMoviesByGenre(genre);  // Use movieService for the search
 }
 
 @DeleteMapping("/delete/{id}")

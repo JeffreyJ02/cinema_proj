@@ -33,13 +33,17 @@ public class MovieService {
     }
 
     public Movie findMovieById(Long id) {
-        return movieRepository.findByMovieId(id)
+        return movieRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Movie not found"));
     }
     
     public void addMovie(Movie movie) {
         movieRepository.save(movie);
         logger.info("Added movie: {}", movie);
+    }
+
+    public List<Movie> findMoviesByGenre(String genre) {
+        return movieRepository.findByGenreIgnoreCase(genre);  // Use a repository query
     }
 
     
