@@ -1,6 +1,11 @@
 package backtofront.example.demo.Showing;
 
+import java.sql.Date;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+import backtofront.example.demo.Movie.Movie;
+import backtofront.example.demo.ShowRoom.ShowRoom;
 
 @Service
 public class ShowingService {
@@ -11,17 +16,24 @@ public class ShowingService {
         this.showingRepository = showingRepository;
     }
 
-    // Register a new credit showing
+    // Register a new showing
     public void registerShowing(int duration, String showTime, 
-                                Long showRoomId, int movieId) {
+                                ShowRoom showRoomId, Movie movie, Date showDate) {
         Showing showing = new Showing();
         showing.setShowingId((int)showingRepository.maxShowingId() + 1);
         showing.setDuration(duration);
         showing.setShowTime(showTime);
-        showing.setShowRoomId(showRoomId);
-        showing.setShowingId(movieId);
+        showing.setShowDate(showDate);
 
         showingRepository.save(showing);
     }
-}
 
+    public List<Showing> findByMovieIdAndShowDate(Movie movie, Date showDate) {
+        return showingRepository.findByMovieIdAndShowDate(movie, showDate);
+    }
+
+    public List<Showing> findByMovieId(Movie movie) {
+        return showingRepository.findByMovieId(movie);
+    }
+
+}

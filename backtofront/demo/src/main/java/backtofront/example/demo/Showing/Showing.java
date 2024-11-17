@@ -1,5 +1,7 @@
 package backtofront.example.demo.Showing;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,4 +34,6 @@ public class Showing {
     @Column(name = "movie_id", nullable = false)
     private Long movieId;
 
+    @Column(name = "show_date", nullable = false)
+    private Date showDate;
 }

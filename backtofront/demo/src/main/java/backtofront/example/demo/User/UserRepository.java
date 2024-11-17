@@ -12,10 +12,11 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
     Optional<User> findByUserId(Long id); 
+    List<User> findByPromotions(int promotions);
 
     @Modifying  
-    @Query("update User u set u.password = ?1, u.registerForPromos = ?2 where u.userId = ?3")
-    void editUserById(String password, int registerForPromos, int user_id); 
+    @Query("update User u set u.password = ?1, u.promotions = ?2 where u.userId = ?3")
+    void editUserById(String password, int promotions, int user_id); 
 
     @Query("select max(u.userId) from User u")
     int maxUserId();
@@ -28,9 +29,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     // for valid login
     Optional<User> findByEmailAndPassword(String email, String password);
-
-    // query?
-    List<User> findByRegisterForPromos(int registerForPromos);
 
     Optional<User> findByFirstNameAndLastName(String firstName, String lastName);
     

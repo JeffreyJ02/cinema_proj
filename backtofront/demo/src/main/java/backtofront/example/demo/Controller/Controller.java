@@ -1,5 +1,6 @@
 package backtofront.example.demo.Controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,31 +17,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backtofront.example.demo.Address.Address;
-import backtofront.example.demo.Address.AddressService;
-import backtofront.example.demo.Movie.Movie;
-import backtofront.example.demo.Movie.MovieService;
-import backtofront.example.demo.PaymentCard.Card;
-import backtofront.example.demo.PaymentCard.CardService;
-import backtofront.example.demo.User.User;
-import backtofront.example.demo.User.UserService;
+import backtofront.example.demo.Address.*;
+import backtofront.example.demo.Admin.*;
+import backtofront.example.demo.Movie.*;
+import backtofront.example.demo.PaymentCard.*;
+import backtofront.example.demo.Promotion.*;
+import backtofront.example.demo.Showing.*;
+import backtofront.example.demo.User.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class Controller {
-
-    private final UserService userService;
-    private final CardService cardService;
+    
     private final AddressService addressService;
+    private final AdminService adminService;    
     private final MovieService movieService;
+    private final CardService cardService;
+    private final PromotionService promotionService;
+    private final UserService userService;
+    private final ShowingService showingService;
 
     public Controller(UserService userService, CardService cardService, 
-                      AddressService addressService, MovieService movieService) {
-        this.userService = userService;
-        this.cardService = cardService;
+                      AddressService addressService, MovieService movieService,
+                      AdminService adminService, ShowingService showingService,
+                      PromotionService promotionService) {
+        
         this.addressService = addressService;
-        this.movieService = movieService;
+        this.adminService = adminService;
+        this.movieService = movieService;    
+        this.cardService = cardService;    
+        this.promotionService = promotionService;
+        this.userService = userService;
+        this.showingService = showingService;
+
     }
 
     @PostMapping("/register-user")
@@ -52,7 +62,7 @@ public class Controller {
                 user.getEmail(),
                 user.getPhone_number(),
                 user.getPassword(),
-                user.getRegisterForPromos() // Get the boolean value
+                user.getPromotions() // Get the boolean value
             );
             return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -133,7 +143,7 @@ public class Controller {
                 user.getEmail(),
                 user.getPhone_number(),
                 user.getPassword(),
-                user.getRegisterForPromos()
+                user.getPromotions()
             );
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
@@ -201,6 +211,20 @@ public class Controller {
         return movies;
     }
 
+    @GetMapping("/get-showings-by-movie-id-and-show-date")
+    public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam Movie movie, @RequestParam Date date) {
+        List<Showing> showings = showingService.findByMovieIdAndShowDate(movie, date); 
+        System.out.println("Fetched showings: " + showings);
+        return showings;
+    }
+
+    @GetMapping("/get-showing-by-movie-id")
+    public List<Showing> getShowingsByMovieId(@RequestParam Movie movie) {
+        List<Showing> showings = showingService.findByMovieId(movie);
+        System.out.println("Fetched showings: " + showings);
+        return showings;
+    }
+
     // Search for movies by title
     @GetMapping("/search-by-title")
     public List<Movie> getMovieByTitle(@RequestParam(required = false) String title) {
@@ -249,7 +273,27 @@ public class Controller {
         }
     }
 
-    
+    @PostMapping("/register-promo")
+    public ResponseEntity<?> addPromo(@RequestBody Promotion promotion) {
+        try {
+            promotionService.registerPromotion(
+                promotion.isBogo(),
+                promotion.getDiscountPercent(),
+                promotion.getPromoCode(),
+                promotion.getExpirationDate()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Promo registered and sent successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+        }
+    }
+
+    @GetMapping("/get-emails-for-promo")
+    public List<String> getEmailsForPromos() {
+        return userService.getEmailsForPromo();
+    }
 
     // Response classes
     private static class LoginResponse {
