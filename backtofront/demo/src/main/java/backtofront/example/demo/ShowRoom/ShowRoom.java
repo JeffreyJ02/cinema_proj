@@ -1,4 +1,4 @@
-package backtofront.example.demo.ShowRoom;
+package backtofront.example.demo.Showroom;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,12 +9,12 @@ import lombok.Data;
 
 @Data
 @Entity
-public class ShowRoom {
+public class Showroom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "showroom_id", unique = true, nullable = false)
-    private int showRoomId;
+    private int showroomId;
 
     @Column(name = "num_seats", nullable = false)
     private int numSeats;

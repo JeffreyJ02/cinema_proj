@@ -1,6 +1,7 @@
 package backtofront.example.demo.Showing;
 
 import java.sql.Date;
+import java.sqo.Time;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +30,7 @@ public class Showing {
     // movie String name, findByMovieName when info is needed?
 
     @Column(name = "showroom_id", nullable = false)
-    private Long showRoomId;
+    private int showroomId;
 
     @Column(name = "movie_id", nullable = false)
     private int movieId;
