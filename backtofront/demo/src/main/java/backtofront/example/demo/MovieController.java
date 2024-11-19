@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backtofront.example.demo.Showtime.Showing;
-import backtofront.example.demo.Showtime.ShowingService;
-
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:5500"})
@@ -39,34 +36,40 @@ public class MovieController {
         return movies;
     }
     
-    
+    @PostMapping("/movies")
+    public ResponseEntity<String> addMovie(@RequestBody Movie movie) {
+        try {
+            movieService.addMovie(movie);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Movie added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding movie: " + e.getMessage());
+        }
+    }
 
-    // Search for movies by title
     @GetMapping("/search-by-title")
     public List<Movie> getMovieByTitle(@RequestParam(required = false) String title) {
         if (title == null || title.isEmpty()) {
-            return new ArrayList<>();  // Return an empty list if no title is provided
+            return new ArrayList<>();
         }
-        return movieService.findMoviesByTitle(title);  // Use movieService for the search
+        return movieService.findMoviesByTitle(title);
     }
 
-    // Search for movies by title
     @GetMapping("/search-by-id")
     public Movie getMovieById(@RequestParam(required = false) Long id) {
-        return movieService.findMovieById(id);  // Use movieService for the search
+        return movieService.findMovieById(id);
     }
 
     @GetMapping("/movies-by-genre")
 public List<Movie> getMoviesByGenre(@RequestParam String genre) {
     if (genre == null || genre.isEmpty()) {
-        return new ArrayList<>();  // Return an empty list if no genre is provided
+        return new ArrayList<>();
     }
-    return movieService.findMoviesByGenre(genre);  // Use movieService for the search
+    return movieService.findMoviesByGenre(genre);
 }
 
-@DeleteMapping("/delete/{id}")
-public ResponseEntity<String> deleteMovie(@PathVariable Integer id) {
-    boolean isDeleted = movieService.deleteMovieById(id);
+@DeleteMapping("/movies/delete/{title}")
+public ResponseEntity<String> deleteMovieByTitle(@PathVariable String title) {
+    boolean isDeleted = movieService.deleteMovieByTitle(title);
     if (isDeleted) {
         return ResponseEntity.ok("Movie deleted successfully!");
     } else {
@@ -74,21 +77,7 @@ public ResponseEntity<String> deleteMovie(@PathVariable Integer id) {
     }
 }
 
-@RequestMapping("/api/showings")
-public class ShowingController {
 
-    private final ShowingService showingService;
 
-    public ShowingController(ShowingService showingService) {
-        this.showingService = showingService;
-    }
-
-    @PostMapping
-    public Showing addShowing(@RequestBody Showing showing) {
-        return showingService.addShowing(showing);
-    }
-}
-
-    
 }
 

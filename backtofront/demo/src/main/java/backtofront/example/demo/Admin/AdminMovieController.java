@@ -28,9 +28,9 @@ public class AdminMovieController {
     }
 
     
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteMovie(@PathVariable Integer id) {
-        boolean isDeleted = movieService.deleteMovieById(id);
+    @DeleteMapping("/delete/{title}")
+    public ResponseEntity<String> deleteMovie(@PathVariable String title) {
+        boolean isDeleted = movieService.deleteMovieByTitle(title);
         if (isDeleted) {
             return ResponseEntity.ok("Movie deleted successfully!");
         } else {

@@ -1,6 +1,7 @@
 package backtofront.example.demo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,15 +48,25 @@ public class MovieService {
     }
 
     
-    public boolean deleteMovieById(Integer id) {
-        if (movieRepository.existsById(id)) {
-            movieRepository.deleteById(id);
-            logger.info("Deleted movie with ID: {}", id);
+    public boolean deleteMovieByTitle(String title) {
+        // Search for the movie by the exact title
+        Optional<Movie> movie = movieRepository.findByTitle(title);
+    
+        // If movie is found, delete it
+        if (movie.isPresent()) {
+            movieRepository.delete(movie.get());
+            logger.info("Deleted movie with title: {}", title);
             return true;
+        } else {
+            // Log the warning if no movie is found
+            System.out.println(title);
+            logger.warn("No movie found with title: {}", title);
+            return false;
         }
-        logger.warn("Movie with ID: {} not found", id);
-        return false;
     }
+    
+    
+
 }
 
 
