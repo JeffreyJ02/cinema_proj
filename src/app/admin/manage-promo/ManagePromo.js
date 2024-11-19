@@ -20,6 +20,27 @@ const ManagePromo = () => {
     // Create new promotion with promo code
     // promoType either BOGO or DISCOUNT
     const newPromo = { id: promoType, discount: discount, code: promoCode };
+    console.log(newPromo);
+
+    // Sending email before promo is added for sprint/testing
+    try {
+      const emailsResponse = await fetch("http://localhost:8080/api/get-emails-for-promo");
+      if (!emailsResponse.ok) {
+        throw new Error(`Failed to fetch emails: ${emailsResponse.statusText}`);
+      }
+
+      const emails = await emailsResponse.json();
+      console.log("Fetched emails:", emails);
+
+      emails.forEach((email) => console.log(`Email: ${email}, Promo Code: ${promoCode}`));
+      emails.forEach((email) => emailPromo( {email, promo: promoCode} ));
+      setShowCreateForm(false);
+      setPromoType('');
+      setDiscount('');
+      setPromoCode('');
+    } catch (error) {
+      console.error("Error sending emails:", error);
+    }
     
     const response = await fetch("http://localhost:8080/api/register-promo", {
       method: "POST",
@@ -38,9 +59,9 @@ const ManagePromo = () => {
       throw new Error(errorData.message || "Unknown Error Registering Promotion");
     }
     else {
-      const emails = await fetch("http://localhost:8000/api/get-emails-for-promo") 
+      const emails = await fetch("http://localhost:8000/api/get-emails-for-promo")
       console.log(emails)
-      emails.forEach((email) => emailPromo( {email, promoCode} ));
+      emails.forEach((email) => emailPromo( {email, promo: promoCode} ));
       setPromotions([...promotions, newPromo]);
       setShowCreateForm(false);
       setPromoType('');
