@@ -29,6 +29,10 @@ const ManageShowing = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // Check if the field is duration and if the value is negative
+    if (name === 'duration' && value < 0) {
+      return; // Do not update the state if the duration is negative
+    }
     setFormData({
       ...formData,
       [name]: value,
@@ -46,23 +50,14 @@ const ManageShowing = () => {
       <h1>Add Showing</h1>
       <form onSubmit={handleSubmit}>
         <label>
-          Showing ID:
-          <input
-            type="text"
-            name="showingID"
-            value={formData.showingID}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
           Duration (minutes):
           <input
-            type="number"
-            name="duration"
-            value={formData.duration}
-            onChange={handleChange}
-            required
+          type="number"
+          name="duration"
+          value={formData.duration}
+          onChange={handleChange}
+          required
+          min="0" // Prevents negative numbers
           />
         </label>
         <label>
