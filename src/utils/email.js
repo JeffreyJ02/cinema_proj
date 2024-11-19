@@ -38,7 +38,7 @@ export function verificationCode({ email, message }) {
     emailjs.send('service_4brc417', 'template_6zuhtqr', parms)
 }
   
-export function promoCode({ email, promo }) {
+export function emailPromo({ email, promo }) {
     const parms = {
         user_email: email,
         message: `Here's to enjoying movies! One promo code on us!!\n${promo}\nAdd this to your next order to see the magic!`,

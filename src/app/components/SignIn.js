@@ -70,15 +70,7 @@ export default function SignIn() {
     e.preventDefault();
     const { email, password, rememberMe } = formData;
     if (!validateInputs()) return;
-    /*
-    const dummyToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwibmFtZSI6IkpvaG4gRG9lIiwicm9sZSI6InVzZXIiLCJleHAiOjE5MDAwMDAwMDB9._dummy-signature_"
-    setCookie('token', dummyToken, { 
-      path: '/',
-      maxAge: 3600,
-      secure: true,
-      sameSite: 'strict',
-    });
-    console.log("Dummy JWT set") */
+  
     try {
       const encryptedPassword = hash(password);
       // Sending API call to login endpoint
@@ -90,27 +82,54 @@ export default function SignIn() {
         body: JSON.stringify({ email, password: encryptedPassword, rememberMe }),
         credentials: "include",
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Unknown Login Error");
       }
-
+  
       const data = await response.json();
       setSuccessMessage("Login successful! Redirecting..."); // Set success message
       localStorage.setItem('userEmail', email);
-
-      // Check if this is correct for the admin page
-      console.log("data.admin: ", data.admin);
-      if (data.admin == 1) {
-        router.push("/admin");
-      } else {
-        router.push("/");
-      }
+  
+      // Call the function to check admin status
+      await fetchAdminStatus(email); // Call this with the user's email
+  
     } catch (error) {
       console.error("Login error:", error);
       setErrorMessage(error.message);
       setSuccessMessage("");
+    }
+  };
+  
+  // Define the fetchAdminStatus function outside of handleSubmit
+  const fetchAdminStatus = async (email) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/get-user-admin-status?email=${email}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Make sure to include the correct token if needed
+            // Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch admin status");
+      }
+  
+      const adminStatus = await response.json();
+      console.log("Admin status:", adminStatus);
+      if (adminStatus == 1) {
+        router.push("../admin");
+      } else {
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Error fetching admin status:", error);
     }
   };
 
@@ -231,3 +250,4 @@ export default function SignIn() {
     </Container>
   );
 }
+

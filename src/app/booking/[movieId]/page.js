@@ -180,6 +180,7 @@ export default function Home({ params }) {
   "selectedSeats": ["A4", "A5"]
   }
   */
+ 
   const updateDatabaseSeats = async () => {
     try {
       console.log("Selected Seats: ", selectedSeats);
@@ -189,7 +190,7 @@ export default function Home({ params }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          showtimeId: selectedShowtime.id,
+          showTimeId: selectedShowtime.id,
           seatAvailability: selectedSeats,
         }),
       });

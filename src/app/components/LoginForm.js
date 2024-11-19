@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
+
 
 
 function LoginForm() {
@@ -48,7 +49,34 @@ function LoginForm() {
                 if (data.status === 'ok') {
                     alert('Login successful');
                     window.localStorage.setItem('token', data.data);
-                    router.push('/App-Page'); 
+                    const fetchAdminStatus = async (email) => {
+                        try {
+                          const response = await fetch(
+                            `http://localhost:8080/api//get-user-admin-status?email=${email}`,
+                            {
+                              method: "GET",
+                              headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`, // If you are using token-based authentication
+                              },
+                            }
+                          );
+                  
+                          if (!response.ok) {
+                            throw new Error("Failed to fetch admin status");
+                          }
+                  
+                          const adminStatus = await response.json();
+                          console.log("data.admin: ", data.admin);
+                            if (data.admin == 1) {
+                            router.push("/admin");
+                            } else {
+                            router.push("/");
+                            }
+                        } catch (error) {
+                          console.error("Error:", error);
+                        }
+                      };
                 } else {
                     console.log('Encrypted Password:', encryptedPassword);
                 console.log('Form Submitted:', formData);
