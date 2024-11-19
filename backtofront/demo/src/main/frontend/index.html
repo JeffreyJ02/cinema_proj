@@ -25,31 +25,44 @@
         <input type="text" id="searchInput" placeholder="Search for a movie...">
         <button id="searchButton">Search</button>
     </div>
-    
+    <div id="genreSearch">
+        <label for="genreSelect">Search by Genre:</label>
+        <select id="genreSelect">
+            <option value="">Select a genre</option>
+            <option value="Action">Action</option>
+            <option value="Animation">Animation</option>
+            <option value="Drama">Drama</option>
+            <option value="Sci-Fi">Sci-Fi</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Crime">Crime</option>
+        </select>
+        <button id="genreSearchButton">Search by Genre</button>
+    </div>
     <div id="movieList"></div>
 
     <script>
-        document.getElementById('searchButton').addEventListener('click', fetchMovies);
+        document.getElementById('searchButton').addEventListener('click', fetchMoviesByTitle);
         document.getElementById('searchInput').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') { // Check if Enter key is pressed
-                fetchMovies(); // Call fetchMovies function
+            if (event.key === 'Enter') {
+                fetchMoviesByTitle();
             }
         });
         document.getElementById('homeButton').onclick = () => {
-            // Redirect to the homepage 
-            window.location.href = 'http://localhost:3000/'; 
+            window.location.href = 'http://localhost:3000/';
         };
-        
 
-        async function fetchMovies() {
-            const title = document.getElementById('searchInput').value; // Get search input
+        document.getElementById('genreSearchButton').addEventListener('click', fetchMoviesByGenre);
+
+        async function fetchMoviesByTitle() {
+            const title = document.getElementById('searchInput').value;
             if (!title.trim()) {
                 alert('Please enter a movie title.');
                 return;
             }
 
             try {
-                const response = await fetch(`http://localhost:8080/api/search?title=${encodeURIComponent(title)}`);
+                const response = await fetch(`http://localhost:8080/api/search-by-title?title=${encodeURIComponent(title)}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -60,12 +73,46 @@
                 document.getElementById('movieList').innerText = 'Error fetching movies';
             }
         }
-        
+
+        async function fetchMoviesByGenre() {
+            const genre = document.getElementById('genreSelect').value;
+            if (!genre) {
+                alert('Please select a genre.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/movies-by-genre?genre=${encodeURIComponent(genre)}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const movies = await response.json();
+                displayMovies(movies);
+            } catch (error) {
+                console.error('Error fetching movies by genre:', error);
+                document.getElementById('movieList').innerText = 'Error fetching movies by genre';
+            }
+        }
+
+        async function fetchShowtimes(movieId) {
+    const response = await fetch(`http://localhost:8080/api/showtimes/${movieId}`);
+    const showtimes = await response.json();
+    displayShowtimes(showtimes);
+}
+
+function displayShowtimes(showtimes) {
+    const showtimeContainer = document.getElementById('showtimeContainer');
+    showtimeContainer.innerHTML = showtimes.map(showtime => `
+        <button onclick="selectShowtime(${showtime.id})">
+            ${showtime.date} - ${showtime.startTime}
+        </button>
+    `).join('');
+}
         function displayMovies(movies) {
             const movieList = document.getElementById('movieList');
-            movieList.innerHTML = ''; // Clear previous results
+            movieList.innerHTML = '';
             if (movies.length === 0) {
-                movieList.innerText = 'No movies found'; // Display message if no movies found
+                movieList.innerText = 'No movies found';
                 return;
             }
             movies.forEach(movie => {
@@ -83,22 +130,15 @@
                     <hr>
                     <div><button class="bookingButton">Book</button></div>
                 `;
-                movieList.appendChild(movieItem); // Append movie details to the list
-                
+                movieList.appendChild(movieItem);
             });
-            // Add event listeners to the dynamically created booking buttons
+
             document.querySelectorAll('.bookingButton').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const movieTitle = event.target.getAttribute('data-movie-title');
-                    // Redirect to a general booking placeholder page
+                button.addEventListener('click', () => {
                     window.location.href = 'http://localhost:3000/booking';
-        });
-    });
-}
+                });
+            });
+        }
     </script>
-    
-    
-    
-    
 </body>
 </html>

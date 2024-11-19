@@ -203,11 +203,12 @@ const SignUpPage = () => {
       const userData = await response.json();
       const userId = userData?.Id;
 
-      if(card_number)
-        await registerCard(userId, encrypt(card_type), encrypt(card_number), encrypt(expirationDate), encrypt(securityCode));
-
+      
       if (billingName)
         await registerAddress(email, billingName, billingAddress, billingCity, billingZip, billingState);
+
+      if(card_number)
+        await registerCard(email, encrypt(card_type), encrypt(card_number), encrypt(expirationDate), encrypt(securityCode));
 
 
       if (promos == 1) sendOptInEmail(email);
@@ -222,13 +223,13 @@ const SignUpPage = () => {
     console.log("submitUserData end");
   };
 
-  const registerCard = async (userId, card_type, card_number, expirationDate, securityCode) => {
+  const registerCard = async (email, card_type, card_number, expirationDate, securityCode) => {
     try {
       await fetch("http://localhost:8080/api/register-card", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          userId, 
+          email, 
           card_type: encrypt(card_type),
           card_number: encrypt(card_number),
           expirationDate: encrypt(expirationDate), 
