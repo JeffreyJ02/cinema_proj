@@ -12,10 +12,10 @@ export default function Home({ params }) {
   const [loading, setLoading] = useState(true);
 
   const fetchMovies = async (title) => {
-    console.log(`http://localhost:8080/api/search?title=${query}`);
+    console.log(`http://localhost:8080/api/search-by-title?title=${encodeURIComponent(query)}`);
     try {
       const response = await fetch(
-        `http://localhost:8080/api/search?title=${query}`
+        `http://localhost:8080/api/search-by-title?title=${encodeURIComponent(query)}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok: " + response.statusText);
