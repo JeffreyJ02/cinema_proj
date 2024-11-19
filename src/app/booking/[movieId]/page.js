@@ -23,7 +23,7 @@ export default function Home({ params }) {
   const [seatAvailability, setSeatAvailability] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
 
-  const placeholderSeats = ["A1", "A2", "B3", "C0"];
+  const placeholderSeats = ["A1", "A2", "B3", "C1"];
 
   const placeholderShowtimes = {
     "2022-12-25": [
@@ -139,7 +139,7 @@ export default function Home({ params }) {
 
   const getSeatAvailability = async (showtime) => {
     try {
-      const occupiedSeats = placeholderSeats; // Replace this with your fetch call during real testing
+      const occupiedSeats = placeholderSeats;
       /*const occupiedSeats = await fetch(
         `http://localhost:8080/api/seats?id=${showtimeId}`
       ); */
@@ -154,7 +154,7 @@ export default function Home({ params }) {
         // Convert seat label to row and column indices
         const row = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(seat[0]);
         // Convert the column number to an integer
-        const col = parseInt(seat.slice(1), 10);
+        const col = parseInt(seat.slice(1), 10) - 1;
         // Calculate the index of the seat in the array
         const index = row * showroomSeats[showtime.showroom] + col;
         // Set the seat to occupied
@@ -189,7 +189,7 @@ export default function Home({ params }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          showtimeId: selectedShowtime.id,
+          showTimeId: selectedShowtime.id,
           seatAvailability: selectedSeats,
         }),
       });
