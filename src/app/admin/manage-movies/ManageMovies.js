@@ -112,7 +112,7 @@ const ManageMovies = () => {
 
   return (
     <div className="manage-movies-container">
-      <h1>Manage Movies</h1>
+      <h1>Add Movie</h1>
 
       {/* Add Movie Section */}
       <form onSubmit={handleAddMovie}>
@@ -222,3 +222,4 @@ const ManageMovies = () => {
 };
 
 export default ManageMovies;
+

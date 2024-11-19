@@ -1,0 +1,43 @@
+.manage-showing {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .manage-showing h1 {
+    text-align: center;
+  }
+  
+  .manage-showing form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .manage-showing label {
+    margin-bottom: 10px;
+  }
+  
+  .manage-showing input,
+  .manage-showing select {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .manage-showing button {
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .manage-showing button:hover {
+    background-color: #218838;
+  }
