@@ -32,29 +32,28 @@ import backtofront.example.demo.User.User;
 import backtofront.example.demo.User.UserService;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000","http://127.0.0.1:5500"})
+@CrossOrigin(origins = { "http://localhost:3000", "http://127.0.0.1:5500" })
 @RequestMapping("/api")
 public class Controller {
-    
+
     private final AddressService addressService;
-    private final AdminService adminService;    
+    private final AdminService adminService;
     private final MovieService movieService;
     private final CardService cardService;
     private final PromotionService promotionService;
     private final UserService userService;
     private final ShowingService showingService;
     public MovieRepository movieRepository;
-    
 
-    public Controller(UserService userService, CardService cardService, 
-                      AddressService addressService, MovieService movieService,
-                      AdminService adminService, ShowingService showingService,
-                      PromotionService promotionService) {
-        
+    public Controller(UserService userService, CardService cardService,
+            AddressService addressService, MovieService movieService,
+            AdminService adminService, ShowingService showingService,
+            PromotionService promotionService) {
+
         this.addressService = addressService;
         this.adminService = adminService;
-        this.movieService = movieService;    
-        this.cardService = cardService;    
+        this.movieService = movieService;
+        this.cardService = cardService;
         this.promotionService = promotionService;
         this.userService = userService;
         this.showingService = showingService;
@@ -65,37 +64,38 @@ public class Controller {
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             userService.registerUser(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPhone_number(),
-                user.getPassword(),
-                user.getPromotions() // Get the boolean value
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPhone_number(),
+                    user.getPassword(),
+                    user.getPromotions() // Get the boolean value
             );
             return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Internal server error"));
         }
     }
 
-    @PostMapping("/register-address") 
+    @PostMapping("/register-address")
     public ResponseEntity<?> registerUserAddress(@RequestBody RegisterAddressRequest address) {
         try {
             addressService.registerAddress(
-                address.getName(),
-                address.getStreet(),
-                address.getCity(),
-                address.getState(),
-                address.getZipCode(),
-                address.getEmail()
-            );
+                    address.getName(),
+                    address.getStreet(),
+                    address.getCity(),
+                    address.getState(),
+                    address.getZipCode(),
+                    address.getEmail());
             return ResponseEntity.ok(new ResponseMessage("User address registered successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Internal server error"));
         }
     }
 
@@ -103,17 +103,17 @@ public class Controller {
     public ResponseEntity<?> registerCard(@RequestBody RegisterCardRequest cardRequest) {
         try {
             cardService.registerCard(
-                cardRequest.getCard_type(),
-                cardRequest.getCard_number(),
-                cardRequest.getExpirationDate(),
-                cardRequest.getSecurityCode(),
-                cardRequest.getEmail()
-            );
+                    cardRequest.getCard_type(),
+                    cardRequest.getCard_number(),
+                    cardRequest.getExpirationDate(),
+                    cardRequest.getSecurityCode(),
+                    cardRequest.getEmail());
             return ResponseEntity.ok(new ResponseMessage("Card registered successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Internal server error"));
         }
     }
 
@@ -145,18 +145,18 @@ public class Controller {
         try {
             User user = userService.getUserProfile(email);
             UserProfileResponse response = new UserProfileResponse(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPhone_number(),
-                user.getPassword(),
-                user.getPromotions()
-            );
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPhone_number(),
+                    user.getPassword(),
+                    user.getPromotions());
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Internal server error"));
         }
     }
 
@@ -164,17 +164,17 @@ public class Controller {
     public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileRequest) {
         try {
             userService.updateProfile(
-                updateProfileRequest.getEmail(),
-                updateProfileRequest.getFirstName(),
-                updateProfileRequest.getLastName(),
-                updateProfileRequest.getPhoneNumber(),
-                updateProfileRequest.isRegisterForPromotions()
-            );
+                    updateProfileRequest.getEmail(),
+                    updateProfileRequest.getFirstName(),
+                    updateProfileRequest.getLastName(),
+                    updateProfileRequest.getPhoneNumber(),
+                    updateProfileRequest.isRegisterForPromotions());
             return ResponseEntity.ok(new ResponseMessage("Profile updated successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Internal server error"));
         }
     }
 
@@ -183,15 +183,15 @@ public class Controller {
     public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
         try {
             userService.updatePassword(
-                updatePasswordRequest.getEmail(),
-                updatePasswordRequest.getCurrentPassword(),
-                updatePasswordRequest.getNewPassword()
-            );
+                    updatePasswordRequest.getEmail(),
+                    updatePasswordRequest.getCurrentPassword(),
+                    updatePasswordRequest.getNewPassword());
             return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Internal server error"));
         }
     }
 
@@ -200,22 +200,20 @@ public class Controller {
     public ResponseEntity<?> setTempPassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
         try {
             userService.setTempPassword(
-                updatePasswordRequest.getEmail(),
-                updatePasswordRequest.getNewPassword()
-            );
+                    updatePasswordRequest.getEmail(),
+                    updatePasswordRequest.getNewPassword());
             return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Internal server error"));
         }
     }
 
-
-
     @GetMapping("/get-showings-by-movie-id-and-show-date")
     public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam Movie movie, @RequestParam Date date) {
-        List<Showing> showings = showingService.findByMovieIdAndShowDate(movie, date); 
+        List<Showing> showings = showingService.findByMovieIdAndShowDate(movie, date);
         System.out.println("Fetched showings: " + showings);
         return showings;
     }
@@ -231,15 +229,15 @@ public class Controller {
     @GetMapping("/search-by-title")
     public List<Movie> getMovieByTitle(@RequestParam(required = false) String title) {
         if (title == null || title.isEmpty()) {
-            return new ArrayList<>();  // Return an empty list if no title is provided
+            return new ArrayList<>(); // Return an empty list if no title is provided
         }
-        return movieService.findMoviesByTitle(title);  // Use movieService for the search
+        return movieService.findMoviesByTitle(title); // Use movieService for the search
     }
 
     // Search for movies by id
     @GetMapping("/search-by-id")
     public Movie getMovieById(@RequestParam(required = false) int id) {
-        return movieService.findMovieById(id);  // Use movieService for the search
+        return movieService.findMovieById(id); // Use movieService for the search
     }
 
     @GetMapping("/movies-by-genre")
@@ -273,7 +271,8 @@ public class Controller {
             movieService.addMovie(movie);
             return ResponseEntity.status(HttpStatus.CREATED).body("Movie added successfully!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding movie: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error adding movie: " + e.getMessage());
         }
     }
 
@@ -281,16 +280,16 @@ public class Controller {
     public ResponseEntity<?> addPromo(@RequestBody Promotion promotion) {
         try {
             promotionService.registerPromotion(
-                promotion.isBogo(),
-                promotion.getDiscountPercent(),
-                promotion.getPromoCode(),
-                promotion.getExpirationDate()
-            );
+                    promotion.isBogo(),
+                    promotion.getDiscountPercent(),
+                    promotion.getPromoCode(),
+                    promotion.getExpirationDate());
             return ResponseEntity.ok(new ResponseMessage("Promo registered and sent successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Internal server error"));
         }
     }
 
@@ -346,17 +345,17 @@ public class Controller {
     private static class ResponseMessage {
         @SuppressWarnings("FieldMayBeFinal")
         private String message;
-    
+
         public ResponseMessage(String message) {
             this.message = message;
         }
-    
+
         @SuppressWarnings("unused")
         public String getMessage() {
             return message;
         }
     }
-    
+
     // User profile response class
     private static class UserProfileResponse {
         @SuppressWarnings("FieldMayBeFinal")
@@ -371,45 +370,46 @@ public class Controller {
         private String password;
         @SuppressWarnings("FieldMayBeFinal")
         private int registerForPromos;
-    
-        public UserProfileResponse(String firstName, String lastName, String email, String phoneNumber, String password, int registerForPromos ) {
+
+        public UserProfileResponse(String firstName, String lastName, String email, String phoneNumber, String password,
+                int registerForPromos) {
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
             this.phoneNumber = phoneNumber;
             this.password = password;
-            this.registerForPromos = registerForPromos;    
+            this.registerForPromos = registerForPromos;
         }
-    
+
         @SuppressWarnings("unused")
         public String getFirstName() {
             return firstName;
         }
-    
+
         @SuppressWarnings("unused")
         public String getLastName() {
             return lastName;
         }
-    
+
         @SuppressWarnings("unused")
         public String getEmail() {
             return email;
         }
 
         @SuppressWarnings("unused")
-        public String getPhoneNumber(){
+        public String getPhoneNumber() {
             return phoneNumber;
         }
-    
+
         @SuppressWarnings("unused")
-        public String getPassword(){
+        public String getPassword() {
             return password;
         }
-    
+
         @SuppressWarnings("unused")
         public int getRegisterForPromos() {
             return registerForPromos;
-        }    
+        }
     }
 
     // Card profile response class
@@ -426,7 +426,7 @@ public class Controller {
         private String security_code;
 
         public CardProfileResponse(int card_id, String card_type, String card_number,
-                                String expiration_date, String security_code) {
+                String expiration_date, String security_code) {
             this.card_id = card_id;
             this.card_type = card_type;
             this.card_number = card_number;
@@ -450,7 +450,7 @@ public class Controller {
         }
 
         @SuppressWarnings("unused")
-        public String getExpiration_date(){
+        public String getExpiration_date() {
             return expiration_date;
         }
 
@@ -474,7 +474,7 @@ public class Controller {
         private String zip_code;
 
         public AddressProfileResponse(int address_id, String street, String city,
-                                String state, String zip_code) {
+                String state, String zip_code) {
             this.address_id = address_id;
             this.street = street;
             this.city = city;
@@ -498,7 +498,7 @@ public class Controller {
         }
 
         @SuppressWarnings("unused")
-        public String getState(){
+        public String getState() {
             return state;
         }
 
@@ -508,47 +508,50 @@ public class Controller {
         }
     }
 
-// Request classes for profile and password updates
-private static class RegisterCardRequest {
-    private String card_type;
-    private String card_number;
-    private String expiration_date;
-    private String security_code;
-    private String email;
+    // Request classes for profile and password updates
+    private static class RegisterCardRequest {
+        private String card_type;
+        private String card_number;
+        private String expiration_date;
+        private String security_code;
+        private String email;
 
-    // Getters and Setters
-    public String getCard_type() {
-        return card_type;
-    }
-    public String getCard_number() {
-        return card_number;
+        // Getters and Setters
+        public String getCard_type() {
+            return card_type;
+        }
+
+        public String getCard_number() {
+            return card_number;
+        }
+
+        public String getExpirationDate() {
+            return expiration_date;
+        }
+
+        public String getSecurityCode() {
+            return security_code;
+        }
+
+        public String getEmail() {
+            return email;
+        }
     }
 
-    public String getExpirationDate() {
-        return expiration_date;
-    }
+    private static class RegisterAddressRequest {
 
-    public String getSecurityCode() {
-        return security_code;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-}
-private static class RegisterAddressRequest {
-    
         private String name;
         private String street;
         private String city;
         private String state;
         private String zipCode;
         private String email;
-    
+
         // Getters and Setters
         public String getName() {
             return name;
         }
+
         public String getStreet() {
             return street;
         }
@@ -568,43 +571,36 @@ private static class RegisterAddressRequest {
         public String getEmail() {
             return email;
         }
-        
-    
-}
 
-private static class UpdateProfileRequest {
-    private String email;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private Integer registerForPromotions;
+    }
 
+    private static class UpdateProfileRequest {
+        private String email;
+        private String firstName;
+        private String lastName;
+        private String phoneNumber;
+        private Integer registerForPromotions;
 
         // Getters and Setters
         public String getEmail() {
             return email;
         }
 
-
         public void setEmail(String email) {
             this.email = email;
         }
-
 
         public String getFirstName() {
             return firstName;
         }
 
-
         public void setFirstName(String firstName) {
             this.firstName = firstName;
         }
 
-
         public String getLastName() {
             return lastName;
         }
-
 
         public void setLastName(String lastName) {
             this.lastName = lastName;
@@ -614,53 +610,44 @@ private static class UpdateProfileRequest {
             return registerForPromotions;
         }
 
-
         public void setRegisterForPromotions(Integer registerForPromotions) {
             this.registerForPromotions = registerForPromotions;
         }
-
 
         public String getPhoneNumber() {
             return phoneNumber;
         }
 
-
         public void setPhoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;
         }
-        }
+    }
 
     private static class UpdatePasswordRequest {
         private String email;
         private String currentPassword;
         private String newPassword;
 
-
         // Getters and Setters
         public String getEmail() {
             return email;
         }
 
-
         public void setEmail(String email) {
             this.email = email;
         }
-
 
         public String getCurrentPassword() {
             return currentPassword;
         }
 
-
         public void setCurrentPassword(String currentPassword) {
             this.currentPassword = currentPassword;
         }
 
-
         public String getNewPassword() {
             return newPassword;
         }
-
 
         public void setNewPassword(String newPassword) {
             this.newPassword = newPassword;

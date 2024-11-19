@@ -75,7 +75,6 @@ const CustomNavbar = () => {
               <NavDropdown.Item>{`Hello, ${
                 localStorage.getItem("userEmail") || "Guest"
               }`}</NavDropdown.Item>
-              <NavDropdown.Item href="/admin">Admin</NavDropdown.Item>
               <NavDropdown.Item href="/edit-profile">
                 Edit Profile
               </NavDropdown.Item>
