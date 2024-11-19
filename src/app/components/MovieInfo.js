@@ -12,7 +12,8 @@ const MovieInfo = ({ movie }) => {
       {/* Right side with synopsis and rating */}
       <div className="info-container">
         <p>{movie.ageRating} | Released: {movie.releaseDate}</p>
-        <p>Director: {movie.director}</p>
+        <p>Director: {movie.director} | Producer: {movie.producer}</p>
+        <p>Genre: {movie.genre}</p>
         <p>{movie.description}</p>
       </div>
     </div>

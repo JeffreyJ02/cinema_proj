@@ -20,7 +20,7 @@ const SeatGrid = ({ nSeats, availability, selectedSeats, setSelectedSeats }) => 
       const buttonRow = [];
       for (let col = 0; col < nSeats; col++) {
         const index = row * nSeats + col;
-        const seatLabel = `${"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[row]}${col}`; // Generate seat label
+        const seatLabel = `${"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[row]}${col + 1}`; // Generate seat label
         const isSelected = selectedSeats.includes(seatLabel);
         buttonRow.push(
           <Button
