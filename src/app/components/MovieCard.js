@@ -13,7 +13,7 @@ const MovieCard = ({ movie }) => {
     console.log(movie);
     console.log(movie.movieId);
     window.location.href = `/booking/${movie.movieId}`;
-  }
+  };
 
   return (
     <>
@@ -47,25 +47,27 @@ const MovieCard = ({ movie }) => {
       </Modal>
 
       {/* Movie Card */}
-      <div className="card">
-        <img
-          /* Movie image */
-          src={movie.imageUrl}
-          alt={movie.title}
-        />
-        {/* Button to show trailer, onClick sets state to true and
+      <div className="movie-card">
+        <div className="card">
+          <img
+            /* Movie image */
+            src={movie.imageUrl}
+            alt={movie.title}
+          />
+          {/* Button to show trailer, onClick sets state to true and
             conditionally renders the Youtube embed */}
-        <div className="movie-buttons">
-          <Button variant="primary" onClick={handleShow}>
-            Watch Trailer
-          </Button>
-          <Button variant="primary" onClick={handleBook}>
-            Book
-          </Button>
-        </div>
+          <div className="movie-buttons">
+            <Button variant="primary" onClick={handleShow}>
+              Watch Trailer
+            </Button>
+            <Button variant="primary" onClick={handleBook}>
+              Book
+            </Button>
+          </div>
 
-        {/* Display the age rating fetched from the database */}
-        <div className="rating">{movie.ageRating}</div>
+          {/* Display the age rating fetched from the database */}
+          <div className="rating">{movie.ageRating}</div>
+        </div>
         <div className="movie-info">
           <h3>{movie.title}</h3>
         </div>
