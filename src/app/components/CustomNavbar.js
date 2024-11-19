@@ -8,6 +8,7 @@ import { TextField, InputAdornment, IconButton } from "@mui/material";
 const CustomNavbar = () => {
   const router = useRouter();
   const { user } = useUser();
+  const [isAdmin, setIsAdmin] = useState(false); // State to track admin status
   const signInButton = () => {
     router.push("/sign-in");
   };
@@ -29,6 +30,39 @@ const CustomNavbar = () => {
       console.error("Logout error:", error);
     }
   };
+
+  const fetchAdminStatus = async (email) => {
+    const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/get-user-admin-status?email=${email}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Use token-based authentication
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch admin status");
+      }
+
+      const data = await response.json();
+      setIsAdmin(data.admin === 1); // Set admin status based on response
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    const userEmail = localStorage.getItem("userEmail");
+    if (userEmail) {
+      fetchAdminStatus(userEmail); // Fetch admin status if user is logged in
+    }
+  }, []);
+
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -76,6 +110,9 @@ const CustomNavbar = () => {
               <NavDropdown.Item href="/edit-profile">
                 Edit Profile
               </NavDropdown.Item>
+              {isAdmin && ( // Conditionally render admin option
+                <NavDropdown.Item href="/admin">Admin Page</NavDropdown.Item>
+              )}
               {localStorage.getItem("userEmail") && ( // Conditionally render logout based on state
                 <div>
                   <NavDropdown.Divider />
