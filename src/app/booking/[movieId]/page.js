@@ -251,10 +251,11 @@ export default function Home({ params }) {
   // When the component mounts, fetch the movie by ID
   //  NOTE CURRENTLY ON PLACEHOLDER DATA
   useEffect(() => {
-    //getMovieById(movieId);
+    console.log("Fetching movie with ID:", movieId);
+    getMovieById(movieId);
     //getMovieShowtimes(movieId);
-    setMovie(placeholderMovie);
-    setMovieShowtimes(placeholderShowtimes);
+    //setMovie(placeholderMovie);
+    //setMovieShowtimes(placeholderShowtimes);
   }, [movieId]);
 
   // If movie is not fetched yet, show a loading message
