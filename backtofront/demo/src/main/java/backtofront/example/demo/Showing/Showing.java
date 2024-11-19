@@ -1,7 +1,7 @@
 package backtofront.example.demo.Showing;
 
 import java.sql.Date;
-import java.sqo.Time;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
