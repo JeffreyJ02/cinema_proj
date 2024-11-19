@@ -325,14 +325,19 @@ public class Controller {
     @PostMapping("/register-showing")
     public ResponseEntity<?> registerShowing(@RequestBody Showing showing) {
         try {
-            showingService.registerShowing(
-                showing.getDuration(),
-                showing.getShowTime(),
-                showing.getShowroomId(),
-                showing.getMovieId(),
-                showing.getShowDate()
-            );
-            return ResponseEntity.ok(new ResponseMessage("Showing registered and sent successfully!"));
+            if (showingService.conflict(showing.getShowTime(), showing.getShowroomId())) {
+                showingService.registerShowing(
+                    showing.getDuration(),
+                    showing.getShowTime(),
+                    showing.getShowroomId(),
+                    showing.getMovieId(),
+                    showing.getShowDate()
+                );
+                return ResponseEntity.ok(new ResponseMessage("Showing registered successfully."));
+            }
+            else {
+                return ResponseEntity.ok(new ResponseMessage("Scheduling conflict. Cannot register showing."));
+            }
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
