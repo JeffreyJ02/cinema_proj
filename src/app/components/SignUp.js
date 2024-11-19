@@ -230,10 +230,10 @@ const SignUpPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           email, 
-          card_type: encrypt(card_type),
-          card_number: encrypt(card_number),
-          expirationDate: encrypt(expirationDate), 
-          securityCode: encrypt(securityCode)
+          card_type: card_type,
+          card_number: card_number,
+          expirationDate: expirationDate, 
+          securityCode: securityCode
         })
       });
       console.log("Credit card registered successfully");
