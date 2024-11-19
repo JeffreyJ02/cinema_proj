@@ -180,6 +180,7 @@ export default function Home({ params }) {
   "selectedSeats": ["A4", "A5"]
   }
   */
+ 
   const updateDatabaseSeats = async () => {
     try {
       console.log("Selected Seats: ", selectedSeats);

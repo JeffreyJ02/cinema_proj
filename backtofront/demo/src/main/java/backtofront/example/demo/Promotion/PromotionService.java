@@ -17,7 +17,7 @@ public class PromotionService {
     public void registerPromotion(boolean bogo, int discount_percentage, 
                                   String promoCode, Date expirationDate) {
         Promotion promotion = new Promotion();
-        promotion.setPromoId(promotionRepository.maxPromoId() + 1);
+        promotion.setPromoId((int)promotionRepository.count() + 1);
         promotion.setBogo(bogo);
         promotion.setDiscountPercent(discount_percentage);
         promotion.setPromoCode(promoCode);

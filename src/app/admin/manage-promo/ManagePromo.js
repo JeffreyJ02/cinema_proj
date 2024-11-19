@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import './ManagePromo.css';
+import { emailPromo } from '@/utils/email';
 
 const ManagePromo = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -14,16 +15,38 @@ const ManagePromo = () => {
     setShowCreateForm(true);
   };
 
-  const handleSubmitCreate = (event) => {
+  const handleSubmitCreate = async (event) => {
     event.preventDefault();
     // Create new promotion with promo code
+    // promoType either BOGO or DISCOUNT
     const newPromo = { id: promoType, discount: discount, code: promoCode };
-    setPromotions([...promotions, newPromo]);
-    setShowCreateForm(false);
-    // Reset fields
-    setPromoType('');
-    setDiscount('');
-    setPromoCode('');
+    
+    const response = await fetch("http://localhost:8080/api/register-promo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        bogo: promoType === "BOGO" ? true : false,
+        discountPercentage: discount,
+        promoCode: promoCode,
+        expirationDate: null,
+      }),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      /* const emails = await fetch("http://localhost:8000/api/get-emails-for-promo")
+      console.log(emails) */
+      throw new Error(errorData.message || "Unknown Error Registering Promotion");
+    }
+    else {
+      const emails = await fetch("http://localhost:8000/api/get-emails-for-promo") 
+      console.log(emails)
+      emails.forEach((email) => emailPromo( {email, promoCode} ));
+      setPromotions([...promotions, newPromo]);
+      setShowCreateForm(false);
+      setPromoType('');
+      setDiscount('');
+      setPromoCode('');
+    }
   };
 
   return (
