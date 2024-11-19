@@ -222,3 +222,4 @@ const ManageMovies = () => {
 };
 
 export default ManageMovies;
+
