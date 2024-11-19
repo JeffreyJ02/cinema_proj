@@ -299,6 +299,12 @@ public class Controller {
         return userService.getEmailsForPromo();
     }
 
+    // returns true if admin
+    @GetMapping("/get-user-admin-status")
+    public int getAdminStatus(@RequestParam String email) {
+        return userService.getUserProfile(email).getAdmin();
+    }
+
     // Response classes
     private static class LoginResponse {
         @SuppressWarnings("FieldMayBeFinal")
