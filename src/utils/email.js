@@ -8,7 +8,7 @@ export function optInPromoEmails( {email} ) {
         message: "you have opted in to receive promotional emails."
     }
 
-    emailjs.send("service_4brc417", "template_r3h3fid", parms)
+    emailjs.send("service_4brc418", "template_r3h3fid", parms)
 }
 
 export function editProfileEmail( {email} ) {
@@ -17,7 +17,7 @@ export function editProfileEmail( {email} ) {
         user_email: email,
         message: "your profile's information has been edited."
     }
-    emailjs.send("service_4brc417", "template_r3h3fid", parms)
+    emailjs.send("service_4brc418", "template_r3h3fid", parms)
 }
 
 export function forgotPassword( {email, message} ) {
@@ -26,7 +26,7 @@ export function forgotPassword( {email, message} ) {
         message: message,
         subject: 'Forgot Password'
     }
-    emailjs.send("service_4brc417", "template_6zuhtqr", parms)
+    emailjs.send("service_4brc418", "template_6zuhtqr", parms)
 }
 
 export function verificationCode({ email, message }) {
@@ -35,8 +35,14 @@ export function verificationCode({ email, message }) {
       message,
       subject: 'Verification Code',
     };
-    emailjs.send('service_4brc417', 'template_6zuhtqr', parms)
+    emailjs.send('service_4brc418', 'template_6zuhtqr', parms)
 }
   
-// in HTML button: 
-// onclick="[function]"
+export function promoCode({ email, promo }) {
+    const parms = {
+        user_email: email,
+        message: `Here's to enjoying movies! One promo code on us!!\n${promo}\nAdd this to your next order to see the magic!`,
+        subject: 'Promo Code from CinemaTeamB8',
+    };
+    emailjs.send('service_4brc418', 'template_6zuhtqr', parms)
+}
