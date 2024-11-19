@@ -1,4 +1,4 @@
-package backtofront.example.demo;
+package backtofront.example.demo.Movie;
 
 import java.util.List;
 import java.util.Optional;

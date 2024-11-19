@@ -32,7 +32,7 @@ public class Showing {
     private Long showRoomId;
 
     @Column(name = "movie_id", nullable = false)
-    private Long movieId;
+    private int movieId;
 
     @Column(name = "show_date", nullable = false)
     private Date showDate;

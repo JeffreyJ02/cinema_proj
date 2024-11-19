@@ -236,7 +236,7 @@ public class Controller {
 
     // Search for movies by id
     @GetMapping("/search-by-id")
-    public Movie getMovieById(@RequestParam(required = false) Long id) {
+    public Movie getMovieById(@RequestParam(required = false) int id) {
         return movieService.findMovieById(id);  // Use movieService for the search
     }
 
