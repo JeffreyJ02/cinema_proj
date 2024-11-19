@@ -8,7 +8,7 @@ const ManageShowing = () => {
     showingID: '',
     duration: '',
     showTime: '',
-    showRoomId: '',
+    showroomId: '',
     movieId: '',
     showDate: '',
   });
@@ -78,8 +78,8 @@ const ManageShowing = () => {
         <label>
           Show Room ID:
           <select
-            name="showRoomId"
-            value={formData.showRoomId}
+            name="showroomId"
+            value={formData.showroomId}
             onChange={handleChange}
             required
           >
