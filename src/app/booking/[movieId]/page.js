@@ -189,7 +189,7 @@ export default function Home({ params }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          showtimeId: selectedShowtime.id,
+          showTimeId: selectedShowtime.id,
           seatAvailability: selectedSeats,
         }),
       });

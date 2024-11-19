@@ -2,6 +2,7 @@ package backtofront.example.demo.Showing;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import backtofront.example.demo.Movie.Movie;
@@ -34,6 +35,10 @@ public class ShowingService {
 
     public List<Showing> findByMovieId(Movie movie) {
         return showingRepository.findByMovieId(movie);
+    }
+
+    public Optional<Showing> findById(int id) {
+        return showingRepository.findById(id);
     }
 
 }

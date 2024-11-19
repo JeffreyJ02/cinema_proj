@@ -26,6 +26,7 @@ import backtofront.example.demo.PaymentCard.Card;
 import backtofront.example.demo.PaymentCard.CardService;
 import backtofront.example.demo.Promotion.Promotion;
 import backtofront.example.demo.Promotion.PromotionService;
+import backtofront.example.demo.ShowSeat.ShowSeatService;
 import backtofront.example.demo.Showing.Showing;
 import backtofront.example.demo.Showing.ShowingService;
 import backtofront.example.demo.User.User;
@@ -43,13 +44,15 @@ public class Controller {
     private final PromotionService promotionService;
     private final UserService userService;
     private final ShowingService showingService;
+    private final ShowSeatService showSeatService;
+
     public MovieRepository movieRepository;
     
 
     public Controller(UserService userService, CardService cardService, 
                       AddressService addressService, MovieService movieService,
                       AdminService adminService, ShowingService showingService,
-                      PromotionService promotionService) {
+                      ShowSeatService showSeatService, PromotionService promotionService) {
         
         this.addressService = addressService;
         this.adminService = adminService;
@@ -58,7 +61,7 @@ public class Controller {
         this.promotionService = promotionService;
         this.userService = userService;
         this.showingService = showingService;
-
+        this.showSeatService = showSeatService;
     }
 
     @PostMapping("/register-user")
@@ -211,8 +214,6 @@ public class Controller {
         }
     }
 
-
-
     @GetMapping("/get-showings-by-movie-id-and-show-date")
     public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam Movie movie, @RequestParam Date date) {
         List<Showing> showings = showingService.findByMovieIdAndShowDate(movie, date); 
@@ -303,6 +304,18 @@ public class Controller {
     @GetMapping("/get-user-admin-status")
     public int getAdminStatus(@RequestParam String email) {
         return userService.getUserProfile(email).getAdmin();
+    }
+
+    @PostMapping("/update-seats")
+    public ResponseEntity<?> updateSeats(@RequestParam int showTimeId, @RequestParam List<String> seatAvailability) {
+        try {
+            for (String seat : seatAvailability) showSeatService.registerShowSeat(seat, showingService.findById(showTimeId).get());
+            return ResponseEntity.ok(new ResponseMessage("Promo registered and sent successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+        }
     }
 
     // Response classes
