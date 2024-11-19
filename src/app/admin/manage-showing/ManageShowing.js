@@ -39,11 +39,31 @@ const ManageShowing = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send formData to your API
-    console.log(formData);
+    console.log('Form data:', formData);
+  
+    try {
+      const response = await fetch("http://localhost:8080/api/register-showing", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to register showing: " + response.statusText);
+      }
+  
+      const data = await response.text();
+      console.log(data);
+    } catch (error) {
+      console.error("Error registering showing:", error.message);
+      alert("Error registering showing: " + error.message);
+    }
   };
+  
 
   return (
     <div className="manage-showing">
