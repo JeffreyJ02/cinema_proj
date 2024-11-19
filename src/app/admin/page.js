@@ -12,6 +12,7 @@ export default function Home() {
       <Button variant="primary" href="admin/manage-movies">Manage Movies</Button>
       <Button variant="primary" href="admin/manage-promo">Manage Promotions</Button>
       <Button variant="primary" href="admin/manage-users">Manage Users</Button>
+      <Button variant="primary" href="admin/manage-showing">Manage Showing Times</Button>
     </div>
   );
 }
