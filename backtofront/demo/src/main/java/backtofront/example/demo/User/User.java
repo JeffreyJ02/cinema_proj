@@ -35,7 +35,7 @@ public class User {
     private int admin = 0;
 
     @Column(name = "promotions", nullable = false)
-    private int registerForPromos = 0;
+    private int promotions = 0;
 
     @Column(name = "status", nullable = false)
     private String status;

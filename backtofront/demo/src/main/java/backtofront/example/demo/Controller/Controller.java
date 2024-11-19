@@ -1,37 +1,56 @@
 package backtofront.example.demo.Controller;
 
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backtofront.example.demo.Address.Address;
-import backtofront.example.demo.Address.AddressService;
-import backtofront.example.demo.PaymentCard.Card;
-import backtofront.example.demo.PaymentCard.CardService;
-import backtofront.example.demo.User.User;
-import backtofront.example.demo.User.UserService;
+import backtofront.example.demo.Address.*;
+import backtofront.example.demo.Admin.*;
+import backtofront.example.demo.Movie.*;
+import backtofront.example.demo.PaymentCard.*;
+import backtofront.example.demo.Promotion.*;
+import backtofront.example.demo.Showing.*;
+import backtofront.example.demo.User.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class Controller {
-
-    private final UserService userService;
-    private final CardService cardService;
+    
     private final AddressService addressService;
+    private final AdminService adminService;    
+    private final MovieService movieService;
+    private final CardService cardService;
+    private final PromotionService promotionService;
+    private final UserService userService;
+    private final ShowingService showingService;
 
-    public Controller(UserService userService, CardService cardService, AddressService addressService) {
-        this.userService = userService;
-        this.cardService = cardService;
+    public Controller(UserService userService, CardService cardService, 
+                      AddressService addressService, MovieService movieService,
+                      AdminService adminService, ShowingService showingService,
+                      PromotionService promotionService) {
+        
         this.addressService = addressService;
+        this.adminService = adminService;
+        this.movieService = movieService;    
+        this.cardService = cardService;    
+        this.promotionService = promotionService;
+        this.userService = userService;
+        this.showingService = showingService;
+
     }
 
     @PostMapping("/register-user")
@@ -43,7 +62,7 @@ public class Controller {
                 user.getEmail(),
                 user.getPhone_number(),
                 user.getPassword(),
-                user.getRegisterForPromos() // Get the boolean value
+                user.getPromotions() // Get the boolean value
             );
             return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -54,7 +73,7 @@ public class Controller {
     }
 
     @PostMapping("/register-address") 
-    public ResponseEntity<?> registerUserAddress(@RequestBody Address address) {
+    public ResponseEntity<?> registerUserAddress(@RequestBody RegisterAddressRequest address) {
         try {
             addressService.registerAddress(
                 address.getName(),
@@ -62,7 +81,7 @@ public class Controller {
                 address.getCity(),
                 address.getState(),
                 address.getZipCode(),
-                address.getUserId()
+                address.getEmail()
             );
             return ResponseEntity.ok(new ResponseMessage("User address registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -81,7 +100,7 @@ public class Controller {
                 card.getExpirationDate(),
                 card.getSecurityCode(),
                 card.getAddress(),
-                card.getUserId()
+                card.getUser()
             );
             return ResponseEntity.ok(new ResponseMessage("Card registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -124,7 +143,7 @@ public class Controller {
                 user.getEmail(),
                 user.getPhone_number(),
                 user.getPassword(),
-                user.getRegisterForPromos()
+                user.getPromotions()
             );
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
@@ -132,6 +151,148 @@ public class Controller {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
         }
+    }
+
+    @PostMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileRequest) {
+        try {
+            userService.updateProfile(
+                updateProfileRequest.getEmail(),
+                updateProfileRequest.getFirstName(),
+                updateProfileRequest.getLastName(),
+                updateProfileRequest.getPhoneNumber(),
+                updateProfileRequest.isRegisterForPromotions()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Profile updated successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+        }
+    }
+
+    // Update user password
+    @PostMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+        try {
+            userService.updatePassword(
+                updatePasswordRequest.getEmail(),
+                updatePasswordRequest.getCurrentPassword(),
+                updatePasswordRequest.getNewPassword()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+        }
+    }
+
+    // set temp password when forgotten
+    @PostMapping("/temp-password")
+    public ResponseEntity<?> setTempPassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+        try {
+            userService.setTempPassword(
+                updatePasswordRequest.getEmail(),
+                updatePasswordRequest.getNewPassword()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+        }
+    }
+
+    @GetMapping("/movies")
+    public List<Movie> getAllMovies() {
+        List<Movie> movies = movieService.getAllMovies();
+        System.out.println("Fetched movies: " + movies);
+        return movies;
+    }
+
+    @GetMapping("/get-showings-by-movie-id-and-show-date")
+    public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam Movie movie, @RequestParam Date date) {
+        List<Showing> showings = showingService.findByMovieIdAndShowDate(movie, date); 
+        System.out.println("Fetched showings: " + showings);
+        return showings;
+    }
+
+    @GetMapping("/get-showing-by-movie-id")
+    public List<Showing> getShowingsByMovieId(@RequestParam Movie movie) {
+        List<Showing> showings = showingService.findByMovieId(movie);
+        System.out.println("Fetched showings: " + showings);
+        return showings;
+    }
+
+    // Search for movies by title
+    @GetMapping("/search-by-title")
+    public List<Movie> getMovieByTitle(@RequestParam(required = false) String title) {
+        if (title == null || title.isEmpty()) {
+            return new ArrayList<>();  // Return an empty list if no title is provided
+        }
+        return movieService.findMoviesByTitle(title);  // Use movieService for the search
+    }
+
+    // Search for movies by id
+    @GetMapping("/search-by-id")
+    public Movie getMovieById(@RequestParam(required = false) int id) {
+        return movieService.findMovieById(id);  // Use movieService for the search
+    }
+
+    @DeleteMapping("/delete-movie")
+    public ResponseEntity<String> deleteMovie(@PathVariable Integer id) {
+        boolean isDeleted = movieService.deleteMovieById(id);
+        if (isDeleted) {
+            return ResponseEntity.ok("Movie deleted successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Movie not found!");
+        }
+    }
+
+    @PostMapping("/add-movie")
+    public ResponseEntity<?> addMovie(@RequestBody Movie movie) {
+        try {
+            movieService.addMovie(
+                movie.getTitle(),
+                movie.getDescription(),
+                movie.getReleaseDate(),
+                movie.getGenre(),
+                movie.getTrailerUrl(),
+                movie.getCategory(),
+                movie.getImageUrl(),
+                movie.getAgeRating(),
+                movie.getDirector(),
+                movie.getProducer()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Card registered successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+        }
+    }
+
+    @PostMapping("/register-promo")
+    public ResponseEntity<?> addPromo(@RequestBody Promotion promotion) {
+        try {
+            promotionService.registerPromotion(
+                promotion.isBogo(),
+                promotion.getDiscountPercent(),
+                promotion.getPromoCode(),
+                promotion.getExpirationDate()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Promo registered and sent successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+        }
+    }
+
+    @GetMapping("/get-emails-for-promo")
+    public List<String> getEmailsForPromos() {
+        return userService.getEmailsForPromo();
     }
 
     // Response classes
@@ -337,61 +498,44 @@ public class Controller {
         }
     }
 
-
-
-
-@PostMapping("/update-profile")
-public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileRequest) {
-    try {
-        userService.updateProfile(
-            updateProfileRequest.getEmail(),
-            updateProfileRequest.getFirstName(),
-            updateProfileRequest.getLastName(),
-            updateProfileRequest.getPhoneNumber(),
-            updateProfileRequest.isRegisterForPromotions()
-        );
-        return ResponseEntity.ok(new ResponseMessage("Profile updated successfully!"));
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
-    }
-}
-
-// Update user password
-@PostMapping("/update-password")
-public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
-    try {
-        userService.updatePassword(
-            updatePasswordRequest.getEmail(),
-            updatePasswordRequest.getCurrentPassword(),
-            updatePasswordRequest.getNewPassword()
-        );
-        return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
-    }
-}
-
-// set temp password when forgotten
-@PostMapping("/temp-password")
-public ResponseEntity<?> setTempPassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
-    try {
-        userService.setTempPassword(
-            updatePasswordRequest.getEmail(),
-            updatePasswordRequest.getNewPassword()
-        );
-        return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
-    }
-}
-
 // Request classes for profile and password updates
+
+private static class RegisterAddressRequest {
+    
+        private String name;
+        private String street;
+        private String city;
+        private String state;
+        private String zipCode;
+        private String email;
+    
+        // Getters and Setters
+        public String getName() {
+            return name;
+        }
+        public String getStreet() {
+            return street;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public String getZipCode() {
+            return zipCode;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+        
+    
+}
+
 private static class UpdateProfileRequest {
     private String email;
     private String firstName;
@@ -400,92 +544,91 @@ private static class UpdateProfileRequest {
     private Integer registerForPromotions;
 
 
-    // Getters and Setters
-    public String getEmail() {
-        return email;
+        // Getters and Setters
+        public String getEmail() {
+            return email;
+        }
+
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+
+        public String getLastName() {
+            return lastName;
+        }
+
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public Integer isRegisterForPromotions() {
+            return registerForPromotions;
+        }
+
+
+        public void setRegisterForPromotions(Integer registerForPromotions) {
+            this.registerForPromotions = registerForPromotions;
+        }
+
+
+        public String getPhoneNumber() {
+            return phoneNumber;
+        }
+
+
+        public void setPhoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+        }
+        }
+
+    private static class UpdatePasswordRequest {
+        private String email;
+        private String currentPassword;
+        private String newPassword;
+
+
+        // Getters and Setters
+        public String getEmail() {
+            return email;
+        }
+
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+
+        public String getCurrentPassword() {
+            return currentPassword;
+        }
+
+
+        public void setCurrentPassword(String currentPassword) {
+            this.currentPassword = currentPassword;
+        }
+
+
+        public String getNewPassword() {
+            return newPassword;
+        }
+
+
+        public void setNewPassword(String newPassword) {
+            this.newPassword = newPassword;
+        }
     }
-
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-
-    public String getLastName() {
-        return lastName;
-    }
-
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer isRegisterForPromotions() {
-        return registerForPromotions;
-    }
-
-
-    public void setRegisterForPromotions(Integer registerForPromotions) {
-        this.registerForPromotions = registerForPromotions;
-    }
-
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-    }
-
-
-private static class UpdatePasswordRequest {
-    private String email;
-    private String currentPassword;
-    private String newPassword;
-
-
-    // Getters and Setters
-    public String getEmail() {
-        return email;
-    }
-
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-    public String getCurrentPassword() {
-        return currentPassword;
-    }
-
-
-    public void setCurrentPassword(String currentPassword) {
-        this.currentPassword = currentPassword;
-    }
-
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-}
 
 }

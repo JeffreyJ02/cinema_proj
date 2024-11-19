@@ -2,6 +2,8 @@
 import { useRouter } from "next/navigation";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useUser } from "../../context/UserContext";
+import SearchIcon from "@mui/icons-material/Search";
+import { TextField, InputAdornment, IconButton } from "@mui/material";
 
 const CustomNavbar = () => {
   const router = useRouter();
@@ -33,17 +35,32 @@ const CustomNavbar = () => {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand className="me-auto">MovieSite</Navbar.Brand>
+        <Navbar.Brand href="/">
+          <img
+            alt=""
+            src="/movieicon.svg"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+          />{" "}
+          ShowTime
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="ml-auto d-flex align-items-center">
-            <Button
-              variant="primary"
-              onClick={handleSearchPage}
-              className="me-3"
-            >
-              Search Movies
-            </Button>
+            <TextField
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSearchPage}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
             <NavDropdown
               title={
                 <img
@@ -55,9 +72,11 @@ const CustomNavbar = () => {
               id="basic-nav-dropdown"
               align="end"
             >
-              <NavDropdown.Item>{`Hello, ${localStorage.getItem('userEmail') || "Guest"}`}</NavDropdown.Item>
-              <NavDropdown.Item href="admin">Admin</NavDropdown.Item>
-              <NavDropdown.Item href="edit-profile">
+              <NavDropdown.Item>{`Hello, ${
+                localStorage.getItem("userEmail") || "Guest"
+              }`}</NavDropdown.Item>
+              <NavDropdown.Item href="/admin">Admin</NavDropdown.Item>
+              <NavDropdown.Item href="/edit-profile">
                 Edit Profile
               </NavDropdown.Item>
               <NavDropdown.Item href="#action/2">
@@ -66,7 +85,7 @@ const CustomNavbar = () => {
               <NavDropdown.Item href="#action/2">
                 View Order History
               </NavDropdown.Item>
-              {localStorage.getItem('userEmail') && ( // Conditionally render logout based on state
+              {localStorage.getItem("userEmail") && ( // Conditionally render logout based on state
                 <div>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={logout}>Sign Out</NavDropdown.Item>
@@ -75,7 +94,7 @@ const CustomNavbar = () => {
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
-        {!localStorage.getItem('userEmail') && (
+        {!localStorage.getItem("userEmail") && (
           <Button variant="primary" onClick={signInButton}>
             Sign In
           </Button>

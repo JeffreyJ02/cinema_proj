@@ -1,4 +1,4 @@
-package backtofront.example.demo;
+package backtofront.example.demo.Movie;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,7 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movie_id")
-    private Long id; 
+    private int movieId; 
     
     @Column(name = "title")
     private String title; 
