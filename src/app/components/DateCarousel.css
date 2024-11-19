@@ -14,17 +14,6 @@
     border-radius: 8px;
   }
   
-  .slick-arrow {
-    z-index: 2;
-  }
-  
-  .slick-prev {
-    left: -40px !important;
-  }
-  
-  .slick-next {
-    right: -40px !important;
-  }
   
 /*
 Used from this medium article: https://medium.com/@gregory.ovis.second/how-to-add-custom-arrows-to-a-react-slick-carousel-a3aac873c46d

@@ -52,3 +52,12 @@
   .card:hover .rating {
     opacity: 0;
   }
+
+  .movie-card {
+    display: flex;
+    flex-direction: column; /* Stack child elements vertically */
+    justify-content: center; /* Center elements vertically */
+    align-items: center; /* Center elements horizontally */
+    height: 100%;
+  }
+  

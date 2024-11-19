@@ -1,13 +1,25 @@
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-function ShowtimeButtons() {
-    return (
-        <div>
-            {/* Sample button list TODO make dynamic */}
-            <Button class="btn btn-primary" data-bs-toggle="button" disabled type="button">1:00</Button>
-            <Button class="btn btn-primary" data-bs-toggle="button" type="button">3:00</Button>
-            <Button class="btn btn-primary" data-bs-toggle="button" type="button">5:00</Button>
-        </div>
-    );
-};
+import React from "react";
+import { Box, Button } from "@mui/material";
+
+function ShowtimeButtons({ showtimes, onShowtimeSelect, selectedShowtime }) {
+  return (
+    <Box display="flex" flexWrap="wrap" justifyContent="center" gap={2} padding={2}>
+      {showtimes.length > 0 ? (
+        showtimes.map((showtime) => (
+          <Button
+            key={showtime.id}
+            variant={selectedShowtime?.id === showtime.id ? "contained" : "outlined"}
+            color="primary"
+            onClick={() => onShowtimeSelect(showtime)}
+          >
+            {showtime.time}
+          </Button>
+        ))
+      ) : (
+        <p>No showtimes available for this date.</p>
+      )}
+    </Box>
+  );
+}
+
 export default ShowtimeButtons;
