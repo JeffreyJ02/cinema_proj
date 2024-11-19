@@ -23,6 +23,47 @@ export default function Home({ params }) {
   const [seatAvailability, setSeatAvailability] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
 
+  const placeholderSeats = ["A1", "A2", "B3", "C0"];
+
+  const placeholderShowtimes = {
+    "2022-12-25": [
+      { id: 1, showroom: 1, time: "12:00 PM" },
+      { id: 2, showroom: 1, time: "3:00 PM" },
+      { id: 3, showroom: 1, time: "6:00 PM" },
+    ],
+    "2022-12-26": [
+      { id: 4, showroom: 2, time: "12:00 PM" },
+      { id: 5, showroom: 2, time: "4:00 PM" },
+      { id: 6, showroom: 2, time: "6:00 PM" },
+    ],
+    "2022-12-27": [
+      { id: 7, showroom: 3, time: "11:00 AM" },
+      { id: 8, showroom: 3, time: "2:00 PM" },
+      { id: 9, showroom: 3, time: "5:00 PM" },
+    ],
+    "2022-12-28": [
+      { id: 10, showroom: 4, time: "10:00 AM" },
+      { id: 11, showroom: 4, time: "1:00 PM" },
+      { id: 12, showroom: 4, time: "4:00 PM" },
+    ],
+    "2022-12-29": [
+      { id: 13, showroom: 5, time: "9:00 AM" },
+      { id: 14, showroom: 5, time: "12:00 PM" },
+      { id: 15, showroom: 5, time: "3:00 PM" },
+    ],
+    "2022-12-30": [
+      { id: 16, showroom: 6, time: "8:00 AM" },
+      { id: 17, showroom: 6, time: "11:00 AM" },
+      { id: 18, showroom: 6, time: "2:00 PM" },
+    ],
+  };
+
+  const showroomSeats = {
+    1: 4,
+    2: 5,
+    3: 6,
+  };
+
   // Function to fetch movie by ID
   const getMovieById = async (id) => {
     try {
@@ -58,18 +99,6 @@ export default function Home({ params }) {
       { id: 5, showroom: 2, time: "4:00 PM" },
       { id: 6, showroom: 2, time: "6:00 PM" },
     ],
-  }
-   
-  getByMovieAndDate(movieId, date) {
-    apicall
-  }
-  {
-    ""
-  }
-
-  getByMovieIdAndShowdate(123, "2022-12-25")
-  {
-    ["12PM","2PM"]
   }
   */
   const getShowtimes = async (id) => {
@@ -107,23 +136,38 @@ export default function Home({ params }) {
 
   return an array of strings for the occupied seats ie. ["A1", "A2"] those two seats are occupied
   */
-  const getSeatAvailability = async (showtimeId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/seats?id=${showtimeId}`
-      );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch seat availability");
-      }
-      const data = await response.json();
-      console.log("Got seat availability: ", data);
-      setSeatAvailability(data);
+  const getSeatAvailability = async (showtime) => {
+    try {
+      const occupiedSeats = placeholderSeats; // Replace this with your fetch call during real testing
+      /*const occupiedSeats = await fetch(
+        `http://localhost:8080/api/seats?id=${showtimeId}`
+      ); */
+      console.log("Got seat availability: ", occupiedSeats);
+      
+      // This creates an array of 0s matching the total number of seats in the showroom
+      const totalSeats = showroomSeats[showtime.showroom] ** 2;
+      const availabilityArray = Array(totalSeats).fill(0);
+      
+      // This sets the occupied seats to 1 in the array
+      occupiedSeats.forEach((seat) => {
+        // Convert seat label to row and column indices
+        const row = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(seat[0]);
+        // Convert the column number to an integer
+        const col = parseInt(seat.slice(1), 10);
+        // Calculate the index of the seat in the array
+        const index = row * showroomSeats[showtime.showroom] + col;
+        // Set the seat to occupied
+        availabilityArray[index] = 1;
+      });
+  
+      setSeatAvailability(availabilityArray);
     } catch (error) {
       console.error("Error fetching seat availability:", error);
     }
+    console.log("Seat availability:", seatAvailability);
   };
-
+  
   // Function to update seat availability in the database
   /*
   Here is what I am expecting on the frontend:
@@ -133,14 +177,12 @@ export default function Home({ params }) {
   Ex.
   {
   "showtimeId": 2,
-  "seatAvailability": [1, 0, 0, 1, 0, 1, 1, 0, 0, 1]
+  "selectedSeats": ["A4", "A5"]
   }
   */
   const updateDatabaseSeats = async () => {
     try {
-      updatedAvailability = seatAvailability.map((seat, index) =>
-        selectedSeats.includes(index) ? 1 : seat
-      );
+      console.log("Selected Seats: ", selectedSeats);
       const response = await fetch(`http://localhost:8080/api/update-seats`, {
         method: "POST",
         headers: {
@@ -148,7 +190,7 @@ export default function Home({ params }) {
         },
         body: JSON.stringify({
           showtimeId: selectedShowtime.id,
-          seatAvailability: updatedAvailability,
+          seatAvailability: selectedSeats,
         }),
       });
 
@@ -181,71 +223,8 @@ export default function Home({ params }) {
   const handleShowtimeSelect = (showtime) => {
     setSelectedShowtime(showtime);
     // setSeatAvailability(getSeatAvaliability(showtime.showroom));
-    setSeatAvailability(
-      generatePlaceholderAvailability(showroomSeats[showtime.showroom])
-    );
+    getSeatAvailability(showtime);
     setSelectedSeats([]);
-  };
-
-  const generatePlaceholderAvailability = (nSeats) => {
-    const totalSeats = nSeats * nSeats;
-    return Array(totalSeats)
-      .fill(0)
-      .map((_, i) => (i % 5 === 0 ? 1 : 0));
-  };
-
-  const placeholderMovie = {
-    img: "https://m.media-amazon.com/images/I/91JnoM0khKL._AC_UF894,1000_QL80_.jpg",
-    id: 1,
-    runtime: "1 HR 45 MIN",
-    name: "Movie 1",
-    trailerLink:
-      "https://www.youtube.com/embed/zSWdZVtXT7E?si=w7ReOmp4NXxSyE3V",
-    synopsis: "A movie about space",
-    rating: "PG-13",
-    cast: ["Actor 1", "Actor 2", "Actor 3"],
-  };
-
-  const placeholderShowtimes = {
-    "2022-12-25": [
-      { id: 1, showroom: 1, time: "12:00 PM" },
-      { id: 2, showroom: 1, time: "3:00 PM" },
-      { id: 3, showroom: 1, time: "6:00 PM" },
-    ],
-    "2022-12-26": [
-      { id: 4, showroom: 2, time: "12:00 PM" },
-      { id: 5, showroom: 2, time: "4:00 PM" },
-      { id: 6, showroom: 2, time: "6:00 PM" },
-    ],
-    "2022-12-27": [
-      { id: 7, showroom: 3, time: "11:00 AM" },
-      { id: 8, showroom: 3, time: "2:00 PM" },
-      { id: 9, showroom: 3, time: "5:00 PM" },
-    ],
-    "2022-12-28": [
-      { id: 10, showroom: 4, time: "10:00 AM" },
-      { id: 11, showroom: 4, time: "1:00 PM" },
-      { id: 12, showroom: 4, time: "4:00 PM" },
-    ],
-    "2022-12-29": [
-      { id: 13, showroom: 5, time: "9:00 AM" },
-      { id: 14, showroom: 5, time: "12:00 PM" },
-      { id: 15, showroom: 5, time: "3:00 PM" },
-    ],
-    "2022-12-30": [
-      { id: 16, showroom: 6, time: "8:00 AM" },
-      { id: 17, showroom: 6, time: "11:00 AM" },
-      { id: 18, showroom: 6, time: "2:00 PM" },
-    ],
-  };
-
-  const showroomSeats = {
-    1: 5,
-    2: 6,
-    3: 3,
-    4: 4,
-    5: 2,
-    6: 3,
   };
 
   // When the component mounts, fetch the movie by ID
@@ -255,7 +234,7 @@ export default function Home({ params }) {
     getMovieById(movieId);
     //getMovieShowtimes(movieId);
     //setMovie(placeholderMovie);
-    //setMovieShowtimes(placeholderShowtimes);
+    setMovieShowtimes(placeholderShowtimes);
   }, [movieId]);
 
   // If movie is not fetched yet, show a loading message
@@ -384,6 +363,7 @@ export default function Home({ params }) {
               right: "16px",
               zIndex: 1000,
             }}
+            onClick={updateDatabaseSeats}
           >
             Continue to Checkout
           </Button>
