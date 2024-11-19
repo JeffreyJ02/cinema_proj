@@ -5,11 +5,17 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import backtofront.example.demo.Address.Address;
+import backtofront.example.demo.Address.AddressRepository;
+
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     // Updated registerUser method to include optional credit card fields
     public void registerUser(String firstName, String lastName, String email,
@@ -61,6 +67,9 @@ public class UserService {
             }
             // Save the updated user
             userRepository.save(existingUser);
+
+
+            
         } else {
             throw new IllegalArgumentException("User not found");
         }

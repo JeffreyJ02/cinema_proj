@@ -32,8 +32,8 @@ public class MovieService {
         return movies;
     }
 
-    public Movie findMovieById(Long id) {
-        return movieRepository.findByMovieId(id)
+    public Movie findMovieById(int id) {
+        return movieRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Movie not found"));
     }
     

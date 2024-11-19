@@ -15,9 +15,9 @@ public interface CardRepository extends JpaRepository<Card, Integer> {
     @SuppressWarnings("null")
     @Override
     List<Card> findAll();
-    List<Card> findAllByUserId(User user); 
+    List<Card> findAllByUser(User user); 
 
     @Modifying
-    @Query("update Card c set c.cardId = ?1, c.card_type = ?2, c.card_number = ?3, c.expirationDate = ?4, c.securityCode = ?5 where c.userId = ?6")
-    void updateAddress(int card_id, String card_type, String card_number, String expiration_date, String security_code, User user);
+    @Query("update Card c set c.cardId = ?1, c.card_type = ?2, c.card_number = ?3, c.expirationDate = ?4, c.securityCode = ?5 where c.user.userId = ?6")
+    void updateCard(int card_id, String card_type, String card_number, String expiration_date, String security_code, User user);
 }

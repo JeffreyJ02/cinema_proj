@@ -24,7 +24,7 @@ public class CardService {
         card.setExpirationDate(expiration_date);
         card.setSecurityCode(security_code);
         card.setAddress(address);
-        card.setUserId(user);
+        card.setUser(user);
 
         cardRepository.save(card);
     }

@@ -54,7 +54,7 @@ public class Controller {
     }
 
     @PostMapping("/register-address") 
-    public ResponseEntity<?> registerUserAddress(@RequestBody Address address) {
+    public ResponseEntity<?> registerUserAddress(@RequestBody RegisterAddressRequest address) {
         try {
             addressService.registerAddress(
                 address.getName(),
@@ -62,7 +62,7 @@ public class Controller {
                 address.getCity(),
                 address.getState(),
                 address.getZipCode(),
-                address.getUserId()
+                address.getEmail()
             );
             return ResponseEntity.ok(new ResponseMessage("User address registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -81,7 +81,7 @@ public class Controller {
                 card.getExpirationDate(),
                 card.getSecurityCode(),
                 card.getAddress(),
-                card.getUserId()
+                card.getUser()
             );
             return ResponseEntity.ok(new ResponseMessage("Card registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -392,6 +392,43 @@ public ResponseEntity<?> setTempPassword(@RequestBody UpdatePasswordRequest upda
 }
 
 // Request classes for profile and password updates
+
+private static class RegisterAddressRequest {
+    
+        private String name;
+        private String street;
+        private String city;
+        private String state;
+        private String zipCode;
+        private String email;
+    
+        // Getters and Setters
+        public String getName() {
+            return name;
+        }
+        public String getStreet() {
+            return street;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public String getZipCode() {
+            return zipCode;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+        
+    
+}
+
 private static class UpdateProfileRequest {
     private String email;
     private String firstName;

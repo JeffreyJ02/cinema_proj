@@ -32,12 +32,12 @@ public class Address {
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private User userId;
+    private User user;
     
     @Column(name = "zip_code")
     private String zipCode;
 
-    @Column(name = "street_info")
+    @Column(name = "street")
     private String street;
 
     
