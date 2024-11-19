@@ -283,10 +283,11 @@ public class Controller {
     public ResponseEntity<?> addPromo(@RequestBody Promotion promotion) {
         try {
             promotionService.registerPromotion(
-                    promotion.isBogo(),
-                    promotion.getDiscountPercent(),
-                    promotion.getPromoCode(),
-                    promotion.getExpirationDate());
+                promotion.isBogo(),
+                promotion.getDiscountPercent(),
+                promotion.getPromoCode(),
+                promotion.getExpirationDate()
+            );
             return ResponseEntity.ok(new ResponseMessage("Promo registered and sent successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));

@@ -27,6 +27,6 @@ public class Promotion {
     @Column(name = "promo_code", nullable = false)
     private String promoCode;
 
-    @Column(name = "expiration_date", nullable = false)
+    @Column(name = "expiration_date")
     private Date expirationDate;
 }
