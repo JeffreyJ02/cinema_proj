@@ -42,4 +42,8 @@ public class ShowingService {
         return showingRepository.findById(id);
     }
 
+    boolean conflict(String showTime, int showRoomId) {
+        return showingRepository.findByShowTimeAndShowRoomId(showTime, showRoomId).isPresent();
+    } 
+
 }

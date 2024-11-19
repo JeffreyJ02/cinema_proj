@@ -1,6 +1,7 @@
 package backtofront.example.demo.Promotion;
 
 import java.sql.Date;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,10 @@ public class PromotionService {
         promotion.setPromoCode(promoCode);
         promotion.setExpirationDate(expirationDate);
         promotionRepository.save(promotion);
+    }
+
+    public Optional<Promotion> findByPromoCode(String promoCode) {
+        return promotionRepository.findByPromoCode(promoCode);
     }
 
 }

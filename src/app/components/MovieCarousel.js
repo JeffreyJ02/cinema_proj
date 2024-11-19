@@ -56,6 +56,11 @@ const MovieCarousel = ({ movies, header }) => {
           <MenuItem value="">All</MenuItem>
           <MenuItem value="Action">Action</MenuItem>
           <MenuItem value="Animation">Animation</MenuItem>
+          <MenuItem value="Drama">Drama</MenuItem>
+          <MenuItem value="Sci-Fi">Sci-Fi</MenuItem>
+          <MenuItem value="Comedy">Comedy</MenuItem>
+          <MenuItem value="Adventure">Adventure</MenuItem>
+          <MenuItem value="Crime">Crime</MenuItem>
         </Select>
       </FormControl>
       <Slider {...settings}>
