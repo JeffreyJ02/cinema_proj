@@ -5,30 +5,25 @@ import './ManagePromo.css';
 
 const ManagePromo = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [showRemoveForm, setShowRemoveForm] = useState(false);
   const [promotions, setPromotions] = useState([]);
   const [promoType, setPromoType] = useState('');
   const [discount, setDiscount] = useState('');
+  const [promoCode, setPromoCode] = useState('');
 
   const handleCreatePromo = () => {
     setShowCreateForm(true);
   };
 
-  const handleRemovePromo = () => {
-    setShowRemoveForm(true);
-  };
-
   const handleSubmitCreate = (event) => {
     event.preventDefault();
-    // TO DO: Implement create promotion logic here
-    const newPromo = { id: promoType, discount: discount };
+    // Create new promotion with promo code
+    const newPromo = { id: promoType, discount: discount, code: promoCode };
     setPromotions([...promotions, newPromo]);
     setShowCreateForm(false);
-  };
-
-  const handleRemove = (promoId) => {
-    // TO DO: Implement remove promotion logic here
-    setPromotions(promotions.filter((promo) => promo.id !== promoId));
+    // Reset fields
+    setPromoType('');
+    setDiscount('');
+    setPromoCode('');
   };
 
   return (
@@ -36,7 +31,6 @@ const ManagePromo = () => {
       <h1>Manage Promotions</h1>
       <div className="button-container">
         <button onClick={handleCreatePromo}>Create Promotion</button>
-        <button onClick={handleRemovePromo}>Remove Promotion</button>
       </div>
       {showCreateForm && (
         <form onSubmit={handleSubmitCreate}>
@@ -46,30 +40,31 @@ const ManagePromo = () => {
             <option value="DISCOUNT">Discount</option>
             <option value="BOGO">Buy One Get One Free</option>
           </select>
-          {promoType === 'DISCOUNT' && (
+          {promoType && (
             <div>
-              <label>Discount Percentage:</label>
-              <input type="number" value={discount} onChange={(e) => setDiscount(e.target.value)} />
+              {promoType === 'DISCOUNT' && (
+                <div>
+                  <label>Discount Percentage:</label>
+                  <input type="number" value={discount} onChange={(e) => setDiscount(e.target.value)} />
+                </div>
+              )}
+              <div>
+                <label>Promo Code:</label>
+                <input type="text" value={promoCode} onChange={(e) => setPromoCode(e.target.value)} />
+              </div>
             </div>
           )}
           <button type="submit">Create Promotion</button>
         </form>
       )}
-      {showRemoveForm && (
-        <div>
-          <h2>Active Promotions</h2>
-          <ul>
-            {promotions.map((promo) => (
-              <li key={promo.id}>
-                {promo.id} ({promo.discount}% off)
-                <button className="remove-button" onClick={() => handleRemove(promo.id)}>
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <h2>Active Promotions</h2>
+      <ul>
+        {promotions.map((promo) => (
+          <li key={promo.code}>
+            {promo.id} {promo.id === 'DISCOUNT' ? `(${promo.discount}% off)` : ''} - Code: {promo.code}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
