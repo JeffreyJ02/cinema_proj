@@ -215,7 +215,7 @@ public class Controller {
     }
 
     @GetMapping("/get-showings-by-movie-id-and-show-date")
-    public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam Movie movie, @RequestParam Date date) {
+    public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam Movie movie, @RequestParam String date) {
         List<Showing> showings = showingService.findByMovieIdAndShowDate(movie, date);
         System.out.println("Fetched showings: " + showings);
         return showings;
@@ -314,6 +314,25 @@ public class Controller {
             for (String seat : seatAvailability)
                 showSeatService.registerShowSeat(seat, showingService.findById(showTimeId).get());
             return ResponseEntity.ok(new ResponseMessage("Promo registered and sent successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Internal server error"));
+        }
+    }
+
+    @PostMapping("/register-showing")
+    public ResponseEntity<?> registerShowing(@RequestBody Showing showing) {
+        try {
+            showingService.registerShowing(
+                showing.getDuration(),
+                showing.getShowTime(),
+                showing.getShowroomId(),
+                showing.getMovieId(),
+                showing.getShowDate()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Showing registered and sent successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
