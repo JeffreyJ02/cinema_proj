@@ -59,5 +59,7 @@
     justify-content: center; /* Center elements vertically */
     align-items: center; /* Center elements horizontally */
     height: 100%;
+    max-width: 250px;
+  max-height: 416px;
   }
   
