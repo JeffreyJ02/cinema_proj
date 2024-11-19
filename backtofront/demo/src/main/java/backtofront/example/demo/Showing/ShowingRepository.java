@@ -1,6 +1,6 @@
 package backtofront.example.demo.Showing;
 
-import java.sql.Date;
+//import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +12,7 @@ import backtofront.example.demo.Movie.Movie;
 
 @Repository
 public interface ShowingRepository extends JpaRepository<Showing, Integer> {
-    List<Showing> findByMovieIdAndShowDate(Movie movie, Date showDate);
+    List<Showing> findByMovieIdAndShowDate(Movie movie, String showDate);
     List<Showing> findByMovieId(Movie movie);
     Optional<Showing> findByShowingId(Long id);
     Optional<Showing> findByShowTimeAndShowroomId(String showTime, int showroomId);

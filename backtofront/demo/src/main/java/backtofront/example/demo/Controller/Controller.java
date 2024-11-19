@@ -215,7 +215,7 @@ public class Controller {
     }
 
     @GetMapping("/get-showings-by-movie-id-and-show-date")
-    public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam Movie movie, @RequestParam Date date) {
+    public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam Movie movie, @RequestParam String date) {
         List<Showing> showings = showingService.findByMovieIdAndShowDate(movie, date);
         System.out.println("Fetched showings: " + showings);
         return showings;
@@ -328,11 +328,11 @@ public class Controller {
             showingService.registerShowing(
                 showing.getDuration(),
                 showing.getShowTime(),
-                showing.getShowRoomId(),
+                showing.getShowroomId(),
                 showing.getMovieId(),
                 showing.getShowDate()
             );
-            return ResponseEntity.ok(new ResponseMessage("Promo registered and sent successfully!"));
+            return ResponseEntity.ok(new ResponseMessage("Showing registered and sent successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
