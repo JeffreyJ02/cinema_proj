@@ -17,16 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backtofront.example.demo.Address.*;
-import backtofront.example.demo.Admin.*;
-import backtofront.example.demo.Movie.*;
-import backtofront.example.demo.PaymentCard.*;
-import backtofront.example.demo.Promotion.*;
-import backtofront.example.demo.Showing.*;
-import backtofront.example.demo.User.*;
+import backtofront.example.demo.Address.AddressService;
+import backtofront.example.demo.Admin.AdminService;
+import backtofront.example.demo.Movie.Movie;
+import backtofront.example.demo.Movie.MovieRepository;
+import backtofront.example.demo.Movie.MovieService;
+import backtofront.example.demo.PaymentCard.Card;
+import backtofront.example.demo.PaymentCard.CardService;
+import backtofront.example.demo.Promotion.Promotion;
+import backtofront.example.demo.Promotion.PromotionService;
+import backtofront.example.demo.Showing.Showing;
+import backtofront.example.demo.Showing.ShowingService;
+import backtofront.example.demo.User.User;
+import backtofront.example.demo.User.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000","http://127.0.0.1:5500"})
 @RequestMapping("/api")
 public class Controller {
     
@@ -37,6 +43,8 @@ public class Controller {
     private final PromotionService promotionService;
     private final UserService userService;
     private final ShowingService showingService;
+    public MovieRepository movieRepository;
+    
 
     public Controller(UserService userService, CardService cardService, 
                       AddressService addressService, MovieService movieService,
@@ -204,12 +212,7 @@ public class Controller {
         }
     }
 
-    @GetMapping("/movies")
-    public List<Movie> getAllMovies() {
-        List<Movie> movies = movieService.getAllMovies();
-        System.out.println("Fetched movies: " + movies);
-        return movies;
-    }
+
 
     @GetMapping("/get-showings-by-movie-id-and-show-date")
     public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam Movie movie, @RequestParam Date date) {
@@ -240,9 +243,17 @@ public class Controller {
         return movieService.findMovieById(id);  // Use movieService for the search
     }
 
-    @DeleteMapping("/delete-movie")
-    public ResponseEntity<String> deleteMovie(@PathVariable Integer id) {
-        boolean isDeleted = movieService.deleteMovieById(id);
+    @GetMapping("/movies-by-genre")
+    public List<Movie> getMoviesByGenre(@RequestParam String genre) {
+        if (genre == null || genre.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return movieService.findMoviesByGenre(genre);
+    }
+
+    @DeleteMapping("/movies/delete/{title}")
+    public ResponseEntity<String> deleteMovieByTitle(@PathVariable String title) {
+        boolean isDeleted = movieService.deleteMovieByTitle(title);
         if (isDeleted) {
             return ResponseEntity.ok("Movie deleted successfully!");
         } else {
@@ -250,26 +261,20 @@ public class Controller {
         }
     }
 
-    @PostMapping("/add-movie")
-    public ResponseEntity<?> addMovie(@RequestBody Movie movie) {
+    @GetMapping("/movies")
+    public List<Movie> getAllMovies() {
+        List<Movie> movies = movieService.getAllMovies();
+        System.out.println("Fetched movies: " + movies);
+        return movies;
+    }
+
+    @PostMapping("/movies")
+    public ResponseEntity<String> addMovie(@RequestBody Movie movie) {
         try {
-            movieService.addMovie(
-                movie.getTitle(),
-                movie.getDescription(),
-                movie.getReleaseDate(),
-                movie.getGenre(),
-                movie.getTrailerUrl(),
-                movie.getCategory(),
-                movie.getImageUrl(),
-                movie.getAgeRating(),
-                movie.getDirector(),
-                movie.getProducer()
-            );
-            return ResponseEntity.ok(new ResponseMessage("Card registered successfully!"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+            movieService.addMovie(movie);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Movie added successfully!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding movie: " + e.getMessage());
         }
     }
 

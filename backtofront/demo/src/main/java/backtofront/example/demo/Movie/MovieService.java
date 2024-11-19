@@ -1,6 +1,7 @@
 package backtofront.example.demo.Movie;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,39 +37,31 @@ public class MovieService {
         return movieRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Movie not found"));
     }
-/*     
+
     public void addMovie(Movie movie) {
         movieRepository.save(movie);
         logger.info("Added movie: {}", movie);
-    } */
-
-    public void addMovie(String title, String description, String releaseDate,
-                         String genre, String trailerUrl, String category, 
-                         String imageUrl, String ageRating, String director, 
-                         String producer) {
-        Movie newMovie = new Movie();
-        newMovie.setTitle(title);
-        newMovie.setDescription(description);
-        newMovie.setReleaseDate(releaseDate);
-        newMovie.setGenre(genre);
-        newMovie.setTrailerUrl(trailerUrl);
-        newMovie.setCategory(category);
-        newMovie.setImageUrl(imageUrl);
-        newMovie.setAgeRating(ageRating);
-        newMovie.setDirector(director);
-        newMovie.setProducer(producer);
-
-        movieRepository.save(newMovie);
     }
 
-    public boolean deleteMovieById(Integer id) {
-        if (movieRepository.existsById(id)) {
-            movieRepository.deleteById(id);
-            logger.info("Deleted movie with ID: {}", id);
+    public List<Movie> findMoviesByGenre(String genre) {
+        return movieRepository.findByGenreIgnoreCase(genre);  // Use a repository query
+    }
+
+    public boolean deleteMovieByTitle(String title) {
+        // Search for the movie by the exact title
+        Optional<Movie> movie = movieRepository.findByTitle(title);
+    
+        // If movie is found, delete it
+        if (movie.isPresent()) {
+            movieRepository.delete(movie.get());
+            logger.info("Deleted movie with title: {}", title);
             return true;
+        } else {
+            // Log the warning if no movie is found
+            System.out.println(title);
+            logger.warn("No movie found with title: {}", title);
+            return false;
         }
-        logger.warn("Movie with ID: {} not found", id);
-        return false;
     }
 }
 
