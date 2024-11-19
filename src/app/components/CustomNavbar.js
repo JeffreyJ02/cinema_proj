@@ -12,9 +12,7 @@ const CustomNavbar = () => {
     router.push("/sign-in");
   };
   const handleSearchPage = () => {
-    router.push(
-      "http://127.0.0.1:5500/backtofront/demo/src/main/frontend/index.html"
-    ); // Redirect to the search page directly
+    router.push(`/search/${document.querySelector("input").value}`);
   };
 
   const logout = async () => {
@@ -75,15 +73,8 @@ const CustomNavbar = () => {
               <NavDropdown.Item>{`Hello, ${
                 localStorage.getItem("userEmail") || "Guest"
               }`}</NavDropdown.Item>
-              <NavDropdown.Item href="/admin">Admin</NavDropdown.Item>
               <NavDropdown.Item href="/edit-profile">
                 Edit Profile
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/2">
-                Manage Account
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/2">
-                View Order History
               </NavDropdown.Item>
               {localStorage.getItem("userEmail") && ( // Conditionally render logout based on state
                 <div>
