@@ -6,7 +6,7 @@ import DateCarousel from "../../components/DateCarousel";
 import ShowtimeButtons from "../../components/ShowtimeButtons";
 import MovieInfo from "../../components/MovieInfo";
 import TicketView from "../../components/TicketView";
-import Button from "@mui/material/Button";
+import { Button, Box } from "@mui/material";
 import SeatGrid from "../../components/SeatGrid";
 import { get } from "http";
 
@@ -59,6 +59,18 @@ export default function Home({ params }) {
       { id: 6, showroom: 2, time: "6:00 PM" },
     ],
   }
+   
+  getByMovieAndDate(movieId, date) {
+    apicall
+  }
+  {
+    ""
+  }
+
+  getByMovieIdAndShowdate(123, "2022-12-25")
+  {
+    ["12PM","2PM"]
+  }
   */
   const getShowtimes = async (id) => {
     try {
@@ -93,11 +105,7 @@ export default function Home({ params }) {
   }
   then there are n*n = 16 seats
 
-  the array I recieve will be of length 16
-
-  If the array looks something like this [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
-  This means that the first seat is taken, the last seat is taken, and all other seats are available.
-  In the rendered grid A0 and D3 will be disabled as those seats are taken
+  return an array of strings for the occupied seats ie. ["A1", "A2"] those two seats are occupied
   */
   const getSeatAvailability = async (showtimeId) => {
     try {
@@ -146,7 +154,7 @@ export default function Home({ params }) {
 
       if (!response.ok) throw new Error("Failed to update seat availability");
       console.log("Seats successfully updated in the database.");
-      
+
       setSelectedSeats([]);
     } catch (error) {
       console.error("Error updating seats:", error);
@@ -173,7 +181,9 @@ export default function Home({ params }) {
   const handleShowtimeSelect = (showtime) => {
     setSelectedShowtime(showtime);
     // setSeatAvailability(getSeatAvaliability(showtime.showroom));
-    setSeatAvailability(generatePlaceholderAvailability(showroomSeats[showtime.showroom]));
+    setSeatAvailability(
+      generatePlaceholderAvailability(showroomSeats[showtime.showroom])
+    );
     setSelectedSeats([]);
   };
 
@@ -231,7 +241,7 @@ export default function Home({ params }) {
 
   const showroomSeats = {
     1: 5,
-    2: 6,	
+    2: 6,
     3: 3,
     4: 4,
     5: 2,
@@ -335,7 +345,7 @@ export default function Home({ params }) {
                 role="tabpanel"
                 aria-labelledby="profile-tab"
               >
-                {selectedShowtime && (
+                {selectedShowtime ? (
                   <div className="seats-content">
                     <h6>Showroom: {selectedShowtime.showroom}</h6>
                     <SeatGrid
@@ -346,6 +356,8 @@ export default function Home({ params }) {
                     />
                     <p>Selected Seats: {selectedSeats.join(", ") || "None"}</p>
                   </div>
+                ) : (
+                  <p>Select a showtime</p>
                 )}
               </div>
               <div
@@ -357,11 +369,21 @@ export default function Home({ params }) {
                 aria-labelledby="contact-tab"
               >
                 <p>Please select {selectedSeats.length} seats</p>
-                <TicketView numTickets={selectedSeats.length}/>
+                <TicketView numTickets={selectedSeats.length} />
               </div>
             </div>
           </div>
-          <Button variant="contained" color="primary" className="checkout">
+          <Button
+            variant="contained"
+            color="primary"
+            className="checkout"
+            sx={{
+              position: "absolute",
+              bottom: "16px",
+              right: "16px",
+              zIndex: 1000,
+            }}
+          >
             Continue to Checkout
           </Button>
         </div>

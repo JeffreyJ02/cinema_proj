@@ -3,9 +3,8 @@ import { useRouter } from "next/navigation";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useUser } from "../../context/UserContext";
 import SearchIcon from "@mui/icons-material/Search";
-import { TextField, InputAdornment,
-  IconButton
- } from "@mui/material";
+import { TextField, InputAdornment, IconButton } from "@mui/material";
+
 const CustomNavbar = () => {
   const router = useRouter();
   const { user } = useUser();
@@ -36,7 +35,16 @@ const CustomNavbar = () => {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand className="me-auto">MovieSite</Navbar.Brand>
+        <Navbar.Brand href="/">
+          <img
+            alt=""
+            src="/movieicon.svg"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+          />{" "}
+          ShowTime
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="ml-auto d-flex align-items-center">
@@ -45,9 +53,9 @@ const CustomNavbar = () => {
                 input: {
                   endAdornment: (
                     <InputAdornment position="end">
-                        <IconButton onClick={handleSearchPage}>
-                          <SearchIcon />
-                        </IconButton>
+                      <IconButton onClick={handleSearchPage}>
+                        <SearchIcon />
+                      </IconButton>
                     </InputAdornment>
                   ),
                 },
