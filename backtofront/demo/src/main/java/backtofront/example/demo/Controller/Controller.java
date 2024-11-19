@@ -322,6 +322,25 @@ public class Controller {
         }
     }
 
+    @PostMapping("/register-showing")
+    public ResponseEntity<?> registerShowing(@RequestBody Showing showing) {
+        try {
+            showingService.registerShowing(
+                showing.getDuration(),
+                showing.getShowTime(),
+                showing.getShowRoomId(),
+                showing.getMovieId(),
+                showing.getShowDate()
+            );
+            return ResponseEntity.ok(new ResponseMessage("Promo registered and sent successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Internal server error"));
+        }
+    }
+
     // Response classes
     private static class LoginResponse {
         @SuppressWarnings("FieldMayBeFinal")

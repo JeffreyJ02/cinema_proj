@@ -1,6 +1,6 @@
 package backtofront.example.demo.Showing;
 
-import java.sql.Date;
+//import java.sql.Date;
 
 
 import jakarta.persistence.Column;
@@ -36,5 +36,5 @@ public class Showing {
     private int movieId;
 
     @Column(name = "show_date", nullable = false)
-    private Date showDate;
+    private String showDate;
 }

@@ -20,11 +20,17 @@ public class ShowingService {
 
     // Register a new showing
     public void registerShowing(int duration, String showTime, 
+<<<<<<< Updated upstream
                                 Showroom showroomId, Movie movie, Date showDate) {
+=======
+                                int showRoomId, int movieId, String showDate) {
+>>>>>>> Stashed changes
         Showing showing = new Showing();
         showing.setShowingId((int)showingRepository.maxShowingId() + 1);
         showing.setDuration(duration);
         showing.setShowTime(showTime);
+        showing.setShowRoomId(showRoomId);
+        showing.setMovieId(movieId);
         showing.setShowDate(showDate);
 
         showingRepository.save(showing);
