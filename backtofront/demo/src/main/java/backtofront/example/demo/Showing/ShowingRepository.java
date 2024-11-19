@@ -17,9 +17,6 @@ public interface ShowingRepository extends JpaRepository<Showing, Integer> {
     Optional<Showing> findByShowingId(Long id);
     Optional<Showing> findByShowTimeAndShowroomId(String showTime, int showroomId);
     
-    @Query("select max(s.showingId) from Showing s")
-    int maxShowingId();
-
     // List<Showing> getAllShowings
 
     void deleteByShowingId(Long id);
