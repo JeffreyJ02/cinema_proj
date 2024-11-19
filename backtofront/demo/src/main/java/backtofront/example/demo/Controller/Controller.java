@@ -92,15 +92,14 @@ public class Controller {
     }
 
     @PostMapping("/register-card")
-    public ResponseEntity<?> registerCard(@RequestBody Card card) {
+    public ResponseEntity<?> registerCard(@RequestBody RegisterCardRequest cardRequest) {
         try {
             cardService.registerCard(
-                card.getCard_type(),
-                card.getCard_number(),
-                card.getExpirationDate(),
-                card.getSecurityCode(),
-                card.getAddress(),
-                card.getUser()
+                cardRequest.getCard_type(),
+                cardRequest.getCard_number(),
+                cardRequest.getExpirationDate(),
+                cardRequest.getSecurityCode(),
+                cardRequest.getEmail()
             );
             return ResponseEntity.ok(new ResponseMessage("Card registered successfully!"));
         } catch (IllegalArgumentException e) {
@@ -499,7 +498,33 @@ public class Controller {
     }
 
 // Request classes for profile and password updates
+private static class RegisterCardRequest {
+    private String card_type;
+    private String card_number;
+    private String expiration_date;
+    private String security_code;
+    private String email;
 
+    // Getters and Setters
+    public String getCard_type() {
+        return card_type;
+    }
+    public String getCard_number() {
+        return card_number;
+    }
+
+    public String getExpirationDate() {
+        return expiration_date;
+    }
+
+    public String getSecurityCode() {
+        return security_code;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+}
 private static class RegisterAddressRequest {
     
         private String name;
