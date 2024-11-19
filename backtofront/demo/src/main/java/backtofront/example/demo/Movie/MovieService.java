@@ -1,4 +1,4 @@
-package backtofront.example.demo;
+package backtofront.example.demo.Movie;
 
 import java.util.List;
 
@@ -32,17 +32,35 @@ public class MovieService {
         return movies;
     }
 
-    public Movie findMovieById(Long id) {
-        return movieRepository.findByMovieId(id)
+    public Movie findMovieById(int id) {
+        return movieRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Movie not found"));
     }
-    
+/*     
     public void addMovie(Movie movie) {
         movieRepository.save(movie);
         logger.info("Added movie: {}", movie);
+    } */
+
+    public void addMovie(String title, String description, String releaseDate,
+                         String genre, String trailerUrl, String category, 
+                         String imageUrl, String ageRating, String director, 
+                         String producer) {
+        Movie newMovie = new Movie();
+        newMovie.setTitle(title);
+        newMovie.setDescription(description);
+        newMovie.setReleaseDate(releaseDate);
+        newMovie.setGenre(genre);
+        newMovie.setTrailerUrl(trailerUrl);
+        newMovie.setCategory(category);
+        newMovie.setImageUrl(imageUrl);
+        newMovie.setAgeRating(ageRating);
+        newMovie.setDirector(director);
+        newMovie.setProducer(producer);
+
+        movieRepository.save(newMovie);
     }
 
-    
     public boolean deleteMovieById(Integer id) {
         if (movieRepository.existsById(id)) {
             movieRepository.deleteById(id);

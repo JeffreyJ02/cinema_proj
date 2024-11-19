@@ -1,15 +1,23 @@
 package backtofront.example.demo.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import backtofront.example.demo.Address.Address;
+import backtofront.example.demo.Address.AddressRepository;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     // Updated registerUser method to include optional credit card fields
     public void registerUser(String firstName, String lastName, String email,
@@ -25,7 +33,7 @@ public class UserService {
         newUser.setEmail(email);
         newUser.setPhone_number(phone_number);
         newUser.setPassword(password);
-        newUser.setRegisterForPromos(registerForPromotions);
+        newUser.setPromotions(registerForPromotions);
         newUser.setStatus("Active");
 
         userRepository.save(newUser);
@@ -34,6 +42,13 @@ public class UserService {
     // Find a user by email
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public List<String> getEmailsForPromo() {
+        List<User> users = userRepository.findByPromotions(1);
+        List<String> emails = new ArrayList<>();
+        for (User user : users) emails.add(user.getEmail());
+        return emails;
     }
 
     // Update user information
@@ -61,11 +76,13 @@ public class UserService {
             }
             // Save the updated user
             userRepository.save(existingUser);
+
+
+            
         } else {
             throw new IllegalArgumentException("User not found");
         }
     }
-
 
     public void updateProfile(String email, String firstName, String lastName,  String phoneNumber, Integer registerForPromotions) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -82,7 +99,7 @@ public class UserService {
             user.setPhone_number(phoneNumber);
         }
         if (registerForPromotions != null) {
-            user.setRegisterForPromos(registerForPromotions);
+            user.setPromotions(registerForPromotions);
         }
 
         userRepository.save(user);

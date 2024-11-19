@@ -207,7 +207,7 @@ const SignUpPage = () => {
         await registerCard(userId, encrypt(card_type), encrypt(card_number), encrypt(expirationDate), encrypt(securityCode));
 
       if (billingName)
-        await registerAddress(userId, billingName, billingAddress, billingCity, billingZip, billingState);
+        await registerAddress(email, billingName, billingAddress, billingCity, billingZip, billingState);
 
 
       if (promos == 1) sendOptInEmail(email);
@@ -243,18 +243,18 @@ const SignUpPage = () => {
   };
 
   // Function to register the address
-const registerAddress = async (userId, billingName, billingAddress, billingCity, billingZip, billingState) => {
+const registerAddress = async (email, billingName, billingAddress, billingCity, billingZip, billingState) => {
   try {
     await fetch("http://localhost:8080/api/register-address", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
         name: billingName,
-        street_info: billingAddress,
+        street: billingAddress,
         city: billingCity,
         state: billingState,
         zipCode: billingZip,
-        userId 
+        email: email
       })
     });
     console.log("Address registered successfully");
