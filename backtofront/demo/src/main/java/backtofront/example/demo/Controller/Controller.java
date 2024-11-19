@@ -51,7 +51,7 @@ public class Controller {
     public Controller(UserService userService, CardService cardService,
             AddressService addressService, MovieService movieService,
             AdminService adminService, ShowingService showingService,
-            PromotionService promotionService) {
+            PromotionService promotionService, ShowSeatService showSeatService) {
 
         this.addressService = addressService;
         this.adminService = adminService;
