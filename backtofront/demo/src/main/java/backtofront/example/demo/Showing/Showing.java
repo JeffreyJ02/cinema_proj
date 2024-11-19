@@ -29,7 +29,7 @@ public class Showing {
     // movie String name, findByMovieName when info is needed?
 
     @Column(name = "showroom_id", nullable = false)
-    private Long showRoomId;
+    private int showRoomId;
 
     @Column(name = "movie_id", nullable = false)
     private int movieId;
