@@ -22,4 +22,8 @@ public class ShowSeatService {
     public List<ShowSeat> findByShowingId(int showingId) {
         return showSeatRepository.findByShowingId(showingId);
     }
+
+    public List<ShowSeat> findBySeatId(String seatId) {
+        return showSeatRepository.findBySeatId(seatId);
+    }
 }

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShowSeatRepository extends JpaRepository<ShowSeat, Integer> {
     List<ShowSeat> findByShowingId(int showingId);
+    List<ShowSeat> findBySeatId(String seatId);
 }
