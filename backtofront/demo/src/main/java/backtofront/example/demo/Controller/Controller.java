@@ -26,6 +26,7 @@ import backtofront.example.demo.PaymentCard.Card;
 import backtofront.example.demo.PaymentCard.CardService;
 import backtofront.example.demo.Promotion.Promotion;
 import backtofront.example.demo.Promotion.PromotionService;
+import backtofront.example.demo.ShowSeat.ShowSeat;
 import backtofront.example.demo.ShowSeat.ShowSeatService;
 import backtofront.example.demo.Showing.Showing;
 import backtofront.example.demo.Showing.ShowingService;
@@ -312,7 +313,7 @@ public class Controller {
     public ResponseEntity<?> updateSeats(@RequestParam int showingId, @RequestParam List<String> seatAvailability) {
         try {
             for (String seat : seatAvailability)
-                showSeatService.registerShowSeat(seat, showingService.findByShowingId(showingId).get());
+                showSeatService.registerShowSeat(seat, showingService.findByShowingId(showingId).get().getShowingId());
             return ResponseEntity.ok(new ResponseMessage("Promo registered and sent successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
@@ -320,6 +321,11 @@ public class Controller {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Internal server error"));
         }
+    }
+
+    @GetMapping("/get-seats")
+    public List<ShowSeat> getSeats(@RequestParam int showingId) {
+        return showSeatService.findByShowingId(showingId);
     }
 
     @PostMapping("/register-showing")

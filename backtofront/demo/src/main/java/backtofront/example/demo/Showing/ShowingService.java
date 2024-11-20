@@ -19,7 +19,7 @@ public class ShowingService {
     public void registerShowing(int duration, String showTime, 
                                 int showRoomId, int movieId, String showDate) {
         Showing showing = new Showing();
-        showing.setShowingId((int)showingRepository.count() + 1);
+        showing.setShowingId(showingRepository.maxShowingId() + 1);
         showing.setDuration(duration);
         showing.setShowTime(showTime);
         showing.setShowroomId(showRoomId);

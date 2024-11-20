@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -13,8 +14,9 @@ public interface ShowingRepository extends JpaRepository<Showing, Integer> {
     List<Showing> findByMovieId(int movieId);
     Optional<Showing> findByShowingId(int showingId);
     Optional<Showing> findByShowTimeAndShowroomId(String showTime, int showroomId);
-    
-    // List<Showing> getAllShowings
+
+    @Query("select max(s.showingId) from Showing s")
+    int maxShowingId();
 
     void deleteByShowingId(Long id);
 }

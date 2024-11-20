@@ -2,7 +2,6 @@ package backtofront.example.demo.ShowSeat;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-import backtofront.example.demo.Showing.Showing;
 
 @Service
 public class ShowSeatService {
@@ -13,14 +12,14 @@ public class ShowSeatService {
         this.showSeatRepository = showSeatRepository;
     }
 
-    public void registerShowSeat(String seatId, Showing showing) {
+    public void registerShowSeat(String seatId, int showingId) {
         ShowSeat showSeat = new ShowSeat();
         showSeat.setSeatId(seatId);
-        showSeat.setShowing(showing);
+        showSeat.setShowingId(showingId);
         showSeatRepository.save(showSeat);
     }
 
-    public List<ShowSeat> findByShowing(Showing showing) {
-        return showSeatRepository.findByShowing(showing);
+    public List<ShowSeat> findByShowingId(int showingId) {
+        return showSeatRepository.findByShowingId(showingId);
     }
 }
