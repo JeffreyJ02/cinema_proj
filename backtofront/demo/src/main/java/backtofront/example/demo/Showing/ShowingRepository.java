@@ -5,16 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import backtofront.example.demo.Movie.Movie;
 
 @Repository
 public interface ShowingRepository extends JpaRepository<Showing, Integer> {
-    List<Showing> findByMovieIdAndShowDate(Movie movie, String showDate);
-    List<Showing> findByMovieId(Movie movie);
-    Optional<Showing> findByShowingId(Long id);
+    List<Showing> findByMovieIdAndShowDate(int movieId, String showDate);
+    List<Showing> findByMovieId(int movieId);
+    Optional<Showing> findByShowingId(int showingId);
     Optional<Showing> findByShowTimeAndShowroomId(String showTime, int showroomId);
     
     // List<Showing> getAllShowings

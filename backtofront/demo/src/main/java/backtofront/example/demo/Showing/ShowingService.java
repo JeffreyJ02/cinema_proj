@@ -4,9 +4,7 @@ package backtofront.example.demo.Showing;
 import java.sql.Time; */
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
-import backtofront.example.demo.Movie.Movie;
 
 @Service
 public class ShowingService {
@@ -31,16 +29,16 @@ public class ShowingService {
         showingRepository.save(showing);
     }
 
-    public List<Showing> findByMovieIdAndShowDate(Movie movie, String showDate) {
-        return showingRepository.findByMovieIdAndShowDate(movie, showDate);
+    public List<Showing> findByMovieIdAndShowDate(int movieId, String showDate) {
+        return showingRepository.findByMovieIdAndShowDate(movieId, showDate);
     }
 
-    public List<Showing> findByMovieId(Movie movie) {
-        return showingRepository.findByMovieId(movie);
+    public List<Showing> findByMovieId(int movieId) {
+        return showingRepository.findByMovieId(movieId);
     }
 
-    public Optional<Showing> findById(int id) {
-        return showingRepository.findById(id);
+    public Optional<Showing> findByShowingId(int id) {
+        return showingRepository.findByShowingId(id);
     }
 
     public boolean conflict(String showTime, int showroomId) {

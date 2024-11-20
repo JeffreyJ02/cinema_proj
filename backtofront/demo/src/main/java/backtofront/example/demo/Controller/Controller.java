@@ -215,15 +215,15 @@ public class Controller {
     }
 
     @GetMapping("/get-showings-by-movie-id-and-show-date")
-    public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam Movie movie, @RequestParam String date) {
-        List<Showing> showings = showingService.findByMovieIdAndShowDate(movie, date);
+    public List<Showing> getShowingsByMovieIdAndShowDate(@RequestParam int movieId, @RequestParam String date) {
+        List<Showing> showings = showingService.findByMovieIdAndShowDate(movieId, date);
         System.out.println("Fetched showings: " + showings);
         return showings;
     }
 
     @GetMapping("/get-showing-by-movie-id")
-    public List<Showing> getShowingsByMovieId(@RequestParam Movie movie) {
-        List<Showing> showings = showingService.findByMovieId(movie);
+    public List<Showing> getShowingsByMovieId(@RequestParam int movieId) {
+        List<Showing> showings = showingService.findByMovieId(movieId);
         System.out.println("Fetched showings: " + showings);
         return showings;
     }
@@ -309,10 +309,10 @@ public class Controller {
     }
 
     @PostMapping("/update-seats")
-    public ResponseEntity<?> updateSeats(@RequestParam int showTimeId, @RequestParam List<String> seatAvailability) {
+    public ResponseEntity<?> updateSeats(@RequestParam int showingId, @RequestParam List<String> seatAvailability) {
         try {
             for (String seat : seatAvailability)
-                showSeatService.registerShowSeat(seat, showingService.findById(showTimeId).get());
+                showSeatService.registerShowSeat(seat, showingService.findByShowingId(showingId).get());
             return ResponseEntity.ok(new ResponseMessage("Promo registered and sent successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
