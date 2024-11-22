@@ -17,21 +17,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backtofront.example.demo.Address.AddressService;
-import backtofront.example.demo.Admin.AdminService;
-import backtofront.example.demo.Movie.Movie;
-import backtofront.example.demo.Movie.MovieRepository;
-import backtofront.example.demo.Movie.MovieService;
-import backtofront.example.demo.PaymentCard.Card;
-import backtofront.example.demo.PaymentCard.CardService;
-import backtofront.example.demo.Promotion.Promotion;
-import backtofront.example.demo.Promotion.PromotionService;
-import backtofront.example.demo.ShowSeat.ShowSeat;
-import backtofront.example.demo.ShowSeat.ShowSeatService;
-import backtofront.example.demo.Showing.Showing;
-import backtofront.example.demo.Showing.ShowingService;
-import backtofront.example.demo.User.User;
-import backtofront.example.demo.User.UserService;
+import backtofront.example.demo.Classes.Address.AddressService;
+import backtofront.example.demo.Classes.Admin.AdminService;
+import backtofront.example.demo.Classes.Movie.Movie;
+import backtofront.example.demo.Classes.Movie.MovieRepository;
+import backtofront.example.demo.Classes.Movie.MovieService;
+import backtofront.example.demo.Classes.PaymentCard.Card;
+import backtofront.example.demo.Classes.PaymentCard.CardService;
+import backtofront.example.demo.Classes.Promotion.Promotion;
+import backtofront.example.demo.Classes.Promotion.PromotionService;
+import backtofront.example.demo.Classes.ShowSeat.ShowSeat;
+import backtofront.example.demo.Classes.ShowSeat.ShowSeatService;
+import backtofront.example.demo.Classes.Showing.Showing;
+import backtofront.example.demo.Classes.Showing.ShowingService;
+import backtofront.example.demo.Classes.User.User;
+import backtofront.example.demo.Classes.User.UserService;
 
 @RestController
 @CrossOrigin(origins = { "http://localhost:3000", "http://127.0.0.1:5500" })
