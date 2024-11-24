@@ -1,6 +1,7 @@
 package backtofront.example.demo.Promotion;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -28,6 +29,10 @@ public class PromotionService {
 
     public Optional<Promotion> findByPromoCode(String promoCode) {
         return promotionRepository.findByPromoCode(promoCode);
+    }
+
+    public List<Promotion> getPromos() {
+        return promotionRepository.findAll();
     }
 
 }

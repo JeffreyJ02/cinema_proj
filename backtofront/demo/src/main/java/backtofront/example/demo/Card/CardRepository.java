@@ -1,4 +1,4 @@
-package backtofront.example.demo.PaymentCard;
+package backtofront.example.demo.Card;
 
 import java.util.List;
 //import java.util.Optional;

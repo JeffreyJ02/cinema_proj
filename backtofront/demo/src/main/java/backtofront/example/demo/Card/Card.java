@@ -1,4 +1,4 @@
-package backtofront.example.demo.PaymentCard;
+package backtofront.example.demo.Card;
 
 import backtofront.example.demo.Address.Address;
 import backtofront.example.demo.User.User;

@@ -1,4 +1,4 @@
-package backtofront.example.demo.PaymentCard;
+package backtofront.example.demo.Card;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
