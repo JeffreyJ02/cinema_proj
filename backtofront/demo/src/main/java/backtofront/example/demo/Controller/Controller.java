@@ -331,7 +331,7 @@ public class Controller {
     @PostMapping("/register-showing")
     public ResponseEntity<?> registerShowing(@RequestBody Showing showing) {
         try {
-            if (!showingService.conflict(showing.getShowTime(), showing.getShowroomId())) {
+            if (!showingService.conflict(showing)) {
                 showingService.registerShowing(
                     showing.getDuration(),
                     showing.getShowTime(),

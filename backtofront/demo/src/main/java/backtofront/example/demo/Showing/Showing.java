@@ -25,10 +25,6 @@ public class Showing {
     @Column(name = "show_time", nullable = false)
     private String showTime;
 
-    // rework ids based on working user/card/address interactions
-    // showroom int 1,2, or 3?
-    // movie String name, findByMovieName when info is needed?
-
     @Column(name = "showroom_id", nullable = false)
     private int showroomId;
 
