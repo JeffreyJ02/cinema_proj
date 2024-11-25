@@ -1,7 +1,5 @@
 package backtofront.example.demo.Showing;
 
-/* import java.sql.Date;
-import java.sql.Time; */
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -41,8 +39,22 @@ public class ShowingService {
         return showingRepository.findByShowingId(id);
     }
 
-    public boolean conflict(String showTime, int showroomId) {
-        return showingRepository.findByShowTimeAndShowroomId(showTime, showroomId).isPresent();
+    public boolean conflict(Showing showing) {
+        List<Showing> other_showings = showingRepository.findByShowDateAndShowroomId(showing.getShowDate(), showing.getShowroomId());
+        
+        String showTime = showing.getShowTime();
+        int show_start  = Integer.parseInt(showTime.substring(0, 2)) * 60 + Integer.parseInt(showTime.substring(3));   
+        int show_end    = show_start + showing.getDuration();
+
+        for (Showing other_showing : other_showings) {
+            String other_showTime = other_showing.getShowTime();
+            int other_show_start  = Integer.parseInt(other_showTime.substring(0, 2)) * 60 + Integer.parseInt(other_showTime.substring(3));   
+            int other_show_end    = other_show_start + other_showing.getDuration();
+
+            if (show_start >= other_show_start && show_start <= other_show_end) return true;
+            if (show_end >= other_show_start && show_end <= other_show_end) return true;
+        }
+        return false;
     } 
 
 }

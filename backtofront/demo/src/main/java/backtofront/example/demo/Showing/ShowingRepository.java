@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface ShowingRepository extends JpaRepository<Showing, Integer> {
     List<Showing> findByMovieIdAndShowDate(int movieId, String showDate);
     List<Showing> findByMovieId(int movieId);
+    List<Showing> findByShowDateAndShowroomId(String showDate, int showroomId);
     Optional<Showing> findByShowingId(int showingId);
     Optional<Showing> findByShowTimeAndShowroomId(String showTime, int showroomId);
 

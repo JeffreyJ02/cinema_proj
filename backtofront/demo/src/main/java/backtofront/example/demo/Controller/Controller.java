@@ -1,6 +1,5 @@
 package backtofront.example.demo.Controller;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -84,6 +83,8 @@ public class Controller {
         }
     }
 
+
+    // don't need request classes we can just use normal classes. remove later?
     @PostMapping("/register-address")
     public ResponseEntity<?> registerUserAddress(@RequestBody RegisterAddressRequest address) {
         try {
@@ -331,7 +332,7 @@ public class Controller {
     @PostMapping("/register-showing")
     public ResponseEntity<?> registerShowing(@RequestBody Showing showing) {
         try {
-            if (!showingService.conflict(showing.getShowTime(), showing.getShowroomId())) {
+            if (!showingService.conflict(showing)) {
                 showingService.registerShowing(
                     showing.getDuration(),
                     showing.getShowTime(),
