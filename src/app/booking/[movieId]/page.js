@@ -23,8 +23,11 @@ export default function Home({ params }) {
   const [selectedShowtime, setSelectedShowtime] = useState(null);
   const [seatAvailability, setSeatAvailability] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
-
-  const placeholderSeats = ["A1", "A2", "B3", "C1"];
+  const [ticketCounts, setTicketCounts] = useState({
+    Adult: 0,
+    Child: 0,
+    Senior: 0,
+  });
 
   const showroomSeats = {
     1: 4,
@@ -199,6 +202,18 @@ export default function Home({ params }) {
     getShowtimes(movieId);
   }, [movieId]);
 
+  const updateTicketCount = (type, action) => {
+    if (action === "Add") {
+      setTicketCounts((prevCounts) => { 
+        return { ...prevCounts, [type]: Math.min(prevCounts[type] + 1, selectedSeats.length) };
+      });
+    } else if (action === "Remove") {
+      setTicketCounts((prevCounts) => { 
+        return { ...prevCounts, [type]: Math.max(prevCounts[type] - 1, 0) };
+      });
+    }
+  };
+
   // If movie is not fetched yet, show a loading message
   if (!movie) return <div>Loading movie details...</div>;
 
@@ -311,7 +326,7 @@ export default function Home({ params }) {
                 aria-labelledby="contact-tab"
               >
                 <p>Please select {selectedSeats.length} seats</p>
-                <TicketView numTickets={selectedSeats.length} />
+                <TicketView ticketCounts={ticketCounts} onTicketChange={updateTicketCount} />
               </div>
             </div>
           </div>

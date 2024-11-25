@@ -55,13 +55,17 @@ const ManageShowing = () => {
           body: JSON.stringify(formData),
         }
       );
-      if (!response.ok) {
-        throw new Error("Failed to register showing: " + response.statusText);
+      const data = await response.json();
+      console.log(data.message);
+
+      if (
+        !response.ok ||
+        data.message === "Scheduling conflict. Cannot register showing."
+      ) {
+        throw new Error(data.message);
       }
 
-      const data = await response.text();
-      console.log(data);
-      setSuccessMessage("Showing successfully added!"); // Set success message
+      setSuccessMessage("Showing successfully added!");
 
       // Reset form fields after a short delay
       setTimeout(() => {
@@ -74,7 +78,7 @@ const ManageShowing = () => {
           showDate: "",
         });
         setSuccessMessage(""); // Clear success message after resetting
-      }, 2000); // 2 seconds delay
+      }, 100000000000000); // 2 seconds delay
     } catch (error) {
       console.error("Error registering showing:", error.message);
       alert("Error registering showing: " + error.message);
@@ -84,7 +88,9 @@ const ManageShowing = () => {
   return (
     <div className="manage-showing">
       <h1>Add Showing</h1>
-      {successMessage && <div className="success-message">{successMessage}</div>} {/* Display success message */}
+      {successMessage && (
+        <div className="success-message">{successMessage}</div>
+      )}
       <form onSubmit={handleSubmit}>
         <label>
           Duration (minutes):
@@ -152,6 +158,5 @@ const ManageShowing = () => {
     </div>
   );
 };
-
 
 export default ManageShowing;

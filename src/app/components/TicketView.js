@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import styles from './TicketView.css';
-const TicketView = ({ numTickets }) => {
+const TicketView = ({ ticketCounts, onTicketChange }) => {
     return (
         <div className="tickets">
             <div className="adult-tickets">
@@ -12,9 +12,10 @@ const TicketView = ({ numTickets }) => {
                     <p>$5</p>
                 </div>
                 <div className="ticket-selector">
-                    <IconButton aria-label="remove"><RemoveIcon /></ IconButton>
-                    <h3>0</h3>
-                    <IconButton aria-label="Add"><AddIcon /></ IconButton>
+                    
+                <IconButton aria-label="remove" onClick={() => onTicketChange("Adult", "Remove")}><RemoveIcon /></ IconButton>
+                    <h3>{ticketCounts["Adult"]}</h3>
+                    <IconButton aria-label="Add" onClick={() => onTicketChange("Adult", "Add")}><AddIcon /></ IconButton>
                 </div>
             </div>
             <div className="child-tickets">
@@ -23,9 +24,9 @@ const TicketView = ({ numTickets }) => {
                     <p>$5</p>
                 </div>
                 <div className="ticket-selector">
-                    <IconButton aria-label="remove"><RemoveIcon /></ IconButton>
-                    <h3>0</h3>
-                    <IconButton aria-label="Add"><AddIcon /></ IconButton>
+                    <IconButton aria-label="remove" onClick={() => onTicketChange("Child", "Remove")}><RemoveIcon /></ IconButton>
+                    <h3>{ticketCounts["Child"]}</h3>
+                    <IconButton aria-label="Add" onClick={() => onTicketChange("Child", "Add")}><AddIcon /></ IconButton>
                 </div>
             </div>
             <div className="senior-tickets">
@@ -34,9 +35,9 @@ const TicketView = ({ numTickets }) => {
                     <p>$5</p>
                 </div>
                 <div className="ticket-selector">
-                    <IconButton aria-label="remove"><RemoveIcon /></ IconButton>
-                    <h3>0</h3>
-                    <IconButton aria-label="Add"><AddIcon /></ IconButton>
+                    <IconButton aria-label="remove" onClick={() => onTicketChange("Senior", "Remove")}><RemoveIcon /></ IconButton>
+                    <h3>{ticketCounts["Senior"]}</h3>
+                    <IconButton aria-label="Add" onClick={() => onTicketChange("Senior", "Add")}><AddIcon /></ IconButton>
                 </div>
             </div>
             <div className="summary">
