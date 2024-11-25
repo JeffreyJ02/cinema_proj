@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "./ManageShowing.css";
-import { duration } from "@mui/material";
 
 const ManageShowing = () => {
   const [moviesList, setMoviesList] = useState([]);
@@ -13,6 +12,7 @@ const ManageShowing = () => {
     movieId: "",
     showDate: "",
   });
+  const [successMessage, setSuccessMessage] = useState(""); // State for success message
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -30,7 +30,6 @@ const ManageShowing = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Check if the field is duration and if the value is negative
     if (name === "duration" && value < 0) {
       return; // Do not update the state if the duration is negative
     }
@@ -62,6 +61,20 @@ const ManageShowing = () => {
 
       const data = await response.text();
       console.log(data);
+      setSuccessMessage("Showing successfully added!"); // Set success message
+
+      // Reset form fields after a short delay
+      setTimeout(() => {
+        setFormData({
+          showingID: "",
+          duration: "",
+          showTime: "",
+          showroomId: "",
+          movieId: "",
+          showDate: "",
+        });
+        setSuccessMessage(""); // Clear success message after resetting
+      }, 2000); // 2 seconds delay
     } catch (error) {
       console.error("Error registering showing:", error.message);
       alert("Error registering showing: " + error.message);
@@ -71,6 +84,7 @@ const ManageShowing = () => {
   return (
     <div className="manage-showing">
       <h1>Add Showing</h1>
+      {successMessage && <div className="success-message">{successMessage}</div>} {/* Display success message */}
       <form onSubmit={handleSubmit}>
         <label>
           Duration (minutes):
@@ -138,5 +152,6 @@ const ManageShowing = () => {
     </div>
   );
 };
+
 
 export default ManageShowing;
