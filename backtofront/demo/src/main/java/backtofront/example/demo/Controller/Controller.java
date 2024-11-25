@@ -299,6 +299,11 @@ public class Controller {
         }
     }
 
+    @GetMapping("/get-promos")
+    public List<Promotion> getPromos() {
+        return promotionService.getPromos();
+    }
+
     @GetMapping("/get-emails-for-promo")
     public List<String> getEmailsForPromos() {
         return userService.getEmailsForPromo();
