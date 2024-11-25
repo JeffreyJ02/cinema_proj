@@ -45,8 +45,16 @@ function DateCarousel({ onDateSelect, dates }) {
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
-    onDateSelect(new Date(date));
+    onDateSelect(date);
   };
+
+  const formatDate = (date) =>
+    date.toLocaleDateString(undefined, {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
 
   return (
     <Box
@@ -59,14 +67,18 @@ function DateCarousel({ onDateSelect, dates }) {
       }}
     >
       <Slider {...settings} style={{ width: "100%", maxWidth: "600px" }}>
-        {dates.map((date, index) => (
-          <DateCard
-            key={index}
-            current={date}
-            isSelected={selectedDate.getTime() === date.getTime()}
-            onDateSelect={handleDateSelect}
-          />
-        ))}
+        {dates.map((date, index) => {
+          const localDate = new Date(date);
+          return (
+            <DateCard
+              key={index}
+              current={localDate}
+              label={formatDate(localDate)}
+              isSelected={selectedDate.getTime() === localDate.getTime()}
+              onDateSelect={handleDateSelect}
+            />
+          );
+        })}
       </Slider>
     </Box>
   );
