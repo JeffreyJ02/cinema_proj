@@ -19,14 +19,10 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
-    
     public List<Movie> getAllMovies() {
-        List<Movie> movies = movieRepository.findAll();
-        logger.info("Fetched Movies: {}", movies);
-        return movies;
+        return movieRepository.findAll();
     }
 
-    
     public List<Movie> findMoviesByTitle(String title) {
         List<Movie> movies = movieRepository.findByTitleContaining(title);
         logger.info("Movies matching title '{}': {}", title, movies);
@@ -34,8 +30,7 @@ public class MovieService {
     }
 
     public Movie findMovieById(int id) {
-        return movieRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Movie not found"));
+        return movieRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Movie not found"));
     }
 
     public void addMovie(Movie movie) {
@@ -44,7 +39,7 @@ public class MovieService {
     }
 
     public List<Movie> findMoviesByGenre(String genre) {
-        return movieRepository.findByGenreIgnoreCase(genre);  // Use a repository query
+        return movieRepository.findByGenreIgnoreCase(genre);
     }
 
     public boolean deleteMovieByTitle(String title) {
