@@ -37,7 +37,10 @@ public class UserService {
         userRepository.save(newUser);
     }
 
-    // Find a user by email
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -49,19 +52,14 @@ public class UserService {
         return emails;
     }
 
-    // Update user information
     public void updateUser(User user) {
         if (user == null || user.getEmail() == null) {
             throw new IllegalArgumentException("User or email cannot be null");
         }
-
-
         Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
-
 
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();
-
 
             if (user.getFirstName() != null) {
                 existingUser.setFirstName(user.getFirstName());
@@ -72,11 +70,8 @@ public class UserService {
             if (user.getPassword() != null) {
                 existingUser.setPassword(user.getPassword());
             }
-            // Save the updated user
+
             userRepository.save(existingUser);
-
-
-            
         } else {
             throw new IllegalArgumentException("User not found");
         }
@@ -84,7 +79,6 @@ public class UserService {
 
     public void updateProfile(String email, String firstName, String lastName,  String phoneNumber, Integer registerForPromotions) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
-
 
         // Update fields only if they are provided (not null or empty)
         if (firstName != null && !firstName.isEmpty()) {
@@ -118,9 +112,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // Method to retrieve user profile by email
     public User getUserProfile(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    public void deleteUserById(int user_id) {
+        userRepository.deleteByUserId(user_id);
     }
 }
