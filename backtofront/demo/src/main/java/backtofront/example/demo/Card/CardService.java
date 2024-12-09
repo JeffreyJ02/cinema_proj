@@ -29,6 +29,7 @@ public class CardService {
     }
 
     // returns cardId
+    // if card not found, registers card
     public int updateCard(String type, String number, String expiration_date, 
                           String security_code, int address_id, int card_id) {
         Optional<Card> opt_card = cardRepository.findByCardId(card_id);

@@ -16,6 +16,7 @@ const EditProfile = () => {
   const [promotionalEmails, setPromotionalEmails] = useState(false);
 
   // User card info
+  const [creditCardType, setCreditCardType] = useState('');
   const [creditCardNumber, setCreditCardNumber] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [cvv, setCvv] = useState('');
@@ -29,7 +30,7 @@ const EditProfile = () => {
   const [zipCode, setZipCode] = useState('');
   
   // User home address
-  const [homeAddessId, setHomeAddressId] = useState('');
+  const [homeAddressId, setHomeAddressId] = useState('');
 
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -66,7 +67,7 @@ useEffect(() => {
 
       // Connor added
       setUserId(userData.userId);
-      setHomeAddressId(userData.homeAddess);
+      setHomeAddressId(userData.homeAddress);
 
       setFirstName(userData.firstName);
       setLastName(userData.lastName);
@@ -126,13 +127,51 @@ useEffect(() => {
 
     try {
       // Update user profile
-      
-      // register home address?
+      const name = firstName + " " + lastName;
+      homeAddressId = await fetch('http://localhost:8080/api/update-address', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          street,
+          city,
+          state,
+          zipCode,
+          homeAddressId
+        }),
+      });
 
       // register cards, store card ids (returned form update-card), and set cards for user (in User controller)
-      for (let card = 0; card < storedCards.length; card++) {
-        let card_id = await fetch('http://localhost:8080/api/update-card', {
+      for (let c = 0; c < storedCards.length; c++) {
+        let card = storedCards[c];
+        let cardType = card.cardType;
+        let cardNumber = card.cardNumber;
+        let cardExpirationDate = card.cardExpirationDate;
+        let cardSecurityCode = card.cardSecuirtyCode;
 
+        let address_id = await fetch('http://localhost:8080/api/update-address', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            street,
+            city,
+            state,
+            zipCode,
+            // addressId from card if updating?
+          }),
+        });
+
+        let card_id = await fetch('http://localhost:8080/api/update-card', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            cardType,
+            cardNumber,
+            cardExpirationDate,
+            cardSecurityCode,
+            address_id,
+            // card_id?
+          }),
         })
       }
 
@@ -196,10 +235,12 @@ useEffect(() => {
 
     if (storedCards.length < 3) {
       const card = {
-        number: creditCardNumber,
-        cvv,
+        cardType,
+        cardNumber: creditCardNumber,
+        cardSecuirtyCode,
         expirationDate,
-        billingAddress: address,
+        // address id?
+        // card id if pulled?
       };
       setStoredCards([...storedCards, card]);
       setCreditCardNumber('');

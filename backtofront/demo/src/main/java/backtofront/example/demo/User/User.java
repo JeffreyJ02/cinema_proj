@@ -51,4 +51,5 @@ public class User {
 
     @Column(name = "home_address_id")
     private int homeAddressId;
+
 }

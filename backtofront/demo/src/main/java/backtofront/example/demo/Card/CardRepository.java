@@ -11,16 +11,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Integer> {
-    @SuppressWarnings("null")
     @Override
     List<Card> findAll();
-    List<Card> findAllByUserId(int user_id); 
     Optional<Card> findByCardId(int card_id);
 
     @Query("select max(c.cardId) from Card c")
     int maxCardId();
     
     @Modifying
-    @Query("update Card c set c.card_type = ?1, c.card_number = ?2, c.expirationDate = ?3, c.securityCode = ?4 where c.cardId = ?5")
+    @Query("update Card c set c.cardType = ?1, c.cardNumber = ?2, c.expirationDate = ?3, c.securityCode = ?4 where c.cardId = ?5")
     void updateCard(String card_type, String card_number, String expiration_date, String security_code, int card_id);
 }
