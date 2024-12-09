@@ -4,6 +4,8 @@ import { encrypt, hash } from '../../utils/encryption';
 import './EditProfile.css';
 
 const EditProfile = () => {
+  // User info
+  const [userId, setUserId] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState(''); // Will be fetched
@@ -11,6 +13,9 @@ const EditProfile = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [promotionalEmails, setPromotionalEmails] = useState(false);
+
+  // User card info
   const [creditCardNumber, setCreditCardNumber] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [cvv, setCvv] = useState('');
@@ -22,7 +27,10 @@ const EditProfile = () => {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [zipCode, setZipCode] = useState('');
-  const [promotionalEmails, setPromotionalEmails] = useState(false);
+  
+  // User home address
+  const [homeAddessId, setHomeAddressId] = useState('');
+
   const [successMessage, setSuccessMessage] = useState('');
 
 
@@ -55,6 +63,11 @@ useEffect(() => {
       const userData = await response.json();
       console.log("User Data: ", userData);
       // Update state with user data
+
+      // Connor added
+      setUserId(userData.userId);
+      setHomeAddressId(userData.homeAddess);
+
       setFirstName(userData.firstName);
       setLastName(userData.lastName);
       setEmail(userData.email);
@@ -113,6 +126,16 @@ useEffect(() => {
 
     try {
       // Update user profile
+      
+      // register home address?
+
+      // register cards, store card ids (returned form update-card), and set cards for user (in User controller)
+      for (let card = 0; card < storedCards.length; card++) {
+        let card_id = await fetch('http://localhost:8080/api/update-card', {
+
+        })
+      }
+
       const profileResponse = await fetch('http://localhost:8080/api/update-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

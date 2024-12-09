@@ -14,18 +14,7 @@ public class CardController {
     }
 
     // returns cardId
-    @PostMapping("/register-card")
-    public int registerCard(@RequestBody Card card, @RequestParam int address_id) {
-        return cardService.registerCard(
-            card.getCardType(),
-            card.getCardNumber(),
-            card.getExpirationDate(),
-            card.getSecurityCode(),
-            address_id
-        );
-    }
-
-    // returns cardId
+    // if no card is found, registers card
     @PostMapping("/update-card")
     public int updateCard(@RequestBody Card card, @RequestParam int address_id, @RequestParam int card_id) {
         return cardService.updateCard(
