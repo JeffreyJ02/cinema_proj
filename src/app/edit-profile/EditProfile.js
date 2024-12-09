@@ -157,7 +157,7 @@ useEffect(() => {
             city,
             state,
             zipCode,
-            // addressId from card if updating?
+            // addressId from address if updating? else null
           }),
         });
 
@@ -169,8 +169,8 @@ useEffect(() => {
             cardNumber,
             cardExpirationDate,
             cardSecurityCode,
-            address_id,
-            // card_id?
+            addressId,
+            // if updating include cardId. else null
           }),
         })
       }
@@ -184,6 +184,9 @@ useEffect(() => {
           lastName,
           phoneNumber,
           promotionalEmails,
+          // card1Id. null if not used
+          // card2Id. null if not used
+          // card3Id. null if not used
         }),
       });
 
