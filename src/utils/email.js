@@ -1,48 +1,64 @@
 import emailjs from '@emailjs/browser';
 emailjs.init('aLH3Qp8VUhQqJf1nk');
 
-export function optInPromoEmails( {email} ) {
-    let parms = {
+// if breaks, change {user_email} back to {email} 
+// and user_email: email
+export function optInPromoEmails( {user_email} ) {
+    const parms = {
         subject: "Promotional Opt-In",
-        user_email: email,
+        user_email,
         message: "you have opted in to receive promotional emails."
-    }
+    };
 
     emailjs.send("service_4brc417", "template_r3h3fid", parms)
 }
 
-export function editProfileEmail( {email} ) {
-    let parms = {
+export function editProfileEmail( {user_email} ) {
+    const parms = {
         subject: "Profile Edited",
-        user_email: email,
+        user_email,
         message: "your profile's information has been edited."
-    }
-    emailjs.send("service_4brc417", "template_r3h3fid", parms)
-}
-
-export function forgotPassword( {email, message} ) {
-    const parms = {
-        user_email: email,
-        message: message,
-        subject: 'Forgot Password'
-    }
-    emailjs.send("service_4brc417", "template_6zuhtqr", parms)
-}
-
-export function verificationCode({ email, message }) {
-    const parms = {
-      user_email: email,
-      message,
-      subject: 'Verification Code',
     };
+
+    emailjs.send("service_4brc417", "template_r3h3fid", parms);
+}
+
+export function forgotPassword( {user_email, message} ) {
+    const parms = {
+        subject: 'Forgot Password',
+        user_email,
+        message
+    };
+
+    emailjs.send("service_4brc417", "template_6zuhtqr", parms);
+}
+
+export function verificationCode( {user_email, message} ) {
+    const parms = {
+        subject: 'Verification Code',
+        user_email,
+        message
+    };
+
     emailjs.send('service_4brc417', 'template_6zuhtqr', parms)
 }
-  
-export function emailPromo({ email, promo }) {
+
+export function emailPromo({ user_email, promo }) {
     const parms = {
-        user_email: email,
-        message: `Here's to enjoying movies! One promo code on us!!\n${promo}\nAdd this to your next order to see the magic!`,
         subject: 'Promo Code from CinemaTeamB8',
+        user_email,
+        message: `Here's to enjoying movies! One promo code on us!!\n${promo}\nAdd this to your next order to see the magic!`
     };
+    
     emailjs.send('service_4brc417', 'template_6zuhtqr', parms)
+}
+
+export function confirmationEmail( {user_email, message} ) {
+    const parms = {
+        subject: "Booking Confirmed!",
+        user_email,
+        message
+    };
+
+    emailjs.send("service_4brc417", "template_6zuhtqr", parms);
 }
