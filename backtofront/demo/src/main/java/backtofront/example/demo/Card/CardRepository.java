@@ -2,6 +2,7 @@ package backtofront.example.demo.Card;
 
 import java.util.List;
 //import java.util.Optional;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,7 +14,8 @@ public interface CardRepository extends JpaRepository<Card, Integer> {
     @SuppressWarnings("null")
     @Override
     List<Card> findAll();
-    List<Card> findAllByCardId(int card_id); 
+    List<Card> findAllByUserId(int user_id); 
+    Optional<Card> findByCardId(int card_id);
 
     @Query("select max(c.cardId) from Card c")
     int maxCardId();

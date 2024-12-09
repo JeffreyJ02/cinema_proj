@@ -11,17 +11,34 @@ public class CardService {
         this.cardRepository = cardRepository;
     }
 
-    // Register a new credit card
-    public void registerCard(String type, String number, String expiration_date, 
+    // returns cardId
+    public int registerCard(String type, String number, String expiration_date, 
                              String security_code, int address_id) {
         Card card = new Card();
         card.setCardId((int)cardRepository.maxCardId() + 1);
-        card.setCard_type(type);
-        card.setCard_number(number);
+        card.setCardType(type);
+        card.setCardNumber(number);
         card.setExpirationDate(expiration_date);
         card.setSecurityCode(security_code);
-        card.setAddress_id(address_id);
+        card.setAddressId(address_id);
 
         cardRepository.save(card);
+        return card.getCardId();
     }
+
+    // returns cardId
+    public int updateCard(String type, String number, String expiration_date, 
+                          String security_code, int address_id, int card_id) {
+        Card card = cardRepository.findByCardId(card_id).orElseThrow(() -> new IllegalArgumentException("Card not found"));
+        card.setCardId((int)cardRepository.maxCardId() + 1);
+        card.setCardType(type);
+        card.setCardNumber(number);
+        card.setExpirationDate(expiration_date);
+        card.setSecurityCode(security_code);
+        card.setAddressId(address_id);
+
+        cardRepository.save(card);
+        return card_id;
+    }
+
 }

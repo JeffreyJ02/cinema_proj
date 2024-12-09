@@ -18,10 +18,10 @@ public class Card {
     private int cardId;
 
     @Column(name = "card_type")
-    private String card_type;
+    private String cardType;
 
     @Column(name = "card_number")
-    private String card_number;
+    private String cardNumber;
 
     @Column(name = "expiration_date")
     private String expirationDate;
@@ -30,6 +30,6 @@ public class Card {
     private String securityCode;
 
     @Column(name = "address_id")
-    private int address_id;
+    private int addressId;
 
 } 
