@@ -1,7 +1,5 @@
 package backtofront.example.demo.Card;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,22 +11,25 @@ public class CardService {
         this.cardRepository = cardRepository;
     }
 
-    // returns cardId
-    public int registerCard(String type, String number, String expiration_date, 
-                             String security_code, int address_id) {
+    public void registerCard(String type, String number, String expiration_date, 
+                             String security_code, int user_id, int address_id) {
         Card card = new Card();
         card.setCardId((int)cardRepository.maxCardId() + 1);
         card.setCardType(type);
         card.setCardNumber(number);
         card.setExpirationDate(expiration_date);
         card.setSecurityCode(security_code);
+        card.setUserId(user_id);
         card.setAddressId(address_id);
 
         cardRepository.save(card);
-        return card.getCardId();
     }
 
-    // returns cardId
+    public void updateCard(String type, String number, String expiration_date, String security_code, int card_id) {
+        cardRepository.updateCard(type, number, expiration_date, security_code, card_id);
+    }
+
+   /*  // returns cardId
     // if card not found, registers card
     public int updateCard(String type, String number, String expiration_date, 
                           String security_code, int address_id, int card_id) {
@@ -44,6 +45,6 @@ public class CardService {
             return card_id;
         }
         else return registerCard(type, number, expiration_date, security_code, address_id);
-    }
+    } */
 
 }

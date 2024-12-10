@@ -32,4 +32,10 @@ public class Address {
     @Column(name = "street")
     private String street;
 
+    @Column(name = "user_id")
+    private int userId;
+
+    @Column(name = "is_home")
+    private boolean home;
+
 }

@@ -56,31 +56,6 @@ public class UserController {
         }
     }
 
-    // card = 1,2, or 3 
-    @PostMapping("/set-card")
-    public ResponseEntity<?> setCard(@RequestParam int user_id, @RequestParam int card_id, @RequestParam int card) {
-        try {
-            userService.updateCard(user_id, card_id, card);
-            return ResponseEntity.ok(new OKMessage("Card updated successfully!"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
-        }
-    }
-
-    @PostMapping("/set-home-addess")
-    public ResponseEntity<?> setHomeAddress(@RequestParam int user_id, @RequestParam int address_id) {
-        try {
-            userService.updateHomeAddress(user_id, address_id);
-            return ResponseEntity.ok(new OKMessage("Home Address updated successfully!"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
-        }
-    }
-
     @PostMapping("/login-user")
     public ResponseEntity<Object> loginUser(@RequestBody User user) {
         Optional<User> existingUser = userService.findByEmail(user.getEmail());
