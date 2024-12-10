@@ -17,10 +17,12 @@ import {
 import SeatGrid from "../../components/SeatGrid";
 import { get } from "http";
 import { format } from "path";
+import { useRouter } from "next/navigation";
 
 export default function Home({ params }) {
   // params come from the URL, e.g. /booking/1
   const { movieId } = params;
+  const router = useRouter();
 
   // React hooks for managing state
   const [activeTab, setActiveTab] = useState("home");
@@ -226,6 +228,22 @@ export default function Home({ params }) {
     }
   };
 
+  const handleCheckout = () => {
+    console.log("Checkout");
+    
+    const checkoutData = {
+      movieId,
+      seats: JSON.stringify(selectedSeats),
+      tickets: JSON.stringify(ticketCounts),
+      total: (ticketCounts.Adult * 10 + ticketCounts.Child * 5 + ticketCounts.Senior * 7),
+    }
+
+    console.log("Checkout data:", checkoutData);
+    localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
+    console.log("Redirecting to checkout page");  
+    router.push(`/booking/${movieId}/checkout`);
+  };
+
   // If movie is not fetched yet, show a loading message
   if (!movie)
     return (
@@ -391,7 +409,7 @@ export default function Home({ params }) {
                 transform: "scale(1.05)",
               },
             }}
-            onClick={updateDatabaseSeats}
+            onClick={handleCheckout}
           >
             Continue to Checkout
           </Button>
