@@ -1,5 +1,7 @@
 package backtofront.example.demo.Controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,4 +57,8 @@ public class CardController {
         }   
     }
     
+    @GetMapping("/get-user-cards")
+    public List<Card> getUserCards(@RequestParam int user_id) {
+        return cardService.getUserCards(user_id);
+    }
 }

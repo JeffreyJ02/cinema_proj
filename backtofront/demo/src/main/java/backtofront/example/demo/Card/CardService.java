@@ -1,5 +1,7 @@
 package backtofront.example.demo.Card;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,6 +29,10 @@ public class CardService {
 
     public void updateCard(String type, String number, String expiration_date, String security_code, int card_id) {
         cardRepository.updateCard(type, number, expiration_date, security_code, card_id);
+    }
+
+    public List<Card> getUserCards(int user_id) {
+        return cardRepository.findAllByUserId(user_id);
     }
 
    /*  // returns cardId

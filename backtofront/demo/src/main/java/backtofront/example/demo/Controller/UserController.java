@@ -47,7 +47,8 @@ public class UserController {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getPhone_number(),
-                user.getPromotions());
+                user.getPromotions()
+            );
             return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
@@ -68,41 +69,6 @@ public class UserController {
             else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ERRORMessage("Incorrect password"));
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ERRORMessage("User not found"));
     }
-    
-    
-
-     // add to updateProfile?
-     /* @PostMapping("/update-password")
-     public ResponseEntity<?> updatePassword(@RequestBody User updatePasswordRequest) {
-         try {
-             userService.updatePassword(
-                     updatePasswordRequest.getEmail(),
-                     updatePasswordRequest.getCurrentPassword(),
-                     updatePasswordRequest.getNewPassword());
-             return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
-         } catch (IllegalArgumentException e) {
-             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
-         } catch (Exception e) {
-             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                     .body(new ErrorResponse("Internal server error"));
-         }
-     } */
- 
-     // make work
-     /* @PostMapping("/temp-password")
-     public ResponseEntity<?> setTempPassword(@RequestBody User updatePasswordRequest) {
-         try {
-             userService.setTempPassword(
-                     updatePasswordRequest.getEmail(),
-                     updatePasswordRequest.getNewPassword());
-             return ResponseEntity.ok(new ResponseMessage("Password updated successfully!"));
-         } catch (IllegalArgumentException e) {
-             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
-         } catch (Exception e) {
-             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                     .body(new ErrorResponse("Internal server error"));
-         }
-     } */
 
     // change to 'get-user-by-email'
     @GetMapping("/user-profile")
