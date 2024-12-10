@@ -29,6 +29,9 @@ public class Card {
     @Column(name = "security_code")
     private String securityCode;
 
+    @Column(name = "user_id")
+    private int userId;
+
     @Column(name = "address_id")
     private int addressId;
 
