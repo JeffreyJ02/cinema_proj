@@ -1,15 +1,11 @@
 package backtofront.example.demo.Address;
 
 
-import backtofront.example.demo.User.User;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Data
@@ -30,9 +26,8 @@ public class Address {
     @Column(name = "state")
     private String state;
     
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private int user_id;
     
     @Column(name = "zip_code")
     private String zipCode;
@@ -40,5 +35,4 @@ public class Address {
     @Column(name = "street")
     private String street;
 
-    
 }

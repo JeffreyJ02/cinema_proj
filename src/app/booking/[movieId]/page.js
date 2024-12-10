@@ -6,7 +6,14 @@ import DateCarousel from "../../components/DateCarousel";
 import ShowtimeButtons from "../../components/ShowtimeButtons";
 import MovieInfo from "../../components/MovieInfo";
 import TicketView from "../../components/TicketView";
-import { Button, Box } from "@mui/material";
+import {
+  Button,
+  Box,
+  CircularProgress,
+  Paper,
+  Typography,
+  Grid2,
+} from "@mui/material";
 import SeatGrid from "../../components/SeatGrid";
 import { get } from "http";
 import { format } from "path";
@@ -145,25 +152,27 @@ export default function Home({ params }) {
   */
   const updateDatabaseSeats = async () => {
     try {
-        const params = new URLSearchParams({
-            showingId: selectedShowtime.id,
-        });
+      const params = new URLSearchParams({
+        showingId: selectedShowtime.id,
+      });
 
-        selectedSeats.forEach((seat) => {
-            params.append("seatAvailability", seat);
-        });
+      selectedSeats.forEach((seat) => {
+        params.append("seatAvailability", seat);
+      });
 
-        const response = await fetch(`http://localhost:8080/api/update-seats?${params.toString()}`, {
-            method: "POST",
-        });
+      const response = await fetch(
+        `http://localhost:8080/api/update-seats?${params.toString()}`,
+        {
+          method: "POST",
+        }
+      );
 
-        if (!response.ok) throw new Error("Failed to update seat availability");
-        console.log("Seats successfully updated in the database.");
+      if (!response.ok) throw new Error("Failed to update seat availability");
+      console.log("Seats successfully updated in the database.");
     } catch (error) {
-        console.error("Error updating seats:", error);
+      console.error("Error updating seats:", error);
     }
-};
-
+  };
 
   // Function sets selected date in state selectedDate
   const handleDateSelect = (date) => {
@@ -173,7 +182,7 @@ export default function Home({ params }) {
       month: "short",
       day: "numeric",
     });
-  
+
     const isoDate = date.toISOString().split("T")[0];
     setSelectedDate(isoDate);
     setSelectedShowtime(null);
@@ -204,18 +213,38 @@ export default function Home({ params }) {
 
   const updateTicketCount = (type, action) => {
     if (action === "Add") {
-      setTicketCounts((prevCounts) => { 
-        return { ...prevCounts, [type]: Math.min(prevCounts[type] + 1, selectedSeats.length) };
+      setTicketCounts((prevCounts) => {
+        return {
+          ...prevCounts,
+          [type]: Math.min(prevCounts[type] + 1, selectedSeats.length),
+        };
       });
     } else if (action === "Remove") {
-      setTicketCounts((prevCounts) => { 
+      setTicketCounts((prevCounts) => {
         return { ...prevCounts, [type]: Math.max(prevCounts[type] - 1, 0) };
       });
     }
   };
 
   // If movie is not fetched yet, show a loading message
-  if (!movie) return <div>Loading movie details...</div>;
+  if (!movie)
+    return (
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <div>
@@ -303,16 +332,30 @@ export default function Home({ params }) {
                 aria-labelledby="profile-tab"
               >
                 {selectedShowtime ? (
-                  <div className="seats-content">
-                    <h6>Showroom: {selectedShowtime.showroom}</h6>
+                  <Box
+                    sx={{
+                      p: 3,
+                      mt: 2,
+                      borderRadius: 2,
+                      backgroundColor: "white",
+                    }}
+                  >
+                    <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                      SCREEN
+                    </Typography>
                     <SeatGrid
                       nSeats={showroomSeats[selectedShowtime.showroom]}
                       availability={seatAvailability}
                       selectedSeats={selectedSeats}
                       setSelectedSeats={setSelectedSeats}
                     />
-                    <p>Selected Seats: {selectedSeats.join(", ") || "None"}</p>
-                  </div>
+                    <Typography variant="body1" sx={{ mt: 2 }}>
+                      <strong>Selected Seats:</strong>{" "}
+                      {selectedSeats.length > 0
+                        ? selectedSeats.join(", ")
+                        : "None"}
+                    </Typography>
+                  </Box>
                 ) : (
                   <p>Select a showtime</p>
                 )}
@@ -326,7 +369,10 @@ export default function Home({ params }) {
                 aria-labelledby="contact-tab"
               >
                 <p>Please select {selectedSeats.length} seats</p>
-                <TicketView ticketCounts={ticketCounts} onTicketChange={updateTicketCount} />
+                <TicketView
+                  ticketCounts={ticketCounts}
+                  onTicketChange={updateTicketCount}
+                />
               </div>
             </div>
           </div>
@@ -335,10 +381,15 @@ export default function Home({ params }) {
             color="primary"
             className="checkout"
             sx={{
-              position: "absolute",
+              position: "fixed",
               bottom: "16px",
               right: "16px",
               zIndex: 1000,
+              color: "#fff",
+              transition: "background-color 0.3s, transform 0.3s",
+              "&:hover": {
+                transform: "scale(1.05)",
+              },
             }}
             onClick={updateDatabaseSeats}
           >
