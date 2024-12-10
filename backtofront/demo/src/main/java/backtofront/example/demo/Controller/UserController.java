@@ -39,19 +39,6 @@ public class UserController {
         }
     }
 
-    @PostMapping("/login-user")
-    public ResponseEntity<Object> loginUser(@RequestBody User user) {
-        Optional<User> existingUser = userService.findByEmail(user.getEmail());
-        if (existingUser.isPresent()) {
-            System.out.println("Recieved password: " + user.getPassword());
-            System.out.println("User password: " + existingUser.get().getPassword());
-            if (existingUser.get().getPassword().equals(user.getPassword())) {
-                return ResponseEntity.ok(new OKMessage("Login successful: " + existingUser.get().getEmail()));
-            } 
-            else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ERRORMessage("Incorrect password"));
-        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ERRORMessage("User not found"));
-    }
-    
     @PostMapping("/update-profile")
     public ResponseEntity<?> updateProfile(@RequestBody User user) {
         try {
@@ -68,6 +55,46 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
         }
     }
+
+    // card = 1,2, or 3 
+    @PostMapping("/set-card")
+    public ResponseEntity<?> setCard(@RequestParam int user_id, @RequestParam int card_id, @RequestParam int card) {
+        try {
+            userService.updateCard(user_id, card_id, card);
+            return ResponseEntity.ok(new OKMessage("Card updated successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
+        }
+    }
+
+    @PostMapping("/set-home-addess")
+    public ResponseEntity<?> setHomeAddress(@RequestParam int user_id, @RequestParam int address_id) {
+        try {
+            userService.updateHomeAddress(user_id, address_id);
+            return ResponseEntity.ok(new OKMessage("Home Address updated successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
+        }
+    }
+
+    @PostMapping("/login-user")
+    public ResponseEntity<Object> loginUser(@RequestBody User user) {
+        Optional<User> existingUser = userService.findByEmail(user.getEmail());
+        if (existingUser.isPresent()) {
+            System.out.println("Recieved password: " + user.getPassword());
+            System.out.println("User password: " + existingUser.get().getPassword());
+            if (existingUser.get().getPassword().equals(user.getPassword())) {
+                return ResponseEntity.ok(new OKMessage("Login successful: " + existingUser.get().getEmail()));
+            } 
+            else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ERRORMessage("Incorrect password"));
+        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ERRORMessage("User not found"));
+    }
+    
+    
 
      // add to updateProfile?
      /* @PostMapping("/update-password")

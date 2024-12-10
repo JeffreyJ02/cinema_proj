@@ -26,9 +26,6 @@ public class Address {
     @Column(name = "state")
     private String state;
     
-    @Column(name = "user_id")
-    private int user_id;
-    
     @Column(name = "zip_code")
     private String zipCode;
 
