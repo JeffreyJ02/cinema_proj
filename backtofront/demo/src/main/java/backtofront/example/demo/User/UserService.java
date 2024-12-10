@@ -3,8 +3,6 @@ package backtofront.example.demo.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +17,7 @@ public class UserService {
     // update to include card and address?
     public void registerUser(String firstName, String lastName, String email, 
                              String phone_number, String password, int registerForPromotions) {
-=======
+
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email already exists");
         }
