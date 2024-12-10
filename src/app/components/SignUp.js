@@ -189,7 +189,7 @@ const SignUpPage = () => {
           registerForPromos: promos,
         }),
       });
-
+      console.log("User Response: ", response);
       if (!response.ok) {
         const errorData = await response.json();
         if (response.status === 409) {

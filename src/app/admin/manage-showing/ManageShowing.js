@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "./ManageShowing.css";
-import { duration } from "@mui/material";
 
 const ManageShowing = () => {
   const [moviesList, setMoviesList] = useState([]);
@@ -13,6 +12,7 @@ const ManageShowing = () => {
     movieId: "",
     showDate: "",
   });
+  const [successMessage, setSuccessMessage] = useState(""); // State for success message
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -30,7 +30,6 @@ const ManageShowing = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Check if the field is duration and if the value is negative
     if (name === "duration" && value < 0) {
       return; // Do not update the state if the duration is negative
     }
@@ -56,12 +55,30 @@ const ManageShowing = () => {
           body: JSON.stringify(formData),
         }
       );
-      if (!response.ok) {
-        throw new Error("Failed to register showing: " + response.statusText);
+      const data = await response.json();
+      console.log(data.message);
+
+      if (
+        !response.ok ||
+        data.message === "Scheduling conflict. Cannot register showing."
+      ) {
+        throw new Error(data.message);
       }
 
-      const data = await response.text();
-      console.log(data);
+      setSuccessMessage("Showing successfully added!");
+
+      // Reset form fields after a short delay
+      setTimeout(() => {
+        setFormData({
+          showingID: "",
+          duration: "",
+          showTime: "",
+          showroomId: "",
+          movieId: "",
+          showDate: "",
+        });
+        setSuccessMessage(""); // Clear success message after resetting
+      }, 100000000000000); // 2 seconds delay
     } catch (error) {
       console.error("Error registering showing:", error.message);
       alert("Error registering showing: " + error.message);
@@ -71,6 +88,9 @@ const ManageShowing = () => {
   return (
     <div className="manage-showing">
       <h1>Add Showing</h1>
+      {successMessage && (
+        <div className="success-message">{successMessage}</div>
+      )}
       <form onSubmit={handleSubmit}>
         <label>
           Duration (minutes):

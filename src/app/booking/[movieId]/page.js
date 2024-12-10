@@ -6,13 +6,23 @@ import DateCarousel from "../../components/DateCarousel";
 import ShowtimeButtons from "../../components/ShowtimeButtons";
 import MovieInfo from "../../components/MovieInfo";
 import TicketView from "../../components/TicketView";
-import { Button, Box } from "@mui/material";
+import {
+  Button,
+  Box,
+  CircularProgress,
+  Paper,
+  Typography,
+  Grid2,
+} from "@mui/material";
 import SeatGrid from "../../components/SeatGrid";
 import { get } from "http";
+import { format } from "path";
+import { useRouter } from "next/navigation";
 
 export default function Home({ params }) {
   // params come from the URL, e.g. /booking/1
   const { movieId } = params;
+  const router = useRouter();
 
   // React hooks for managing state
   const [activeTab, setActiveTab] = useState("home");
@@ -22,41 +32,11 @@ export default function Home({ params }) {
   const [selectedShowtime, setSelectedShowtime] = useState(null);
   const [seatAvailability, setSeatAvailability] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
-
-  const placeholderSeats = ["A1", "A2", "B3", "C1"];
-
-  const placeholderShowtimes = {
-    "2022-12-25": [
-      { id: 1, showroom: 1, time: "12:00 PM" },
-      { id: 2, showroom: 1, time: "3:00 PM" },
-      { id: 3, showroom: 1, time: "6:00 PM" },
-    ],
-    "2022-12-26": [
-      { id: 4, showroom: 2, time: "12:00 PM" },
-      { id: 5, showroom: 2, time: "4:00 PM" },
-      { id: 6, showroom: 2, time: "6:00 PM" },
-    ],
-    "2022-12-27": [
-      { id: 7, showroom: 3, time: "11:00 AM" },
-      { id: 8, showroom: 3, time: "2:00 PM" },
-      { id: 9, showroom: 3, time: "5:00 PM" },
-    ],
-    "2022-12-28": [
-      { id: 10, showroom: 4, time: "10:00 AM" },
-      { id: 11, showroom: 4, time: "1:00 PM" },
-      { id: 12, showroom: 4, time: "4:00 PM" },
-    ],
-    "2022-12-29": [
-      { id: 13, showroom: 5, time: "9:00 AM" },
-      { id: 14, showroom: 5, time: "12:00 PM" },
-      { id: 15, showroom: 5, time: "3:00 PM" },
-    ],
-    "2022-12-30": [
-      { id: 16, showroom: 6, time: "8:00 AM" },
-      { id: 17, showroom: 6, time: "11:00 AM" },
-      { id: 18, showroom: 6, time: "2:00 PM" },
-    ],
-  };
+  const [ticketCounts, setTicketCounts] = useState({
+    Adult: 0,
+    Child: 0,
+    Senior: 0,
+  });
 
   const showroomSeats = {
     1: 4,
@@ -82,29 +62,32 @@ export default function Home({ params }) {
     }
   };
 
+  // Function to format showtimes data
+  const formatShowtimes = (showtimes) => {
+    // New formatted dates object
+    const formatted = {};
+    // Loop through each showtime
+    showtimes.forEach((show) => {
+      const { showDate, showingId, showroomId, showTime } = show;
+      // If this date dosent yet exist, create it in the formatted object
+      if (!formatted[showDate]) {
+        formatted[showDate] = [];
+      }
+      // Push the formatted showtime into the array for this date
+      formatted[showDate].push({
+        id: showingId,
+        showroom: showroomId,
+        time: showTime,
+      });
+    });
+    return formatted;
+  };
+
   // Function to fetch showtimes by movie ID
-  /*
-  Here is what I am expecting on the frontend:
-  I do the api call to get the showtimes for a specific movie id.
-  The api call will return an object with each date as the key and an array of showtimes as the value.
-  For example:
-  {
-    "2022-12-25": [
-      { id: 1, showroom: 1, time: "12:00 PM" },
-      { id: 2, showroom: 1, time: "3:00 PM" },
-      { id: 3, showroom: 1, time: "6:00 PM" },
-    ],
-    "2022-12-26": [
-      { id: 4, showroom: 2, time: "12:00 PM" },
-      { id: 5, showroom: 2, time: "4:00 PM" },
-      { id: 6, showroom: 2, time: "6:00 PM" },
-    ],
-  }
-  */
   const getShowtimes = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/showtimes?id=${id}`
+        `http://localhost:8080/api/get-showing-by-movie-id?movieId=${id}`
       );
 
       if (!response.ok) {
@@ -112,43 +95,32 @@ export default function Home({ params }) {
       }
       const data = await response.json();
       console.log("Got showtimes: ", data);
-      setMovieShowtimes(data);
+
+      // Format the showtimes
+      const formattedShowtimes = formatShowtimes(data);
+      console.log("Formatted Showtimes: ", formattedShowtimes);
+
+      // Set the formatted data to state
+      setMovieShowtimes(formattedShowtimes);
     } catch (error) {
       console.error("Error fetching showtimes:", error);
     }
   };
 
   // Function to fetch seat availability by showtime ID
-  /*
-  Here is what I am expecting on the frontend:
-  I do the api call to get the seat availability for a specific showtime id.
-  The api call will return an array of boolean values, where each value represents the availability of a seat.
-  For example:
-
-  if showroom 4 has n=4 seats
-  const showroomSeats {
-    1: 5
-    2: 6
-    3: 3
-    4: 4
-  }
-  then there are n*n = 16 seats
-
-  return an array of strings for the occupied seats ie. ["A1", "A2"] those two seats are occupied
-  */
-
   const getSeatAvailability = async (showtime) => {
+    console.log("Fetching seat availability for showtime:", showtime);
     try {
-      const occupiedSeats = placeholderSeats;
-      /*const occupiedSeats = await fetch(
-        `http://localhost:8080/api/seats?id=${showtimeId}`
-      ); */
-      console.log("Got seat availability: ", occupiedSeats);
-      
+      const response = await fetch(
+        `http://localhost:8080/api/get-seats?showingId=${showtime.id}`
+      );
+      const occupiedSeatsData = await response.json();
+
       // This creates an array of 0s matching the total number of seats in the showroom
+      const occupiedSeats = occupiedSeatsData.map((seat) => seat.seatId);
       const totalSeats = showroomSeats[showtime.showroom] ** 2;
       const availabilityArray = Array(totalSeats).fill(0);
-      
+
       // This sets the occupied seats to 1 in the array
       occupiedSeats.forEach((seat) => {
         // Convert seat label to row and column indices
@@ -160,14 +132,14 @@ export default function Home({ params }) {
         // Set the seat to occupied
         availabilityArray[index] = 1;
       });
-  
+
       setSeatAvailability(availabilityArray);
     } catch (error) {
       console.error("Error fetching seat availability:", error);
     }
     console.log("Seat availability:", seatAvailability);
   };
-  
+
   // Function to update seat availability in the database
   /*
   Here is what I am expecting on the frontend:
@@ -180,25 +152,25 @@ export default function Home({ params }) {
   "selectedSeats": ["A4", "A5"]
   }
   */
- 
   const updateDatabaseSeats = async () => {
     try {
-      console.log("Selected Seats: ", selectedSeats);
-      const response = await fetch(`http://localhost:8080/api/update-seats`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          showTimeId: selectedShowtime.id,
-          seatAvailability: selectedSeats,
-        }),
+      const params = new URLSearchParams({
+        showingId: selectedShowtime.id,
       });
+
+      selectedSeats.forEach((seat) => {
+        params.append("seatAvailability", seat);
+      });
+
+      const response = await fetch(
+        `http://localhost:8080/api/update-seats?${params.toString()}`,
+        {
+          method: "POST",
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to update seat availability");
       console.log("Seats successfully updated in the database.");
-
-      setSelectedSeats([]);
     } catch (error) {
       console.error("Error updating seats:", error);
     }
@@ -206,12 +178,20 @@ export default function Home({ params }) {
 
   // Function sets selected date in state selectedDate
   const handleDateSelect = (date) => {
-    const formattedDate = date.toISOString().split("T")[0];
-    setSelectedDate(formattedDate);
+    const localDateStr = date.toLocaleDateString(undefined, {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+
+    const isoDate = date.toISOString().split("T")[0];
+    setSelectedDate(isoDate);
     setSelectedShowtime(null);
     setSeatAvailability([]);
     setSelectedSeats([]);
-    console.log("Selected date:", formattedDate);
+    console.log("Selected date (local timezone):", localDateStr);
+    console.log("Selected date (ISO):", isoDate);
   };
 
   // When a tab is clicked, set the active tab
@@ -220,26 +200,69 @@ export default function Home({ params }) {
   };
 
   // When a showtime is selected, set the selected showtime
-  // NOTE CURRENTLY ON PLACEHOLDER DATA
   const handleShowtimeSelect = (showtime) => {
     setSelectedShowtime(showtime);
-    // setSeatAvailability(getSeatAvaliability(showtime.showroom));
     getSeatAvailability(showtime);
     setSelectedSeats([]);
   };
 
   // When the component mounts, fetch the movie by ID
-  //  NOTE CURRENTLY ON PLACEHOLDER DATA
   useEffect(() => {
     console.log("Fetching movie with ID:", movieId);
     getMovieById(movieId);
-    //getMovieShowtimes(movieId);
-    //setMovie(placeholderMovie);
-    setMovieShowtimes(placeholderShowtimes);
+    getShowtimes(movieId);
   }, [movieId]);
 
+  const updateTicketCount = (type, action) => {
+    if (action === "Add") {
+      setTicketCounts((prevCounts) => {
+        return {
+          ...prevCounts,
+          [type]: Math.min(prevCounts[type] + 1, selectedSeats.length),
+        };
+      });
+    } else if (action === "Remove") {
+      setTicketCounts((prevCounts) => {
+        return { ...prevCounts, [type]: Math.max(prevCounts[type] - 1, 0) };
+      });
+    }
+  };
+
+  const handleCheckout = () => {
+    console.log("Checkout");
+    
+    const checkoutData = {
+      movieId,
+      seats: JSON.stringify(selectedSeats),
+      tickets: JSON.stringify(ticketCounts),
+      total: (ticketCounts.Adult * 10 + ticketCounts.Child * 5 + ticketCounts.Senior * 7),
+    }
+
+    console.log("Checkout data:", checkoutData);
+    localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
+    console.log("Redirecting to checkout page");  
+    router.push(`/booking/${movieId}/checkout`);
+  };
+
   // If movie is not fetched yet, show a loading message
-  if (!movie) return <div>Loading movie details...</div>;
+  if (!movie)
+    return (
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <div>
@@ -308,7 +331,7 @@ export default function Home({ params }) {
                   <DateCarousel
                     onDateSelect={handleDateSelect}
                     dates={Object.keys(movieShowtimes).map(
-                      (dateStr) => new Date(dateStr)
+                      (dateStr) => new Date(`${dateStr}T00:00:00-05:00`)
                     )}
                   />
                   <ShowtimeButtons
@@ -327,16 +350,30 @@ export default function Home({ params }) {
                 aria-labelledby="profile-tab"
               >
                 {selectedShowtime ? (
-                  <div className="seats-content">
-                    <h6>Showroom: {selectedShowtime.showroom}</h6>
+                  <Box
+                    sx={{
+                      p: 3,
+                      mt: 2,
+                      borderRadius: 2,
+                      backgroundColor: "white",
+                    }}
+                  >
+                    <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                      SCREEN
+                    </Typography>
                     <SeatGrid
                       nSeats={showroomSeats[selectedShowtime.showroom]}
                       availability={seatAvailability}
                       selectedSeats={selectedSeats}
                       setSelectedSeats={setSelectedSeats}
                     />
-                    <p>Selected Seats: {selectedSeats.join(", ") || "None"}</p>
-                  </div>
+                    <Typography variant="body1" sx={{ mt: 2 }}>
+                      <strong>Selected Seats:</strong>{" "}
+                      {selectedSeats.length > 0
+                        ? selectedSeats.join(", ")
+                        : "None"}
+                    </Typography>
+                  </Box>
                 ) : (
                   <p>Select a showtime</p>
                 )}
@@ -350,7 +387,10 @@ export default function Home({ params }) {
                 aria-labelledby="contact-tab"
               >
                 <p>Please select {selectedSeats.length} seats</p>
-                <TicketView numTickets={selectedSeats.length} />
+                <TicketView
+                  ticketCounts={ticketCounts}
+                  onTicketChange={updateTicketCount}
+                />
               </div>
             </div>
           </div>
@@ -359,12 +399,17 @@ export default function Home({ params }) {
             color="primary"
             className="checkout"
             sx={{
-              position: "absolute",
+              position: "fixed",
               bottom: "16px",
               right: "16px",
               zIndex: 1000,
+              color: "#fff",
+              transition: "background-color 0.3s, transform 0.3s",
+              "&:hover": {
+                transform: "scale(1.05)",
+              },
             }}
-            onClick={updateDatabaseSeats}
+            onClick={handleCheckout}
           >
             Continue to Checkout
           </Button>
