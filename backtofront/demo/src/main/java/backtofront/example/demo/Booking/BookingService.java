@@ -1,5 +1,6 @@
 package backtofront.example.demo.Booking;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,15 +12,21 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public void registerBooking(int num_tickets, double total_price, int promotion_id, 
-                                int user_id) {
+    public void registerBooking(List<Integer> tickets, String movieTitle, String showDate,
+                               String showTime, String cardNumber, int userId) {
         Booking booking = new Booking();
-        booking.setBookingId((int)bookingRepository.maxBookingId() + 1);
-        booking.setNumTickets(num_tickets);
-        booking.setTotalPrice(user_id);
-        booking.setPromotionId(promotion_id);
-        booking.setUserId(user_id);
+        // (int)
+        booking.setBookingId(bookingRepository.maxBookingId() + 1);
+        booking.setTickets(tickets);
+        booking.setShowDate(showDate);
+        booking.setShowTime(showTime);
+        booking.setCardNumber(cardNumber);
+        booking.setUserId(userId);
 
         bookingRepository.save(booking);
+    }
+
+    public List<Booking> getUserBookings(int userId) {
+        return bookingRepository.findAllByUserId(userId);
     }
 }

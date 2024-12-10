@@ -4,6 +4,8 @@ import { encrypt, hash } from '../../utils/encryption';
 import './EditProfile.css';
 
 const EditProfile = () => {
+  // User info
+  const [userId, setUserId] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState(''); // Will be fetched
@@ -11,6 +13,10 @@ const EditProfile = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [promotionalEmails, setPromotionalEmails] = useState(false);
+
+  // User card info
+  const [creditCardType, setCreditCardType] = useState('');
   const [creditCardNumber, setCreditCardNumber] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [cvv, setCvv] = useState('');
@@ -22,7 +28,10 @@ const EditProfile = () => {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [zipCode, setZipCode] = useState('');
-  const [promotionalEmails, setPromotionalEmails] = useState(false);
+  
+  // User home address
+  const [homeAddressId, setHomeAddressId] = useState('');
+
   const [successMessage, setSuccessMessage] = useState('');
 
 
@@ -55,6 +64,11 @@ useEffect(() => {
       const userData = await response.json();
       console.log("User Data: ", userData);
       // Update state with user data
+
+      // Connor added
+      setUserId(userData.userId);
+      setHomeAddressId(userData.homeAddress);
+
       setFirstName(userData.firstName);
       setLastName(userData.lastName);
       setEmail(userData.email);
@@ -113,6 +127,54 @@ useEffect(() => {
 
     try {
       // Update user profile
+      const name = firstName + " " + lastName;
+      homeAddressId = await fetch('http://localhost:8080/api/update-address', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          street,
+          city,
+          state,
+          zipCode,
+          homeAddressId
+        }),
+      });
+
+      // register cards, store card ids (returned form update-card), and set cards for user (in User controller)
+      for (let c = 0; c < storedCards.length; c++) {
+        let card = storedCards[c];
+        let cardType = card.cardType;
+        let cardNumber = card.cardNumber;
+        let cardExpirationDate = card.cardExpirationDate;
+        let cardSecurityCode = card.cardSecuirtyCode;
+
+        let address_id = await fetch('http://localhost:8080/api/update-address', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            street,
+            city,
+            state,
+            zipCode,
+            // addressId from address if updating? else null
+          }),
+        });
+
+        let card_id = await fetch('http://localhost:8080/api/update-card', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            cardType,
+            cardNumber,
+            cardExpirationDate,
+            cardSecurityCode,
+            addressId,
+            // if updating include cardId. else null
+          }),
+        })
+      }
+
       const profileResponse = await fetch('http://localhost:8080/api/update-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -122,6 +184,9 @@ useEffect(() => {
           lastName,
           phoneNumber,
           promotionalEmails,
+          // card1Id. null if not used
+          // card2Id. null if not used
+          // card3Id. null if not used
         }),
       });
 
@@ -173,10 +238,12 @@ useEffect(() => {
 
     if (storedCards.length < 3) {
       const card = {
-        number: creditCardNumber,
-        cvv,
+        cardType,
+        cardNumber: creditCardNumber,
+        cardSecuirtyCode,
         expirationDate,
-        billingAddress: address,
+        // address id?
+        // card id if pulled?
       };
       setStoredCards([...storedCards, card]);
       setCreditCardNumber('');

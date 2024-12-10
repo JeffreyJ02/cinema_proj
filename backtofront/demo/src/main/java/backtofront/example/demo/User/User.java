@@ -39,4 +39,17 @@ public class User {
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    @Column(name = "card_1_id")
+    private int card1Id;
+
+    @Column(name = "card_2_id")
+    private int card2Id;
+
+    @Column(name = "card_3_id")
+    private int card3Id;
+
+    @Column(name = "home_address_id")
+    private int homeAddressId;
+
 }

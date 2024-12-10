@@ -12,15 +12,14 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
-    // Updated registerUser method to include optional credit card fields
-    public void registerUser(String firstName, String lastName, String email,
-            String phone_number, String password,
-            int registerForPromotions) {
+  
+    // update to include card and address?
+    public void registerUser(String firstName, String lastName, String email, 
+                             String phone_number, String password, int registerForPromotions) {
+=======
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email already exists");
         }
@@ -35,6 +34,26 @@ public class UserService {
         newUser.setStatus("Active");
 
         userRepository.save(newUser);
+    }
+
+    // card = 1,2, or 3
+    public void updateCard(int user_id, int card_id, int card) {
+        User user = userRepository.findByUserId(user_id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        switch(card) {
+            case 1: user.setCard1Id(card_id);
+                    break;
+            case 2: user.setCard2Id(card_id);
+                    break;
+            case 3: user.setCard3Id(card_id);
+                    break;
+        }
+        userRepository.save(user);
+    }
+
+    public void updateHomeAddress(int user_id, int address_id) {
+        User user = userRepository.findByUserId(user_id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.setHomeAddressId(address_id);
+        userRepository.save(user);
     }
 
     public List<User> getAllUsers() {
@@ -53,9 +72,6 @@ public class UserService {
     }
 
     public void updateUser(User user) {
-        if (user == null || user.getEmail() == null) {
-            throw new IllegalArgumentException("User or email cannot be null");
-        }
         Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
 
         if (existingUserOpt.isPresent()) {
@@ -70,11 +86,9 @@ public class UserService {
             if (user.getPassword() != null) {
                 existingUser.setPassword(user.getPassword());
             }
-
             userRepository.save(existingUser);
-        } else {
-            throw new IllegalArgumentException("User not found");
-        }
+        } 
+        else throw new IllegalArgumentException("User not found");
     }
 
     public void updateProfile(String email, String firstName, String lastName,  String phoneNumber, Integer registerForPromotions) {
@@ -99,9 +113,7 @@ public class UserService {
 
     public void updatePassword(String email, String currentPassword, String newPassword) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        if (!user.getPassword().equals(currentPassword)) {
-            throw new IllegalArgumentException("Current password is incorrect");
-        }
+        if (!user.getPassword().equals(currentPassword)) throw new IllegalArgumentException("Current password is incorrect");
         user.setPassword(newPassword);
         userRepository.save(user);
     }
@@ -113,8 +125,7 @@ public class UserService {
     }
 
     public User getUserProfile(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
     public void deleteUserById(int user_id) {

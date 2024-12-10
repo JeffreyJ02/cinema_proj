@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Integer> {
-    Optional<Address> findById(int id);
+    Optional<Address> findByAddressId(int id);
 
     @Query("select max(a.addressId) from Address a")
     int maxAddressId();
