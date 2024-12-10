@@ -13,6 +13,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
     Optional<User> findByUserId(int id); 
     List<User> findByPromotions(int promotions);
+    List<User> findAll();
 
     @Modifying  
     @Query("update User u set u.password = ?1, u.promotions = ?2 where u.userId = ?3")
@@ -33,4 +34,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByFirstNameAndLastName(String firstName, String lastName);
     
     void deleteByEmail(String email);
+    
+    void deleteByUserId(int user_id);
 }
