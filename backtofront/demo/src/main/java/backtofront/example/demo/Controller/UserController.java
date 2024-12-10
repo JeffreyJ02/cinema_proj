@@ -135,6 +135,11 @@ public class UserController {
         return userService.findByEmail(email).get();
     }
 
+    @GetMapping("/get-all-users")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
     @GetMapping("/get-emails-for-promo")
     public List<String> getEmailsForPromos() {
         return userService.getEmailsForPromo();
