@@ -1,6 +1,7 @@
 package backtofront.example.demo.Controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +40,10 @@ public class PromotionController {
     @GetMapping("/get-promos")
     public List<Promotion> getPromos() {
         return promotionService.getPromos();
+    }
+
+    @GetMapping("/check-promo")
+    public Optional<Promotion> checkPromo(@RequestParam String code) {
+        return promotionService.findByPromoCode(code);
     }
 }

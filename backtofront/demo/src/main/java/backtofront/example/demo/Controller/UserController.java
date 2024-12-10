@@ -57,6 +57,7 @@ public class UserController {
         }
     }
 
+<<<<<<< HEAD
     // card = 1,2, or 3
     @PostMapping("/set-card")
     public ResponseEntity<?> setCard(@RequestParam int user_id, @RequestParam int card_id, @RequestParam int card) {
@@ -84,6 +85,8 @@ public class UserController {
         }
     }
 
+=======
+>>>>>>> 1c3aa79304793c7fc29b5e4ee0a8bce7b5c38b94
     @PostMapping("/login-user")
     public ResponseEntity<Object> loginUser(@RequestBody User user) {
         Optional<User> existingUser = userService.findByEmail(user.getEmail());
