@@ -1,35 +1,20 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { useUser } from "../../context/UserContext";
 import SearchIcon from "@mui/icons-material/Search";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from "react";
+import { useUser } from "../../context/UserContext";
 
 const CustomNavbar = () => {
   const router = useRouter();
-  const { user } = useUser();
+  const { logout } = useUser();
   const [isAdmin, setIsAdmin] = useState(false); // State to track admin status
   const signInButton = () => {
     router.push("/sign-in");
   };
   const handleSearchPage = () => {
     router.push(`/search/${document.querySelector("input").value}`);
-  };
-
-  const logout = async () => {
-    console.log("Document cookie:", document.cookie);
-    document.cookie = "token=; Max-Age=0; path=/;";
-    localStorage.removeItem("userEmail");
-    try {
-      const response = await fetch("http://localhost:8080/api/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      router.push("/sign-in");
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
   };
 
   const fetchAdminStatus = async (email) => {
@@ -64,7 +49,6 @@ const CustomNavbar = () => {
       fetchAdminStatus(userEmail); // Fetch admin status if user is logged in
     }
   }, []);
-
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -109,17 +93,17 @@ const CustomNavbar = () => {
               <NavDropdown.Item>{`Hello, ${
                 localStorage.getItem("userEmail") || "Guest"
               }`}</NavDropdown.Item>
-              <NavDropdown.Item href="/edit-profile">
-                Edit Profile
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/order-history">
-                Order History
-              </NavDropdown.Item>
               {isAdmin && ( // Conditionally render admin option
                 <NavDropdown.Item href="/admin">Admin Page</NavDropdown.Item>
               )}
               {localStorage.getItem("userEmail") && ( // Conditionally render logout based on state
                 <div>
+                  <NavDropdown.Item href="/edit-profile">
+                    Edit Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/order-history">
+                    Order History
+                  </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={logout}>Sign Out</NavDropdown.Item>
                 </div>

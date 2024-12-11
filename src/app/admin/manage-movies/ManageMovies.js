@@ -1,35 +1,37 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import './ManageMovies.css';
+import { useEffect, useState } from "react";
+import "./ManageMovies.css";
+import { fetchMovies } from "@/utils/manageMoviesAPIFacade";
+import { addMovies } from "@/utils/manageMoviesAPIFacade";
+import { deleteMovie } from "@/utils/manageMoviesAPIFacade";
 
 const ManageMovies = () => {
-  const [movie, setMovie] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [releaseDate, setReleaseDate] = useState('');
-  const [genre, setGenre] = useState('');
-  const [trailerUrl, setTrailerUrl] = useState('');
-  const [category, setCategory] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [ageRating, setAgeRating] = useState('');
-  const [director, setDirector] = useState('');
-  const [producer, setProducer] = useState('');
+  const [movie, setMovie] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [releaseDate, setReleaseDate] = useState("");
+  const [genre, setGenre] = useState("");
+  const [trailerUrl, setTrailerUrl] = useState("");
+  const [category, setCategory] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [ageRating, setAgeRating] = useState("");
+  const [director, setDirector] = useState("");
+  const [producer, setProducer] = useState("");
   const [moviesList, setMoviesList] = useState([]);
 
   // Fetch movies list when the component loads
   useEffect(() => {
-    const fetchMovies = async () => {
+    const loadMovies = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/movies');
-        const movies = await response.json();
+        const movies = await fetchMovies();
         setMoviesList(movies);
       } catch (error) {
-        alert('Error fetching movies: ' + error.message);
+        alert("Error fetching movies site: " + error.message);
       }
     };
 
-    fetchMovies();
+    loadMovies();
   }, []);
 
   const handleAddMovie = async (event) => {
@@ -48,66 +50,57 @@ const ManageMovies = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:8080/api/movies', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(movieData),
-      });
-      const message = await response.text();
-      if (!response.ok) {
-        throw new Error(message);
-      }
+      const message = await addMovies(movieData);
       alert(message);
-      // Refresh the movie list after adding
-      const newMovies = await fetch('http://localhost:8080/api/movies').then(res => res.json());
-      setMoviesList(newMovies);
-      resetForm();
+
+      try {
+        const movies = await fetchMovies();
+        setMoviesList(movies);
+      } catch (error) {
+        alert("Error fetching movies site: " + error.message);
+      }
     } catch (error) {
-      alert('Error adding movie: ' + error.message);
+      alert("Error adding movie: " + error.message);
     }
   };
 
   const handleDeleteMovie = async (event) => {
     event.preventDefault();
     if (!movie) {
-      alert('Please select a movie to delete');
+      alert("Please select a movie to delete");
       return;
     }
 
-    if (!window.confirm('Are you sure you want to delete this movie?')) {
+    if (!window.confirm("Are you sure you want to delete this movie?")) {
       return;
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/api/movies/delete/${movie}`, {
-        method: 'DELETE',
-      });
-      const message = await response.text();
-      if (!response.ok) {
-        throw new Error(message);
-      }
+      const message = await deleteMovie(movie);
       alert(message);
-      // Refresh the movie list after deletion
-      const newMovies = await fetch('http://localhost:8080/api/movies').then(res => res.json());
-      setMoviesList(newMovies);
+
+      try {
+        const movies = await fetchMovies();
+        setMoviesList(movies);
+      } catch (error) {
+        alert("Error fetching movies site: " + error.message);
+      }
     } catch (error) {
-      alert('Error deleting movie: ' + error.message);
+      alert("Error deleting movie: " + error.message);
     }
   };
 
   const resetForm = () => {
-    setTitle('');
-    setDescription('');
-    setReleaseDate('');
-    setGenre('');
-    setTrailerUrl('');
-    setCategory('');
-    setImageUrl('');
-    setAgeRating('');
-    setDirector('');
-    setProducer('');
+    setTitle("");
+    setDescription("");
+    setReleaseDate("");
+    setGenre("");
+    setTrailerUrl("");
+    setCategory("");
+    setImageUrl("");
+    setAgeRating("");
+    setDirector("");
+    setProducer("");
   };
 
   return (
@@ -206,10 +199,14 @@ const ManageMovies = () => {
       <h2>Delete Movie</h2>
       <form onSubmit={handleDeleteMovie}>
         <label>Select Movie to Delete:</label>
-        <select value={movie} onChange={(e) => setMovie(e.target.value)} required>
+        <select
+          value={movie}
+          onChange={(e) => setMovie(e.target.value)}
+          required
+        >
           <option value="">Select a movie</option>
-          {moviesList.map((movie) => (
-            <option key={movie.id} value={movie.title}>
+          {moviesList.map((movie, index) => (
+            <option key={movie.id || index} value={movie.title}>
               {movie.title}
             </option>
           ))}
@@ -222,4 +219,3 @@ const ManageMovies = () => {
 };
 
 export default ManageMovies;
-

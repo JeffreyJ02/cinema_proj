@@ -25,6 +25,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select max(u.userId) from User u")
     int maxUserId();
 
+
     @Query("select u.userId from User u where u.email = ?1")
     int getUserIdByEmail(String email);
 
@@ -33,9 +34,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("update User u set u.password = ?1 where u.email = ?2")
     void updatePassword(String password, String email);
 
+
     @Modifying
     @Query("update User u set u.password = ?1, u.userId = ?2")
     void tempPassUpdate(String password, int user_id);
+
+    @Modifying
+    @Query("update User u set u.password = ?1, u.userId = ?2")
+    void updatePassword(String password, int user_id);
+
 
     boolean existsByEmail(String email);
 

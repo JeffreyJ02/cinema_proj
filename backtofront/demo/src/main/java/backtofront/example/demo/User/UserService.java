@@ -79,6 +79,7 @@ public class UserService {
         userRepository.updateUserById(firstName, lastName, phoneNumber, promotions, user.getUserId());
     }
 
+
     public void updatePassword(String email, String currentPassword, String newPassword) {
         System.out.println("Updating password for: " + email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -86,6 +87,10 @@ public class UserService {
         //if (!user.getPassword().equals(currentPassword)) throw new IllegalArgumentException("Current password is incorrect");
         System.out.println("saving password");
         userRepository.updatePassword(newPassword, email);
+
+    public void updatePassword(String newPassword, int user_id) {
+        userRepository.updatePassword(newPassword, 0);
+
     }
 
     // OLD METHOD UNUSED
