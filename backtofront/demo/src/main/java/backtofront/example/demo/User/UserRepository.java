@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
@@ -15,12 +17,21 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findByPromotions(int promotions);
     List<User> findAll();
 
+    @Transactional
     @Modifying  
-    @Query("update User u set u.firstName = ?1, u.lastName = ?2, u.password = ?3, u.promotions = ?4 where u.userId = ?5")
-    void updateUserById(String firstName, String lastName, String password, int promotions, int user_id); 
+    @Query("update User u set u.firstName = ?1, u.lastName = ?2, u.phone_number = ?3, u.promotions = ?4 where u.userId = ?5")
+    void updateUserById(String firstName, String lastName, String phone_number, int promotions, int user_id); 
 
     @Query("select max(u.userId) from User u")
     int maxUserId();
+
+    @Query("select u.userId from User u where u.email = ?1")
+    int getUserIdByEmail(String email);
+
+    @Transactional
+    @Modifying
+    @Query("update User u set u.password = ?1 where u.email = ?2")
+    void updatePassword(String password, String email);
 
     @Modifying
     @Query("update User u set u.password = ?1, u.userId = ?2")

@@ -70,17 +70,25 @@ public class UserService {
     } */
 
     public void updateProfile(String email, String firstName, String lastName,  String phoneNumber, int promotions) {
+        System.out.println("Updating profile for: " + email);
+
+      
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        System.out.println("User found: " + user);
+        System.out.println(user.getUserId());
         userRepository.updateUserById(firstName, lastName, phoneNumber, promotions, user.getUserId());
     }
 
     public void updatePassword(String email, String currentPassword, String newPassword) {
+        System.out.println("Updating password for: " + email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        if (!user.getPassword().equals(currentPassword)) throw new IllegalArgumentException("Current password is incorrect");
-        user.setPassword(newPassword);
-        userRepository.save(user);
+        System.out.println("user found");
+        //if (!user.getPassword().equals(currentPassword)) throw new IllegalArgumentException("Current password is incorrect");
+        System.out.println("saving password");
+        userRepository.updatePassword(newPassword, email);
     }
 
+    // OLD METHOD UNUSED
     public void setTempPassword(String email, String tempPassword) {
         User user = userRepository.findByEmail(email).get();
         user.setPassword(tempPassword);
