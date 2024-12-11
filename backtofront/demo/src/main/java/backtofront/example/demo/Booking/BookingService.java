@@ -15,7 +15,7 @@ public class BookingService {
     public void registerBooking(String seats, String tickets, String movieTitle, String showDate,
                                 String showTime, String cardNumber, double price, int userId) {
         Booking booking = new Booking();
-        booking.setBookingId(bookingRepository.maxBookingId() + 1);
+        booking.setBookingId((int)bookingRepository.maxBookingId() + 1);
         booking.setSeats(seats);
         booking.setTickets(tickets);
         booking.setShowDate(showDate);
