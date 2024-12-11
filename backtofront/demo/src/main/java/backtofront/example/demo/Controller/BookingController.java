@@ -28,6 +28,7 @@ public class BookingController {
                 booking.getShowDate(),
                 booking.getShowTime(),
                 booking.getCardNumber(),
+                booking.getPrice(),
                 user_id
             );
             return ResponseEntity.ok(new OKMessage("Booking registered successfully!"));
