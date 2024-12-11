@@ -96,9 +96,11 @@ export default function SignIn() {
 
       const data = await response.json();
       setSuccessMessage("Login successful! Redirecting...");
-      localStorage.setItem("userEmail", email); // Store email for session
+      const token = data.token;
+      console.log("Token:", token);
+      setCookie("token", data.token, { path: "/", maxAge: 3600 * 24 * 7 }); // Set cookie for 7 days
+      localStorage.setItem("userEmail", email);
 
-      // Check if the user is an admin
       await fetchAdminStatus(email);
     } catch (error) {
       console.error("Login error:", error);
