@@ -24,18 +24,18 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             userService.registerUser(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPhone_number(),
-                user.getPassword(),
-                user.getPromotions()
-            );
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPhone_number(),
+                    user.getPassword(),
+                    user.getPromotions());
             return ResponseEntity.ok(new OKMessage("User registered successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ERRORMessage("Internal server error"));
         }
     }
 
@@ -53,7 +53,21 @@ public class UserController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ERRORMessage("Internal server error"));
+        }
+    }
+
+    @PostMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestParam String newPassword, @RequestParam int user_id) {
+        try {
+            userService.updatePassword(newPassword, user_id);
+            return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ERRORMessage("Internal server error"));
         }
     }
 
@@ -70,9 +84,10 @@ public class UserController {
                 // userCookie.setMaxAge(rememberMe ? 604800 : -1);
                 // response.addCookie(userCookie);
                 return ResponseEntity.ok(new OKMessage("Login successful: " + existingUser.get().getEmail()));
-            } 
-            else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ERRORMessage("Incorrect password"));
-        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ERRORMessage("User not found"));
+            } else
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ERRORMessage("Incorrect password"));
+        } else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ERRORMessage("User not found"));
     }
 
     // change to 'get-user-by-email'

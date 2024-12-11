@@ -45,12 +45,22 @@ public class MovieController {
     }
 
     @GetMapping("/search-by-title")
-    public List<Movie> getMovieByTitle(@RequestParam(required = false) String title) {
+    public List<Movie> getMoviesByTitle(@RequestParam(required = false) String title) {
         return movieService.findMoviesByTitle(title);
     }    
     
     @GetMapping("/search-by-id")
     public Movie getMovieById(@RequestParam(required = false) int id) {
         return movieService.findMovieById(id);
+    }
+
+    @GetMapping("/search-by-genre")
+    public List<Movie> getMoviesByGenre(@RequestParam String genre) {
+        return movieService.findMoviesByGenre(genre);
+    }
+
+    @GetMapping("/search-by-category")
+    public List<Movie> getMoviesByCategory(@RequestParam String category) {
+        return movieService.findMoviesByCategory(category);
     }
 }
