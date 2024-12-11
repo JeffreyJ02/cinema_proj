@@ -74,11 +74,8 @@ public class UserService {
         userRepository.updateUserById(firstName, lastName, phoneNumber, promotions, user.getUserId());
     }
 
-    public void updatePassword(String email, String currentPassword, String newPassword) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        if (!user.getPassword().equals(currentPassword)) throw new IllegalArgumentException("Current password is incorrect");
-        user.setPassword(newPassword);
-        userRepository.save(user);
+    public void updatePassword(String newPassword, int user_id) {
+        userRepository.updatePassword(newPassword, 0);
     }
 
     public void setTempPassword(String email, String tempPassword) {

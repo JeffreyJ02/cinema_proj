@@ -43,20 +43,12 @@ public class UserController {
     public ResponseEntity<?> updateProfile(@RequestBody User user) {
         try {
             userService.updateProfile(
-<<<<<<< HEAD
-                    user.getEmail(),
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getPhone_number(),
-                    user.getPromotions());
-=======
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getPhone_number(),
                 user.getPromotions()
             );
->>>>>>> 6d0f1e8ed0c48dac6e7c1b6063ba5ee8b12c162c
             return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
@@ -66,14 +58,11 @@ public class UserController {
         }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    // card = 1,2, or 3
-    @PostMapping("/set-card")
-    public ResponseEntity<?> setCard(@RequestParam int user_id, @RequestParam int card_id, @RequestParam int card) {
+    @PostMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestParam String newPassword, @RequestParam int user_id) {
         try {
-            userService.updateCard(user_id, card_id, card);
-            return ResponseEntity.ok(new OKMessage("Card updated successfully!"));
+            userService.updatePassword(newPassword, user_id);
+            return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
         } catch (Exception e) {
@@ -82,24 +71,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/set-home-addess")
-    public ResponseEntity<?> setHomeAddress(@RequestParam int user_id, @RequestParam int address_id) {
-        try {
-            userService.updateHomeAddress(user_id, address_id);
-            return ResponseEntity.ok(new OKMessage("Home Address updated successfully!"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ERRORMessage("Internal server error"));
-        }
-    }
-
-=======
->>>>>>> 1c3aa79304793c7fc29b5e4ee0a8bce7b5c38b94
-=======
     // returns cookie 
->>>>>>> 6d0f1e8ed0c48dac6e7c1b6063ba5ee8b12c162c
     @PostMapping("/login-user")
     public ResponseEntity<?> loginUser(@RequestBody User login) { //, @RequestParam boolean rememberMe) , HttpServletResponse response) {
         Optional<User> existingUser = userService.findByEmail(login.getEmail());
@@ -117,52 +89,6 @@ public class UserController {
         } else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ERRORMessage("User not found"));
     }
-<<<<<<< HEAD
-
-    // add to updateProfile?
-    /*
-     * @PostMapping("/update-password")
-     * public ResponseEntity<?> updatePassword(@RequestBody User
-     * updatePasswordRequest) {
-     * try {
-     * userService.updatePassword(
-     * updatePasswordRequest.getEmail(),
-     * updatePasswordRequest.getCurrentPassword(),
-     * updatePasswordRequest.getNewPassword());
-     * return ResponseEntity.ok(new
-     * ResponseMessage("Password updated successfully!"));
-     * } catch (IllegalArgumentException e) {
-     * return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new
-     * ErrorResponse(e.getMessage()));
-     * } catch (Exception e) {
-     * return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-     * .body(new ErrorResponse("Internal server error"));
-     * }
-     * }
-     */
-
-    // make work
-    /*
-     * @PostMapping("/temp-password")
-     * public ResponseEntity<?> setTempPassword(@RequestBody User
-     * updatePasswordRequest) {
-     * try {
-     * userService.setTempPassword(
-     * updatePasswordRequest.getEmail(),
-     * updatePasswordRequest.getNewPassword());
-     * return ResponseEntity.ok(new
-     * ResponseMessage("Password updated successfully!"));
-     * } catch (IllegalArgumentException e) {
-     * return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new
-     * ErrorResponse(e.getMessage()));
-     * } catch (Exception e) {
-     * return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-     * .body(new ErrorResponse("Internal server error"));
-     * }
-     * }
-     */
-=======
->>>>>>> 6d0f1e8ed0c48dac6e7c1b6063ba5ee8b12c162c
 
     // change to 'get-user-by-email'
     @GetMapping("/user-profile")
@@ -184,9 +110,5 @@ public class UserController {
     public int getAdminStatus(@RequestParam String email) {
         return userService.getUserProfile(email).getAdmin();
     }
-<<<<<<< HEAD
-}
-=======
     
 }
->>>>>>> 6d0f1e8ed0c48dac6e7c1b6063ba5ee8b12c162c

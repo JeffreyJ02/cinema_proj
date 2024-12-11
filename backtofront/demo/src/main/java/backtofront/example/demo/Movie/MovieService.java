@@ -42,6 +42,10 @@ public class MovieService {
         return movieRepository.findByGenreIgnoreCase(genre);
     }
 
+    public List<Movie> findMoviesByCategory(String category) {
+        return movieRepository.findByCategory(category);
+    }
+
     public boolean deleteMovieByTitle(String title) {
         // Search for the movie by the exact title
         Optional<Movie> movie = movieRepository.findByTitle(title);
