@@ -1,7 +1,5 @@
 package backtofront.example.demo.Booking;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +17,7 @@ public class Booking {
     private int bookingId;
 
     @Column(name = "seats", nullable = false)
-    private List<String> seats;
+    private String seats;
 
     @Column(name = "tickets", nullable = false)
     private String tickets;
