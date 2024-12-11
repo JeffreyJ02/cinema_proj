@@ -8,7 +8,6 @@ export default function Home() {
     return (
         <div>
             <CustomNavbar />
-            <h1>Edit Profile</h1>
             <EditProfile />
         </div>
     );

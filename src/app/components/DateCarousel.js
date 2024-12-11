@@ -41,7 +41,7 @@ function DateCarousel({ onDateSelect, dates }) {
     ],
   };
 
-  const [selectedDate, setSelectedDate] = useState(dates[0]);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
@@ -74,7 +74,7 @@ function DateCarousel({ onDateSelect, dates }) {
               key={index}
               current={localDate}
               label={formatDate(localDate)}
-              isSelected={selectedDate.getTime() === localDate.getTime()}
+              isSelected={selectedDate && selectedDate.getTime() === localDate.getTime()}
               onDateSelect={handleDateSelect}
             />
           );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { editProfileEmail } from "../../utils/email";
-import { encrypt, hash } from "../../utils/encryption";
+import { encrypt, hash, decrypt } from "../../utils/encryption";
 import {
   Alert,
   Box,
@@ -14,6 +14,8 @@ import {
   InputLabel,
   InputAdornment,
   IconButton,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -40,6 +42,7 @@ const EditProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [firstName, setFirstName] = useState("");
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState(""); // Will be fetched
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -128,6 +131,7 @@ const EditProfile = () => {
         });
 
         console.log(userData);
+        getStoredCards(userData.userId);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -136,9 +140,37 @@ const EditProfile = () => {
     fetchUserProfile(userEmail); // Call the fetch function with the user email
   }, []);
 
+  const getStoredCards = async (id) => {
+    console.log("Getting stored cards...");
+    console.log("User ID:", id);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/get-user-cards?user_id=${id}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch stored cards");
+      const data = await response.json();
+
+      const decryptedCards = data.map((card) => ({
+        cardId: card.cardId,
+        cardType: card.cardType ? decrypt(card.cardType) : null,
+        cardNumber: card.cardNumber ? decrypt(card.cardNumber) : null,
+        expirationDate: card.expirationDate
+          ? decrypt(card.expirationDate)
+          : null,
+        securityCode: card.securityCode ? decrypt(card.securityCode) : null,
+        userId: card.userId,
+        addressId: card.addressId,
+      }));
+      console.log("Decrypted cards:", decryptedCards);
+      setStoredCards(decryptedCards);
+    } catch (error) {
+      console.error("Error fetching stored cards:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
+
     console.log("Form submitted");
     setSuccessMessage("User information successfully updated");
     const newErrors = {};
@@ -149,21 +181,23 @@ const EditProfile = () => {
     }
 
     if (localStorage.getItem("tempPassword") !== formData.currentPassword) {
-          
-    if (formData.newPassword && formData.newPassword !== formData.confirmNewPassword) {
-      newErrors.confirmNewPassword = "Passwords do not match";
+      if (
+        formData.newPassword &&
+        formData.newPassword !== formData.confirmNewPassword
+      ) {
+        newErrors.confirmNewPassword = "Passwords do not match";
+      }
     }
-  }
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-    
+
     const encryptedNewPassword = hash(formData.newPassword);
     const encryptedCurrentPassword = hash(formData.currentPassword);
     const encryptedCreditCard = encrypt(
       creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4)
     );
-    console.log(formData)
+    console.log(formData);
     console.log("Address:", {
       street,
       city,
@@ -172,25 +206,25 @@ const EditProfile = () => {
     });
     try {
       console.log("Sending editProfile email... " + formData.email);
-      //editProfileEmail({ email });
+      editProfileEmail({ email });
     } catch (error) {
       console.error("Error sending editProfile email:", error);
     }
     try {
       // Update user profile
       console.log("Updating profile...");
+      console.log("Form Data:", formData);
       const profileResponse = await fetch(
         "http://localhost:8080/api/update-profile",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone_number: formData.phoneNumber,
-          promotions: formData.promotionalEmails
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone_number: formData.phoneNumber,
+            promotions: formData.promotionalEmails,
           }),
         }
       );
@@ -200,7 +234,7 @@ const EditProfile = () => {
       }
 
       // Update password if provided
-      console.log("outside password functionality")
+      console.log("outside password functionality");
       if (formData.newPassword) {
         console.log("here");
         const passwordResponse = await fetch(
@@ -210,7 +244,7 @@ const EditProfile = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               email: formData.email,
-              password: encryptedCurrentPassword
+              password: encryptedCurrentPassword,
             }),
           }
         );
@@ -323,213 +357,229 @@ const EditProfile = () => {
   ];
 
   return (
-      <Container
-        maxWidth={false}
+    <Container
+      maxWidth={false}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        width: "100vw",
+      }}
+    >
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
-          width: "100vw",
+          width: "66%",
+          maxWidth: "500px",
+          padding: 4,
+          boxShadow: 3,
+          borderRadius: 2,
+          backgroundColor: "#fff",
         }}
       >
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{
-            width: "66%",
-            maxWidth: "500px",
-            padding: 4,
-            boxShadow: 3,
-            borderRadius: 2,
-            backgroundColor: "#fff",
-          }}
+        <h2>Edit Profile</h2>
+        <h3>Personal Information</h3>
+        <TextField
+          label="Email"
+          name="email"
+          value={formData.email}
+          fullWidth
+          readOnly
+          margin="normal"
+        />
+        <TextField
+          label="First Name"
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Last Name"
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Phone Number"
+          name="phoneNumber"
+          value={formData.phoneNumber}
+          onChange={handleChange}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <h3>Address Information</h3>
+        <TextField
+          label="Street"
+          name="street"
+          value={formData.street}
+          onChange={handleChange}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="City"
+          name="city"
+          value={formData.city}
+          onChange={handleChange}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Zip Code"
+          name="zipCode"
+          value={formData.zipCode}
+          onChange={handleChange}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          id="state-select"
+          select
+          label="State"
+          fullWidth
+          value={formData.billingState}
+          onChange={(e) =>
+            handleChange({
+              target: { name: "billingState", value: e.target.value },
+            })
+          }
         >
-          <h2>Edit Profile</h2>
-          <h3>Personal Information</h3>
-          <TextField
-            label="Email"
-            name="email"
-            value={formData.email}
-            fullWidth
-            readOnly
-            margin="normal"
-          />
-          <TextField
-            label="First Name"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Last Name"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Phone Number"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            required
-            fullWidth
-            margin="normal"
-          />
-          <h3>Address Information</h3>
-          <TextField
-            label="Street"
-            name="street"
-            value={formData.street}
-            onChange={handleChange}
-            required
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="City"
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            required
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Zip Code"
-            name="zipCode"
-            value={formData.zipCode}
-            onChange={handleChange}
-            required
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            id="state-select"
-            select
-            label="State"
-            fullWidth
-            value={formData.billingState}
-            onChange={(e) =>
-              handleChange({
-                target: { name: "billingState", value: e.target.value },
-              })
-            }
-          >
-            {states.map((state) => (
-              <MenuItem key={state} value={state}>
-                {state}
-              </MenuItem>
-            ))}
-          </TextField>
-          <h3>Payment Cards</h3>
-          <Button onClick={() => setShowAddCard(true)}>Add New Card</Button>
-          {showAddCard && (
-            <div>
-              <TextField
-                label="Credit Card Number"
-                name="card_number"
-                type="tel"
-                inputMode="numeric"
-                pattern="[0-9\s]{13,19}"
-                autoComplete="cc-number"
-                maxLength="19"
-                placeholder="xxxx xxxx xxxx xxxx"
-                value={formData.cardNumber}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="Expiration Date"
-                name="expirationDate"
-                type="tel"
-                inputMode="numeric"
-                pattern="/^[0-9]{3,4}$/"
-                maxLength="5"
-                placeholder="MM/YY"
-                value={formData.expirationDate}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="CVV"
-                name="securityCode"
-                type="tel"
-                inputMode="numeric"
-                pattern="[0-9]{3-4}"
-                maxLength="4"
-                placeholder="123"
-                value={formData.securityCode}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-              />
-              <button type="button" onClick={handleAddCard}>
-                Add Card
-              </button>
-              <button type="button" onClick={() => setShowAddCard(false)}>
-                Cancel
-              </button>
-            </div>
-          )}
-          {storedCards.length > 0 ? (
-            <ul>
-              {storedCards.map((card, index) => (
-                <li key={index}>
-                  {card.number} - {card.expirationDate}
-                  <button type="button" onClick={() => handleDeleteCard(index)}>
-                    Delete
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No stored cards available.</p>
-          )}
-          {errors.form && <p className="error-message">{errors.form}</p>}
-          <h3>Password</h3>
-          <TextField
-            label="New Password"
-            name="newPassword"
-            type="password"
-            value={formData.newPassword}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Confirm New Password"
-            name="confirmNewPassword"
-            type="password"
-            value={formData.confirmNewPassword}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
+          {states.map((state) => (
+            <MenuItem key={state} value={state}>
+              {state}
+            </MenuItem>
+          ))}
+        </TextField>
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="promotionalEmails"
+              checked={formData.promotionalEmails}
+              onChange={handleChange}
+            />
+          }
+          label="Promotional Emails"
+        />
 
-          <h3>Save Changes</h3>
-          <p>To save your changes, please enter your current password</p>
-          <TextField
-            label="Password"
-            name="currentPassword"
-            type="password"
-            value={formData.currentPassword}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <Button type="submit">Save Changes</Button>
-        </Box>
-      </Container>
+        <h3>Payment Cards</h3>
+        {storedCards.length > 0 ? (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              {storedCards.map((card, index) => (
+                <Button
+                  key={index}
+                  variant={
+                    index === selectedCardIndex ? "contained" : "outlined"
+                  }
+                  onClick={() => setSelectedCardIndex(index)}
+                  sx={{ justifyContent: "space-between" }}
+                >
+                  **** **** **** {card.cardNumber.slice(-4)} -{" "}
+                  {card.expirationDate}
+                </Button>
+              ))}
+            </Box>
+          ) : (
+            <Typography variant="body1">No stored cards avaliable</Typography>
+          )}
+        <Button onClick={() => setShowAddCard(true)}>Add New Card</Button>
+        {showAddCard && (
+          <div>
+            <TextField
+              label="Credit Card Number"
+              name="card_number"
+              type="tel"
+              inputMode="numeric"
+              pattern="[0-9\s]{13,19}"
+              autoComplete="cc-number"
+              maxLength="19"
+              placeholder="xxxx xxxx xxxx xxxx"
+              value={formData.cardNumber}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Expiration Date"
+              name="expirationDate"
+              type="tel"
+              inputMode="numeric"
+              pattern="/^[0-9]{3,4}$/"
+              maxLength="5"
+              placeholder="MM/YY"
+              value={formData.expirationDate}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="CVV"
+              name="securityCode"
+              type="tel"
+              inputMode="numeric"
+              pattern="[0-9]{3-4}"
+              maxLength="4"
+              placeholder="123"
+              value={formData.securityCode}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <button type="button" onClick={handleAddCard}>
+              Add Card
+            </button>
+            <button type="button" onClick={() => setShowAddCard(false)}>
+              Cancel
+            </button>
+          </div>
+        )}
+        {errors.form && <p className="error-message">{errors.form}</p>}
+        <h3>Password</h3>
+        <TextField
+          label="New Password"
+          name="newPassword"
+          type="password"
+          value={formData.newPassword}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Confirm New Password"
+          name="confirmNewPassword"
+          type="password"
+          value={formData.confirmNewPassword}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
+
+        <h3>Save Changes</h3>
+        <p>To save your changes, please enter your current password</p>
+        <TextField
+          label="Password"
+          name="currentPassword"
+          type="password"
+          value={formData.currentPassword}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
+        <Button type="submit">Save Changes</Button>
+      </Box>
+    </Container>
   );
 };
 export default EditProfile;
