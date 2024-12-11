@@ -312,7 +312,7 @@ Ex.
         return;
       } else {
         console.log("No seat conflicts detected");
-        updateDatabaseSeats();
+        //updateDatabaseSeats();
       }
     } catch (error) {
       console.error("Error fetching seat availability:",  error);
@@ -346,6 +346,7 @@ Ex.
       localStorage.setItem("bookingConfirmation", JSON.stringify(checkoutData));
       window.location.href = "/booking/[movieId]/confirmation";
     } catch (error) {
+      console.error(error.stack)
       console.error("Error during checkout:", error);
     }
   };

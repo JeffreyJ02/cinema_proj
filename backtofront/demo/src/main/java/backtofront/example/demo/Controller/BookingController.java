@@ -21,6 +21,7 @@ public class BookingController {
 
     @PostMapping("/register-booking")
     public ResponseEntity<?> registerBooking(@RequestBody Booking booking, @RequestParam int user_id) {
+        System.out.println(booking);
         try {
             bookingService.registerBooking(
                 booking.getSeats(),
@@ -36,6 +37,7 @@ public class BookingController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
         }
     }

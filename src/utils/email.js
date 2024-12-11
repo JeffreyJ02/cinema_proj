@@ -33,10 +33,11 @@ export function forgotPassword( {user_email, message} ) {
     emailjs.send("service_4brc417", "template_6zuhtqr", parms);
 }
 
-export function verificationCode( {user_email, message} ) {
+export function verificationCode( {email, message} ) {
+    console.log("vc, email: ", email);
     const parms = {
         subject: 'Verification Code',
-        user_email,
+        user_email: email,
         message
     };
 

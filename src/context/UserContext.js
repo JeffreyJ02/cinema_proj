@@ -7,29 +7,36 @@ import { jwtDecode } from "jwt-decode";
 const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
-  const [userEmail, setUserEmail] = useState(null);
+  const [cookies, setCookie, removeCookie] = useCookies(["userEmail"]);
+  const [userEmail, setUserEmail] = useState(cookies.userEmail || null);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
     const userEmail = localStorage.getItem("userEmail");
     const currentPath = window.location.pathname;
 
-    if (!userEmail && currentPath !== "/sign-in" && currentPath !== "/sign-up" && currentPath !== "/forgot-password" && currentPath !== "/password-reset" && currentPath !== "/") {
+    if (!cookies.userEmail && currentPath !== "/sign-in" && currentPath !== "/sign-up" && currentPath !== "/forgot-password" && currentPath !== "/password-reset" && currentPath !== "/") {
       setIsAuthenticated(false);
       window.location.href = "/sign-in";
     } else {
-      setUserEmail(userEmail);
+      setUserEmail(cookies.userEmail || null);
       setIsAuthenticated(true);
     }
-  }, []);
+  }, [cookies]);
 
   const login = (email) => {
     localStorage.setItem("userEmail", email);
+    setCookie("userEmail", email, {
+      path: "/",
+      maxAge: 3600,
+      sameSite: "strict",
+    });
     setUserEmail(email);
   };
 
   const logout = () => {
     localStorage.removeItem("userEmail");
+    removeCookie("userEmail", { path: "/" });
     setUserEmail(null);
     window.location.href = "/sign-in";
   };
