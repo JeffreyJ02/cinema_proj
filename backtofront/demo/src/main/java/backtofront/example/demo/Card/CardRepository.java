@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Integer> {
-    @Override
     List<Card> findAll();
     List<Card> findAllByUserId(int user_id);
     Optional<Card> findByCardId(int card_id);
