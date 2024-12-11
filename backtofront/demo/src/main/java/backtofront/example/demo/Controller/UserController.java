@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import backtofront.example.demo.Controller.ControllerMessage.*;
 import backtofront.example.demo.User.*;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin(origins = { "http://localhost:3000", "http://127.0.0.1:5500" })
@@ -55,13 +57,17 @@ public class UserController {
         }
     }
 
+    // returns cookie 
     @PostMapping("/login-user")
-    public ResponseEntity<Object> loginUser(@RequestBody User user) {
-        Optional<User> existingUser = userService.findByEmail(user.getEmail());
+    public ResponseEntity<Object> loginUser(@RequestBody User login, HttpServletResponse response) {
+        Optional<User> existingUser = userService.findByEmail(login.getEmail());
         if (existingUser.isPresent()) {
+            User user = existingUser.get();
             System.out.println("Recieved password: " + user.getPassword());
             System.out.println("User password: " + existingUser.get().getPassword());
-            if (existingUser.get().getPassword().equals(user.getPassword())) {
+            if (user.getPassword().equals(user.getPassword())) {
+                Cookie userCookie = new Cookie(user.getEmail(), user.getUserId() + "");
+                response.addCookie(userCookie);
                 return ResponseEntity.ok(new OKMessage("Login successful: " + existingUser.get().getEmail()));
             } 
             else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ERRORMessage("Incorrect password"));
