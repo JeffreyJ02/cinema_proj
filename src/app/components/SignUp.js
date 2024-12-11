@@ -71,6 +71,7 @@ const SignUpPage = () => {
   const sendVerificationEmail = async (emailAddress) => {
     console.log("sendVerificationEmail called");
     const code = generateVerificationCode();
+    console.log(code)
     try {
         // Async function to send verification code from email.js
       verificationCode({
@@ -99,6 +100,7 @@ const SignUpPage = () => {
     e.preventDefault();
     const { email, confirmEmail, password, confirmPassword, phone_number, card_number, expirationDate, securityCode } = formData;
 
+    console.log('errror checking')
     if (email !== confirmEmail) {
       setErrorMessage("Email addresses do not match.");
       return;
@@ -145,7 +147,7 @@ const SignUpPage = () => {
         return; // Stops execution if validation fails
       }
     }
-    
+    console.log('no errors')
     // If all validations pass or credit card fields are empty, continue to send verification email
     await sendVerificationEmail(email); // Send verification email
     handleShow(); // Open the verification modal
@@ -225,8 +227,10 @@ const SignUpPage = () => {
 
   const registerCard = async (email, card_type, card_number, expirationDate, securityCode) => {
     try {
+      console.log("Registering card");
       await fetch("http://localhost:8080/api/register-card", {
         method: "POST",
+        
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           email, 
@@ -248,6 +252,7 @@ const registerAddress = async (email, billingName, billingAddress, billingCity, 
   try {
     await fetch("http://localhost:8080/api/register-address", {
       method: "POST",
+      
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
         name: billingName,
@@ -255,7 +260,8 @@ const registerAddress = async (email, billingName, billingAddress, billingCity, 
         city: billingCity,
         state: billingState,
         zipCode: billingZip,
-        email: email
+        email: email,
+        isHome: true
       })
     });
     console.log("Address registered successfully");
