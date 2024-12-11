@@ -20,16 +20,18 @@ public class BookingController {
     }
 
     @PostMapping("/register-booking")
-    public ResponseEntity<?> registerBooking(@RequestBody Booking booking) {
+    public ResponseEntity<?> registerBooking(@RequestBody Booking booking, @RequestParam int user_id) {
         try {
             bookingService.registerBooking(
+                booking.getSeats(),
                 booking.getTickets(),
                 booking.getMovieTitle(),
                 booking.getShowDate(),
                 booking.getShowTime(),
                 booking.getCardNumber(),
-                booking.getUserId()
-        );
+                booking.getPrice(),
+                user_id
+            );
             return ResponseEntity.ok(new OKMessage("Booking registered successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));

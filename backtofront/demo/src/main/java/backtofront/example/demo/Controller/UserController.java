@@ -59,7 +59,7 @@ public class UserController {
 
     // returns cookie 
     @PostMapping("/login-user")
-    public ResponseEntity<?> loginUser(@RequestBody User login, @RequestParam boolean rememberMe) { //, HttpServletResponse response) {
+    public ResponseEntity<?> loginUser(@RequestBody User login) { //, @RequestParam boolean rememberMe) , HttpServletResponse response) {
         Optional<User> existingUser = userService.findByEmail(login.getEmail());
         if (existingUser.isPresent()) {
             User user = existingUser.get();

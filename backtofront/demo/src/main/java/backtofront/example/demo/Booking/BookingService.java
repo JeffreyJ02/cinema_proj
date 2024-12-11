@@ -12,15 +12,16 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public void registerBooking(List<Integer> tickets, String movieTitle, String showDate,
-                                String showTime, String cardNumber, int userId) {
+    public void registerBooking(String seats, String tickets, String movieTitle, String showDate,
+                                String showTime, String cardNumber, double price, int userId) {
         Booking booking = new Booking();
-        // (int)
         booking.setBookingId(bookingRepository.maxBookingId() + 1);
+        booking.setSeats(seats);
         booking.setTickets(tickets);
         booking.setShowDate(showDate);
         booking.setShowTime(showTime);
         booking.setCardNumber(cardNumber);
+        booking.setPrice(price);
         booking.setUserId(userId);
 
         bookingRepository.save(booking);
