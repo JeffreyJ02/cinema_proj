@@ -31,7 +31,7 @@ public class AddressService {
     }
 
     public Address findAddressByAddressId(int address_id) {
-        Optional<Address> opt_addr = addressRepository.findById(address_id);
+        Optional<Address> opt_addr = addressRepository.findByAddressId(address_id);
         if (opt_addr.isPresent()) return opt_addr.get();
         return new Address();
     }
