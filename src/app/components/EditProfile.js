@@ -138,27 +138,32 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+   
     console.log("Form submitted");
     setSuccessMessage("User information successfully updated");
     const newErrors = {};
 
-    if (newPassword && !validatePassword(newPassword)) {
+    if (formData.newPassword && !validatePassword(formData.newPassword)) {
       newErrors.newPassword =
         "Password must include upper, lower, number, symbol, and be at least 8 characters long";
     }
-    if (newPassword && newPassword !== confirmNewPassword) {
+
+    if (localStorage.getItem("tempPassword") !== formData.currentPassword) {
+          
+    if (formData.newPassword && formData.newPassword !== formData.confirmNewPassword) {
       newErrors.confirmNewPassword = "Passwords do not match";
     }
+  }
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
     
-    const encryptedNewPassword = hash(newPassword);
-    const encryptedCurrentPassword = hash(currentPassword);
+    const encryptedNewPassword = hash(formData.newPassword);
+    const encryptedCurrentPassword = hash(formData.currentPassword);
     const encryptedCreditCard = encrypt(
       creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4)
     );
-
+    console.log(formData)
     console.log("Address:", {
       street,
       city,
@@ -166,49 +171,54 @@ const EditProfile = () => {
       zipCode,
     });
     try {
-      console.log("Sending editProfile email...");
-      editProfileEmail({ email });
+      console.log("Sending editProfile email... " + formData.email);
+      //editProfileEmail({ email });
     } catch (error) {
       console.error("Error sending editProfile email:", error);
     }
     try {
       // Update user profile
+      console.log("Updating profile...");
       const profileResponse = await fetch(
         "http://localhost:8080/api/update-profile",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            email,
-            firstName,
-            lastName,
-            phoneNumber,
-            promotionalEmails,
+            
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone_number: formData.phoneNumber,
+          promotions: formData.promotionalEmails
           }),
         }
       );
-
+      console.log("Profile response:", profileResponse);
       if (!profileResponse.ok) {
         throw new Error("Failed to update profile");
       }
 
       // Update password if provided
-      if (newPassword) {
+      console.log("outside password functionality")
+      if (formData.newPassword) {
+        console.log("here");
         const passwordResponse = await fetch(
-          "http://localhost:8080/api/update-password",
+          `http://localhost:8080/api/update-password?newpass=${encryptedNewPassword}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              email,
-              currentPassword: encryptedCurrentPassword,
-              newPassword: encryptedNewPassword,
+              email: formData.email,
+              password: encryptedCurrentPassword
             }),
           }
         );
 
         if (!passwordResponse.ok) {
           throw new Error("Failed to update password");
+        } else {
+          console.log("Password updated successfully");
         }
       }
 
@@ -313,7 +323,6 @@ const EditProfile = () => {
   ];
 
   return (
-    <div>
       <Container
         maxWidth={false}
         sx={{
@@ -521,211 +530,6 @@ const EditProfile = () => {
           <Button type="submit">Save Changes</Button>
         </Box>
       </Container>
-      <form onSubmit={handleSubmit}>
-        <h2>Edit Profile</h2>
-        {successMessage && <p className="success-message">{successMessage}</p>}
-        <label>
-          Email:
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            readOnly //user cannot edit email
-          />
-        </label>
-        <br />
-        <label>
-          First Name:
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            placeholder="First Name"
-          />
-        </label>
-        <br />
-        <label>
-          Last Name:
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            placeholder="Last Name"
-          />
-        </label>
-        <br />
-        <label>
-          Phone Number:
-          <input
-            type="text"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            placeholder="Phone Number"
-          />
-        </label>
-        <br />
-        <label>
-          Current Password:
-          <input
-            type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            placeholder="Enter current password"
-          />
-        </label>
-        <br />
-        <label>
-          New Password:
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Enter new password"
-          />
-        </label>
-        <br />
-        <label>
-          Confirm New Password:
-          <input
-            type="password"
-            value={confirmNewPassword}
-            onChange={(e) => setConfirmNewPassword(e.target.value)}
-            placeholder="Confirm new password"
-          />
-        </label>
-        <br />
-        <label>
-          Street:
-          <input
-            type="text"
-            value={street}
-            onChange={(e) => setStreet(e.target.value)}
-            placeholder="Enter street"
-          />
-        </label>
-        <label>
-          Street:
-          <input
-            type="text"
-            value={street}
-            onChange={(e) => setStreet(e.target.value)}
-            placeholder="Enter street"
-          />
-        </label>
-        <br />
-        <label>
-          City:
-          <input
-            type="text"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            placeholder="Enter city"
-          />
-        </label>
-        <br />
-        <label>
-          State:
-          <input
-            type="text"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-            placeholder="Enter state"
-          />
-        </label>
-        <br />
-        <label>
-          Zip Code:
-          <input
-            type="text"
-            value={zipCode}
-            onChange={(e) => setZipCode(e.target.value)}
-            placeholder="Enter zip code"
-          />
-        </label>
-        <br />
-        <label>
-          <input
-            type="checkbox"
-            checked={promotionalEmails}
-            onChange={(e) => setPromotionalEmails(e.target.checked)}
-            style={{ marginRight: "8px" }}
-          />
-          Receive promotional emails
-        </label>
-        <br />
-        <button type="submit">Update Profile</button>
-        <h3>Stored Credit Cards</h3>
-        <button type="button" onClick={() => setShowAddCard(true)}>
-          Add New Card
-        </button>
-        {showAddCard && (
-          <div>
-            <h4>Add Credit Card</h4>
-            <label>
-              Card Number:
-              <input
-                type="text"
-                value={creditCardNumber}
-                onChange={(e) => setCreditCardNumber(e.target.value)}
-                placeholder="xxxx-xxxx-xxxx-xxxx"
-              />
-            </label>
-            <br />
-            <label>
-              Expiration Date (MM/YY):
-              <input
-                type="text"
-                value={expirationDate}
-                onChange={(e) => setExpirationDate(e.target.value)}
-                placeholder="MM/YY"
-              />
-            </label>
-            <br />
-            <label>
-              CVV:
-              <input
-                type="text"
-                value={cvv}
-                onChange={(e) => setCvv(e.target.value)}
-                placeholder="CVV"
-              />
-            </label>
-            <br />
-            <label>
-              Billing Address:
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Enter billing address"
-              />
-            </label>
-            <br />
-            <button type="button" onClick={handleAddCard}>
-              Add Card
-            </button>
-            <button type="button" onClick={() => setShowAddCard(false)}>
-              Cancel
-            </button>
-          </div>
-        )}
-        {storedCards.length > 0 ? (
-          <ul>
-            {storedCards.map((card, index) => (
-              <li key={index}>
-                {card.number} - {card.expirationDate}
-                <button type="button" onClick={() => handleDeleteCard(index)}>
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No stored cards available.</p>
-        )}
-        {errors.form && <p className="error-message">{errors.form}</p>}
-      </form>
-    </div>
   );
 };
 export default EditProfile;

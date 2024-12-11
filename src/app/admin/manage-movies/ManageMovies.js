@@ -151,11 +151,15 @@ const ManageMovies = () => {
         <br />
 
         <label>Category:</label>
-        <input
-          type="text"
+        <select   
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-        />
+          required
+        >
+          <option value="">Select a category</option>
+          <option value="Coming Soon">Coming Soon</option>
+          <option value="Currently Running">Currently Running</option>
+        </select>
         <br />
 
         <label>Image URL:</label>
@@ -219,3 +223,5 @@ const ManageMovies = () => {
 };
 
 export default ManageMovies;
+
+

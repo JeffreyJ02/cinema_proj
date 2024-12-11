@@ -41,3 +41,15 @@
   .manage-showing button:hover {
     background-color: #218838;
   }
+
+  .back-button {
+    position: absolute; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: none; 
+    color: black; 
+    border: none; 
+    font-size: 16px; 
+    cursor: pointer; 
+  }
