@@ -300,12 +300,12 @@ Ex.
         throw new Error("Failed to fetch seat availability");
       }
       const seatAvailability = await response.json();
-  
+
       const unavailableSeats = seatAvailability.map((seat) => seat.seatId);
       const hasConflict = checkoutInfo.seat_arr.some((seat) =>
         unavailableSeats.includes(seat)
       );
-  
+
       if (hasConflict) {
         console.error("Seat conflict detected");
         alert("One or more selected seats are no longer available.");
@@ -315,9 +315,9 @@ Ex.
         updateDatabaseSeats();
       }
     } catch (error) {
-      console.error("Error fetching seat availability:",  error);
+      console.error("Error fetching seat availability:", error);
     }
-  
+
     try {
       const checkoutData = {
         seats: checkoutInfo.seats,
@@ -346,7 +346,7 @@ Ex.
       localStorage.setItem("bookingConfirmation", JSON.stringify(checkoutData));
       window.location.href = "/booking/[movieId]/confirmation";
     } catch (error) {
-      console.error(error.stack)
+      console.error(error.stack);
       console.error("Error during checkout:", error);
     }
   };
@@ -467,220 +467,261 @@ Ex.
     );
 
   return (
-    <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Checkout
-      </Typography>
-      <MovieInfo movie={movie} />
-      <Typography variant="body1">1. Seats</Typography>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        padding: 2,
+      }}
+    >
       <Box
         sx={{
+          width: "100%",
+          maxWidth: "600px",
+          padding: 4,
           display: "flex",
-          justifyContent: "space-between",
-          borderBottom: "1px solid #ccc",
-          paddingY: 1,
+          flexDirection: "column",
+          gap: 2,
         }}
       >
-        <Typography variant="body1">My Seats:</Typography>
-        <Typography variant="body1" fontWeight="bold">
-          {seats}
+        <Typography variant="h4" gutterBottom>
+          Checkout
         </Typography>
-      </Box>
-      <Typography variant="body1">2. Tickets</Typography>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          borderBottom: "1px solid #ccc",
-          paddingY: 1,
-        }}
-      >
-        <Typography variant="body1">My Tickets:</Typography>
-        <Typography variant="body1" fontWeight="bold">
-          {tickets.substring(2)}
-        </Typography>
-      </Box>
+        <MovieInfo movie={movie} />
+        <Typography variant="body1">1. Seats</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #ccc",
+            paddingY: 1,
+          }}
+        >
+          <Typography variant="body1">My Seats:</Typography>
+          <Typography variant="body1" fontWeight="bold">
+            {seats}
+          </Typography>
+        </Box>
+        <Typography variant="body1">2. Tickets</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #ccc",
+            paddingY: 1,
+          }}
+        >
+          <Typography variant="body1">My Tickets:</Typography>
+          <Typography variant="body1" fontWeight="bold">
+            {tickets.substring(2)}
+          </Typography>
+        </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          borderBottom: "1px solid #ccc",
-          paddingY: 1,
-        }}
-      >
-        <Typography variant="body1">My Total:</Typography>
-        <Typography variant="body1" fontWeight="bold">
-          ${total} + tax: ${(total * 0.07).toFixed(2)} = $
-          {(total * 1.07).toFixed(2)}
-        </Typography>
-      </Box>
-      <Typography variant="body1">3. Payment</Typography>
-      <div>
-        <p>Stored Cards:</p>
-        {storedCards.length > 0 ? (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            {storedCards.map((card, index) => (
-              <Button
-                key={index}
-                variant={index === selectedCardIndex ? "contained" : "outlined"}
-                onClick={() => setSelectedCardIndex(index)}
-                sx={{ justifyContent: "space-between" }}
-              >
-                **** **** **** {card.cardNumber.slice(-4)} -{" "}
-                {card.expirationDate}
-              </Button>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #ccc",
+            paddingY: 1,
+          }}
+        >
+          <Typography variant="body1">My Total:</Typography>
+          <Typography variant="body1" fontWeight="bold">
+            ${total} + tax: ${(total * 0.07).toFixed(2)} = $
+            {(total * 1.07).toFixed(2)}
+          </Typography>
+        </Box>
+        <Typography variant="body1">3. Payment</Typography>
+        <div>
+          <Typography variant="body1" sx={{ margin: "0 0 15px 0" }}>Stored Cards:</Typography>
+          {storedCards.length > 0 ? (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              {storedCards.map((card, index) => (
+                <Button
+                  key={index}
+                  variant={
+                    index === selectedCardIndex ? "contained" : "outlined"
+                  }
+                  onClick={() => setSelectedCardIndex(index)}
+                  sx={{ justifyContent: "space-between" }}
+                >
+                  **** **** **** {card.cardNumber.slice(-4)} -{" "}
+                  {card.expirationDate}
+                </Button>
+              ))}
+            </Box>
+          ) : (
+            <Typography variant="body1">No stored cards avaliable</Typography>
+          )}
+          <Typography variant="body1" sx={{ margin: "20px 0 0 0" }}>
+            Add Card:
+          </Typography>
+          <TextField
+            label="Credit Card Number"
+            name="creditCardNumber"
+            type="tel"
+            inputMode="numeric"
+            pattern="\d{4}-\d{4}-\d{4}-\d{4}"
+            autoComplete="cc-number"
+            maxLength="19"
+            placeholder="xxxx-xxxx-xxxx-xxxx"
+            value={cardData.creditCardNumber}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            id="type-select"
+            select
+            label="Card Type"
+            value={cardData.cardType || ""}
+            fullWidth
+            onChange={(e) =>
+              handleChange({
+                target: { name: "cardType", value: e.target.value },
+              })
+            }
+          >
+            {cardTypes.map((ctype) => (
+              <MenuItem key={ctype} value={ctype}>
+                {ctype}
+              </MenuItem>
             ))}
+          </TextField>
+          <TextField
+            label="Expiration Date"
+            name="expirationDate"
+            type="tel"
+            inputMode="numeric"
+            pattern="(0[1-9]|1[0-2])\/\d{2}"
+            maxLength="5"
+            placeholder="MM/YY"
+            value={cardData.expirationDate}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="CVV"
+            name="cvv"
+            type="tel"
+            inputMode="numeric"
+            pattern="\d{3,4}"
+            maxLength="4"
+            placeholder="123"
+            value={cardData.cvv}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Name"
+            name="name"
+            value={cardData.name}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Street"
+            name="street"
+            value={cardData.street}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="City"
+            name="city"
+            value={cardData.city}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+          />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 2,
+              marginY: 2,
+            }}
+          >
+            <TextField
+              label="Zip Code"
+              name="zipCode"
+              value={cardData.zipCode}
+              onChange={handleChange}
+              required
+              fullWidth
+              sx={{ flex: 1 }}
+            />
+            <TextField
+              id="state-select"
+              select
+              label="State"
+              fullWidth
+              value={cardData.state}
+              onChange={(e) =>
+                handleChange({
+                  target: { name: "state", value: e.target.value },
+                })
+              }
+              sx={{ flex: 1 }}
+            >
+              {states.map((state) => (
+                <MenuItem key={state} value={state}>
+                  {state}
+                </MenuItem>
+              ))}
+            </TextField>
           </Box>
-        ) : (
-          <p>No stored cards available.</p>
-        )}
-        <TextField
-          label="Credit Card Number"
-          name="creditCardNumber"
-          type="tel"
-          inputMode="numeric"
-          pattern="\d{4}-\d{4}-\d{4}-\d{4}"
-          autoComplete="cc-number"
-          maxLength="19"
-          placeholder="xxxx-xxxx-xxxx-xxxx"
-          value={cardData.creditCardNumber}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="type-select"
-          select
-          label="Card Type"
-          value={cardData.cardType || ""}
-          fullWidth
-          onChange={(e) =>
-            handleChange({
-              target: { name: "cardType", value: e.target.value },
-            })
-          }
+
+          <Button variant="contained" onClick={handleAddCard}>
+            Add Card
+          </Button>
+        </div>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingY: 1,
+            borderBottom: "1px solid #ccc",
+          }}
         >
-          {cardTypes.map((ctype) => (
-            <MenuItem key={ctype} value={ctype}>
-              {ctype}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          label="Expiration Date"
-          name="expirationDate"
-          type="tel"
-          inputMode="numeric"
-          pattern="(0[1-9]|1[0-2])\/\d{2}"
-          maxLength="5"
-          placeholder="MM/YY"
-          value={cardData.expirationDate}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="CVV"
-          name="cvv"
-          type="tel"
-          inputMode="numeric"
-          pattern="\d{3,4}"
-          maxLength="4"
-          placeholder="123"
-          value={cardData.cvv}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Name"
-          name="name"
-          value={cardData.name}
-          onChange={handleChange}
-          required
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Street"
-          name="street"
-          value={cardData.street}
-          onChange={handleChange}
-          required
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="City"
-          name="city"
-          value={cardData.city}
-          onChange={handleChange}
-          required
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Zip Code"
-          name="zipCode"
-          value={cardData.zipCode}
-          onChange={handleChange}
-          required
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="state-select"
-          select
-          label="State"
-          fullWidth
-          value={cardData.state}
-          onChange={(e) =>
-            handleChange({
-              target: { name: "state", value: e.target.value },
-            })
-          }
-        >
-          {states.map((state) => (
-            <MenuItem key={state} value={state}>
-              {state}
-            </MenuItem>
-          ))}
-        </TextField>
-        <Button variant="contained" onClick={handleAddCard}>
-          Add Card
-        </Button>
-        <Button variant="outlined" onClick={() => setShowAddCard(false)}>
-          Cancel
-        </Button>
-      </div>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          borderBottom: "1px solid #ccc",
-          paddingY: 1,
-        }}
-      >
-        <TextField
-          label="Promo Code"
-          value={promoCode}
-          onChange={(e) => setPromoCode(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => applyPromoCode(promoCode)}
-        >
-          Apply
+          <TextField
+            label="Promo Code"
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value)}
+            sx={{
+              flex: 1,
+              marginRight: 2,
+              maxWidth: "300px",
+              height: "56px",
+            }}
+          />
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => console.log("Apply promo code")}
+            sx={{
+              flexShrink: 0,
+              height: "56px",
+            }}
+          >
+            Apply
+          </Button>
+        </Box>
+
+        <Button variant="contained" color="primary" onClick={submitCheckout}>
+          Confirm Payment
         </Button>
       </Box>
-
-      <Button variant="contained" color="primary" onClick={submitCheckout}>
-        Confirm Payment
-      </Button>
     </Box>
   );
 }
