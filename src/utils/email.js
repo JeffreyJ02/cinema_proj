@@ -1,32 +1,30 @@
 import emailjs from '@emailjs/browser';
 emailjs.init('aLH3Qp8VUhQqJf1nk');
 
-// if breaks, change {user_email} back to {email} 
-// and user_email: email
-export function optInPromoEmails( {user_email} ) {
+export function optInPromoEmails( {email} ) {
     const parms = {
         subject: "Promotional Opt-In",
-        user_email,
+        user_email: email,
         message: "you have opted in to receive promotional emails."
     };
 
     emailjs.send("service_4brc417", "template_r3h3fid", parms)
 }
 
-export function editProfileEmail( {user_email} ) {
+export function editProfileEmail( {email} ) {
     const parms = {
         subject: "Profile Edited",
-        user_email,
+        user_email: email,
         message: "your profile's information has been edited."
     };
 
     emailjs.send("service_4brc417", "template_r3h3fid", parms);
 }
 
-export function forgotPassword( {user_email, message} ) {
+export function forgotPassword( {email, message} ) {
     const parms = {
         subject: 'Forgot Password',
-        user_email,
+        user_email: email,
         message
     };
 
@@ -34,7 +32,6 @@ export function forgotPassword( {user_email, message} ) {
 }
 
 export function verificationCode( {email, message} ) {
-    console.log("vc, email: ", email);
     const parms = {
         subject: 'Verification Code',
         user_email: email,
@@ -44,26 +41,27 @@ export function verificationCode( {email, message} ) {
     emailjs.send('service_4brc417', 'template_6zuhtqr', parms)
 }
 
-export function emailPromo({ user_email, promo }) {
+export function emailPromo({ email, promo }) {
     const parms = {
         subject: 'Promo Code from CinemaTeamB8',
-        user_email,
+        user_email: email,
         message: `Here's to enjoying movies! One promo code on us!!\n${promo}\nAdd this to your next order to see the magic!`
     };
     
     emailjs.send('service_4brc417', 'template_6zuhtqr', parms)
 }
 
-export function confirmationEmail( {user_email, message} ) {
+export function confirmationEmail( {email, message} ) {
     const parms = {
         subject: "Booking Confirmed!",
-        user_email,
+        user_email: email,
         message
     };
 
     emailjs.send("service_4brc417", "template_6zuhtqr", parms);
 }
 
+// change user_email to email if broke
 export function sendTempPassword({ user_email, tempPassword }) {
     const parms = {
         subject: 'Your Temporary Password',

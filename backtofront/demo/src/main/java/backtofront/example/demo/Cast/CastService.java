@@ -15,7 +15,7 @@ public class CastService {
     // Register a new credit cast
     public void registerCast(String actor, String role, int movie_id) {
         Cast cast = new Cast();
-        cast.setActorId((int)castRepository.maxActorId() + 1);
+        //cast.setActorId((int)castRepository.maxActorId() + 1);
         cast.setActor(actor);
         cast.setRole(role);
         cast.setMovieId(movie_id);

@@ -1,5 +1,6 @@
 package backtofront.example.demo.Controller;
 
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,9 @@ public class UserController {
 
     @PostMapping("/update-profile")
     public ResponseEntity<?> updateProfile(@RequestBody User user) {
+        System.out.println("here");
         try {
+            System.out.println(user);
             userService.updateProfile(
                 user.getEmail(),
                 user.getFirstName(),
@@ -49,6 +52,27 @@ public class UserController {
                 user.getPhone_number(),
                 user.getPromotions()
             );
+            
+            return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
+        }
+    }
+
+    @PostMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestBody User user, @RequestParam String newpass) {
+        System.out.println("here");
+        try {
+            System.out.println(user);
+            userService.updatePassword(
+                user.getEmail(),
+                user.getPassword(),
+                newpass
+                
+            );
+            
             return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
@@ -58,7 +82,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/update-password")
+   /*  @PostMapping("/update-password")
     public ResponseEntity<?> updatePassword(@RequestParam String newPassword, @RequestParam int user_id) {
         try {
             userService.updatePassword(newPassword, user_id);
@@ -69,7 +93,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ERRORMessage("Internal server error"));
         }
-    }
+    } */
 
     // returns cookie 
     @PostMapping("/login-user")
