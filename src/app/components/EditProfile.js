@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { editProfileEmail } from "../../utils/email";
-import { encrypt, hash } from "../../utils/encryption";
+import { encrypt, hash, decrypt } from "../../utils/encryption";
 import {
   Alert,
   Box,
@@ -42,6 +42,7 @@ const EditProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [firstName, setFirstName] = useState("");
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState(""); // Will be fetched
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -130,6 +131,7 @@ const EditProfile = () => {
         });
 
         console.log(userData);
+        getStoredCards(userData.userId);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -137,6 +139,34 @@ const EditProfile = () => {
 
     fetchUserProfile(userEmail); // Call the fetch function with the user email
   }, []);
+
+  const getStoredCards = async (id) => {
+    console.log("Getting stored cards...");
+    console.log("User ID:", id);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/get-user-cards?user_id=${id}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch stored cards");
+      const data = await response.json();
+
+      const decryptedCards = data.map((card) => ({
+        cardId: card.cardId,
+        cardType: card.cardType ? decrypt(card.cardType) : null,
+        cardNumber: card.cardNumber ? decrypt(card.cardNumber) : null,
+        expirationDate: card.expirationDate
+          ? decrypt(card.expirationDate)
+          : null,
+        securityCode: card.securityCode ? decrypt(card.securityCode) : null,
+        userId: card.userId,
+        addressId: card.addressId,
+      }));
+      console.log("Decrypted cards:", decryptedCards);
+      setStoredCards(decryptedCards);
+    } catch (error) {
+      console.error("Error fetching stored cards:", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -445,6 +475,25 @@ const EditProfile = () => {
         />
 
         <h3>Payment Cards</h3>
+        {storedCards.length > 0 ? (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              {storedCards.map((card, index) => (
+                <Button
+                  key={index}
+                  variant={
+                    index === selectedCardIndex ? "contained" : "outlined"
+                  }
+                  onClick={() => setSelectedCardIndex(index)}
+                  sx={{ justifyContent: "space-between" }}
+                >
+                  **** **** **** {card.cardNumber.slice(-4)} -{" "}
+                  {card.expirationDate}
+                </Button>
+              ))}
+            </Box>
+          ) : (
+            <Typography variant="body1">No stored cards avaliable</Typography>
+          )}
         <Button onClick={() => setShowAddCard(true)}>Add New Card</Button>
         {showAddCard && (
           <div>
@@ -495,20 +544,6 @@ const EditProfile = () => {
               Cancel
             </button>
           </div>
-        )}
-        {storedCards.length > 0 ? (
-          <ul>
-            {storedCards.map((card, index) => (
-              <li key={index}>
-                {card.number} - {card.expirationDate}
-                <button type="button" onClick={() => handleDeleteCard(index)}>
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No stored cards available.</p>
         )}
         {errors.form && <p className="error-message">{errors.form}</p>}
         <h3>Password</h3>
