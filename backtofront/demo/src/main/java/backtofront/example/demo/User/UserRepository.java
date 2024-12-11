@@ -16,8 +16,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findAll();
 
     @Modifying  
-    @Query("update User u set u.password = ?1, u.promotions = ?2 where u.userId = ?3")
-    void editUserById(String password, int promotions, int user_id); 
+    @Query("update User u set u.firstName = ?1, u.lastName = ?2, u.password = ?3, u.promotions = ?4 where u.userId = ?5")
+    void updateUserById(String firstName, String lastName, String password, int promotions, int user_id); 
 
     @Query("select max(u.userId) from User u")
     int maxUserId();

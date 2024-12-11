@@ -1,5 +1,6 @@
 package backtofront.example.demo.Showing;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,13 @@ public class ShowingService {
 
     public List<Showing> findByMovieId(int movieId) {
         return showingRepository.findByMovieId(movieId);
+    }
+
+    public List<Integer> getMovieIdsByShowDate(String showDate) {
+        List<Integer> movie_ids = new ArrayList<>(); 
+        for (Showing showing : showingRepository.findByShowDate(showDate))
+            movie_ids.add(showing.getMovieId());
+        return movie_ids;
     }
 
     public Optional<Showing> findByShowingId(int id) {

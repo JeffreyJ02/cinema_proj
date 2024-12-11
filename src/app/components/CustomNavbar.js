@@ -112,6 +112,9 @@ const CustomNavbar = () => {
               <NavDropdown.Item href="/edit-profile">
                 Edit Profile
               </NavDropdown.Item>
+              <NavDropdown.Item href="/order-history">
+                Order History
+              </NavDropdown.Item>
               {isAdmin && ( // Conditionally render admin option
                 <NavDropdown.Item href="/admin">Admin Page</NavDropdown.Item>
               )}

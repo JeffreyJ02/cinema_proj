@@ -236,6 +236,9 @@ export default function Home({ params }) {
       seats: JSON.stringify(selectedSeats),
       tickets: JSON.stringify(ticketCounts),
       total: (ticketCounts.Adult * 10 + ticketCounts.Child * 5 + ticketCounts.Senior * 7),
+      showing_id: selectedShowtime.id,
+      show_date: selectedDate,
+      show_time: selectedShowtime.time,
     }
 
     console.log("Checkout data:", checkoutData);

@@ -8,6 +8,12 @@ export default function Home({ params }) {
   let { query } = params;
   query = query.replace(/%20/g, " ");
 
+  const isDate = (str) => {
+    const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+    if (!dateRegex.test(str)) return false;
+  };
+
+
   const [movieList, setMovieList] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,8 +42,27 @@ export default function Home({ params }) {
     }
   };
 
+  const fetchMoviesByDate = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/get-movie-ids-by-showdate?date=${query}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok: " + response.statusText);
+      }
+      const data = await response.json();
+      console.log("Fetched movies:", data);
+      setMovieList(data);
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+    
+
   useEffect(() => {
-    fetchMovies();
+    isDate(query) ? fetchMoviesByDate() : fetchMovies();
   }, []);
 
   if (loading) return (

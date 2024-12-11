@@ -17,24 +17,18 @@ public class AddressController {
         this.addressService = addressService;
     }
 
+    // returns address_id
     @PostMapping("/register-address")
-    public ResponseEntity<?> registerAddress(@RequestBody Address address, @RequestParam int user_id) {
-        try {
-            addressService.registerAddress(
-                address.getName(),
-                address.getStreet(),
-                address.getCity(),
-                address.getState(),
-                address.getZipCode(),
-                user_id,
-                address.isHome()
-            );
-            return ResponseEntity.ok(new OKMessage("Address registered successfully!"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
-        }
+    public int registerAddress(@RequestBody Address address, @RequestParam int user_id) {
+        return addressService.registerAddress(
+            address.getName(),
+            address.getStreet(),
+            address.getCity(),
+            address.getState(),
+            address.getZipCode(),
+            user_id,
+            address.isHome()
+        );
     }
 
     @PostMapping("/update-address")
@@ -55,4 +49,15 @@ public class AddressController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
         }
     }
+
+    @GetMapping("/get-user-home-address")
+    public Address getUserHomeAddress(@RequestParam int user_id) {
+        return addressService.findUserHomeAddress(user_id);
+    }
+
+    @GetMapping("/get-address-by-id")
+    public Address getAddressByAddressId(@RequestParam int address_id) {
+        return addressService.findAddressByAddressId(address_id);
+    }
+
 }

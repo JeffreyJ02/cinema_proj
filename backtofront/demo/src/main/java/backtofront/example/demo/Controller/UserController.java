@@ -2,13 +2,13 @@ package backtofront.example.demo.Controller;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import backtofront.example.demo.Controller.ControllerMessage.*;
 import backtofront.example.demo.User.*;
+// import jakarta.servlet.http.Cookie;
+// import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin(origins = { "http://localhost:3000", "http://127.0.0.1:5500" })
@@ -43,11 +43,20 @@ public class UserController {
     public ResponseEntity<?> updateProfile(@RequestBody User user) {
         try {
             userService.updateProfile(
+<<<<<<< HEAD
                     user.getEmail(),
                     user.getFirstName(),
                     user.getLastName(),
                     user.getPhone_number(),
                     user.getPromotions());
+=======
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getPhone_number(),
+                user.getPromotions()
+            );
+>>>>>>> 6d0f1e8ed0c48dac6e7c1b6063ba5ee8b12c162c
             return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
@@ -57,6 +66,7 @@ public class UserController {
         }
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     // card = 1,2, or 3
     @PostMapping("/set-card")
@@ -87,19 +97,27 @@ public class UserController {
 
 =======
 >>>>>>> 1c3aa79304793c7fc29b5e4ee0a8bce7b5c38b94
+=======
+    // returns cookie 
+>>>>>>> 6d0f1e8ed0c48dac6e7c1b6063ba5ee8b12c162c
     @PostMapping("/login-user")
-    public ResponseEntity<Object> loginUser(@RequestBody User user) {
-        Optional<User> existingUser = userService.findByEmail(user.getEmail());
+    public ResponseEntity<?> loginUser(@RequestBody User login) { //, @RequestParam boolean rememberMe) , HttpServletResponse response) {
+        Optional<User> existingUser = userService.findByEmail(login.getEmail());
         if (existingUser.isPresent()) {
+            User user = existingUser.get();
             System.out.println("Recieved password: " + user.getPassword());
             System.out.println("User password: " + existingUser.get().getPassword());
-            if (existingUser.get().getPassword().equals(user.getPassword())) {
+            if (user.getPassword().equals(user.getPassword())) {
+                // Cookie userCookie = new Cookie(user.getUserId() + "", null);
+                // userCookie.setMaxAge(rememberMe ? 604800 : -1);
+                // response.addCookie(userCookie);
                 return ResponseEntity.ok(new OKMessage("Login successful: " + existingUser.get().getEmail()));
             } else
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ERRORMessage("Incorrect password"));
         } else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ERRORMessage("User not found"));
     }
+<<<<<<< HEAD
 
     // add to updateProfile?
     /*
@@ -143,6 +161,8 @@ public class UserController {
      * }
      * }
      */
+=======
+>>>>>>> 6d0f1e8ed0c48dac6e7c1b6063ba5ee8b12c162c
 
     // change to 'get-user-by-email'
     @GetMapping("/user-profile")
@@ -164,4 +184,9 @@ public class UserController {
     public int getAdminStatus(@RequestParam String email) {
         return userService.getUserProfile(email).getAdmin();
     }
+<<<<<<< HEAD
 }
+=======
+    
+}
+>>>>>>> 6d0f1e8ed0c48dac6e7c1b6063ba5ee8b12c162c

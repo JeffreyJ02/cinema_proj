@@ -62,3 +62,20 @@ export function confirmationEmail( {user_email, message} ) {
 
     emailjs.send("service_4brc417", "template_6zuhtqr", parms);
 }
+
+export function sendTempPassword({ user_email, tempPassword }) {
+    const parms = {
+        subject: 'Your Temporary Password',
+        user_email,
+        message: `You have requested a password reset. Here is your temporary password: ${tempPassword}. Please use it to log in and change your password as soon as possible.`
+    };
+
+    emailjs.send("service_4brc417", "template_6zuhtqr", parms)
+        .then(response => {
+            console.log("Success:", response);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
+

@@ -1,6 +1,7 @@
 package backtofront.example.demo.Address;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
-    public void registerAddress(String name, String street, String city, String state, String zip_code, int user_id, boolean home) {
+    public int registerAddress(String name, String street, String city, String state, String zip_code, int user_id, boolean home) {
         Address address = new Address();
         address.setAddressId((int)addressRepository.maxAddressId() + 1);
         address.setName(name);
@@ -26,6 +27,13 @@ public class AddressService {
         address.setHome(home);
 
         addressRepository.save(address);
+        return address.getAddressId();
+    }
+
+    public Address findAddressByAddressId(int address_id) {
+        Optional<Address> opt_addr = addressRepository.findByAddressId(address_id);
+        if (opt_addr.isPresent()) return opt_addr.get();
+        return new Address();
     }
 
     public Address findUserHomeAddress(int user_id) {

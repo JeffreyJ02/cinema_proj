@@ -2,7 +2,6 @@ package backtofront.example.demo.Address;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Integer> {
     List<Address> findAllByUserId(int user_id);
-    Optional<Address> findByAddressId(int id);
+    Optional<Address> findByAddressId(int address_id);
 
     @Query("select max(a.addressId) from Address a")
     int maxAddressId();

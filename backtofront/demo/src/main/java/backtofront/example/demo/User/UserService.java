@@ -49,7 +49,7 @@ public class UserService {
         return emails;
     }
 
-    public void updateUser(User user) {
+/*     public void updateUser(User user) {
         Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
 
         if (existingUserOpt.isPresent()) {
@@ -67,26 +67,11 @@ public class UserService {
             userRepository.save(existingUser);
         } 
         else throw new IllegalArgumentException("User not found");
-    }
+    } */
 
-    public void updateProfile(String email, String firstName, String lastName,  String phoneNumber, Integer registerForPromotions) {
+    public void updateProfile(String email, String firstName, String lastName,  String phoneNumber, int promotions) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        // Update fields only if they are provided (not null or empty)
-        if (firstName != null && !firstName.isEmpty()) {
-            user.setFirstName(firstName);
-        }
-        if (lastName != null && !lastName.isEmpty()) {
-            user.setLastName(lastName);
-        }
-        if(phoneNumber != null){
-            user.setPhone_number(phoneNumber);
-        }
-        if (registerForPromotions != null) {
-            user.setPromotions(registerForPromotions);
-        }
-
-        userRepository.save(user);
+        userRepository.updateUserById(firstName, lastName, phoneNumber, promotions, user.getUserId());
     }
 
     public void updatePassword(String email, String currentPassword, String newPassword) {
