@@ -23,6 +23,7 @@ public class BookingController {
     public ResponseEntity<?> registerBooking(@RequestBody Booking booking, @RequestParam int user_id) {
         try {
             bookingService.registerBooking(
+                booking.getSeats(),
                 booking.getTickets(),
                 booking.getMovieTitle(),
                 booking.getShowDate(),
