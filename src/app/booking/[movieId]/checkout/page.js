@@ -24,8 +24,10 @@ export default function Page() {
     cardType: "",
   });
   const [storedCards, setStoredCards] = useState([]);
+  const [addresses, setAddresses] = useState([]);
   const [userId, setUserId] = useState(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
   const [promoCode, setPromoCode] = useState("");
   const [total, setTotal] = useState(checkoutInfo.total);
 
@@ -96,9 +98,39 @@ export default function Page() {
     }
   };
 
+  const getAddresses = async () => {
+    try {
+      const id = await getUserProfile();
+      console.log("User ID:", id);
+      const cardResponse = await fetch(
+        `http://localhost:8080/api/get-user-billing-address-ids?user_id=${id}`
+      );
+      if (!cardResponse.ok) throw new Error("Failed to fetch addresses");
+      const addressIds = await cardResponse.json();
+      console.log("Address IDs:", addressIds);
+
+      const addresses = [];
+      for (const addressId of addressIds) {
+        console.log("Fetching address:", addressId);
+        const addressResponse = await fetch(
+          `http://localhost:8080/api/get-address-by-id?address_id=${addressId}`
+        );
+        if (!addressResponse.ok) throw new Error("Failed to fetch address");
+        const addressData = await addressResponse.json();
+        addresses.push(addressData.address);
+      }
+
+      setAddresses(addresses);
+      console.log("Addresses:", addresses);
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+    }
+  };
+
   useEffect(() => {
     getMovieById(movieId);
     getStoredCards();
+    getAddresses();
   }, [movieId]);
 
   // Handle card input changes
@@ -317,6 +349,7 @@ export default function Page() {
       </Box>
       <Typography variant="body1">3. Payment</Typography>
       <div>
+        <p>Stored Cards:</p>
         {storedCards.length > 0 ? (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             {storedCards.map((card, index) => (
@@ -392,6 +425,24 @@ export default function Page() {
           fullWidth
           margin="normal"
         />
+        {addresses.length > 0 ? (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            {addresses.map((address, index) => (
+              <Button
+                key={index}
+                variant={
+                  index === selectedAddressIndex ? "contained" : "outlined"
+                }
+                onClick={() => setSelectedAddressIndex(index)}
+                sx={{ justifyContent: "space-between" }}
+              >
+                {address}
+              </Button>
+            ))}
+          </Box>
+        ) : (
+          <p>No addresses available</p>
+        )}
         <Button variant="contained" onClick={handleAddCard}>
           Add Card
         </Button>
