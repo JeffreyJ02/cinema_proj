@@ -22,6 +22,11 @@ export default function Page() {
     expirationDate: "",
     cvv: "",
     cardType: "",
+    name: "",
+    street: "",
+    city: "",
+    zipCode: "",
+    state: "",
   });
   const [storedCards, setStoredCards] = useState([]);
   const [addresses, setAddresses] = useState([]);
@@ -141,17 +146,18 @@ export default function Page() {
 
   const registerCard = async (cardData) => {
     console.log("Registering card:", cardData);
+    let addressNumber = await registerAddress();
     try {
       const encryptedCard = {
         cardType: encrypt(cardData.cardType),
         cardNumber: encrypt(cardData.creditCardNumber),
         expirationDate: encrypt(cardData.expirationDate),
         securityCode: encrypt(cardData.cvv),
-        addressId: 1,
       };
+      
 
       const response = await fetch(
-        `http://localhost:8080/api/register-card?user_id=${userId}&address_id=1`,
+        `http://localhost:8080/api/register-card?user_id=${userId}&address_id=${addressNumber}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -170,6 +176,42 @@ export default function Page() {
       console.error("Error registering card:", error);
     }
   };
+
+  const registerAddress = async () => {
+    console.log("Registering address:", cardData);
+    try {
+      const addressData = {
+        street: cardData.street,
+        city: cardData.city,
+        state: cardData.state,
+        zip_code: cardData.zipCode,
+        name: cardData.name,
+      };
+
+      console.log("Registering address:", addressData);
+
+      const response = await fetch(`http://localhost:8080/api/register-address?user_id=${userId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(addressData),
+      });
+
+      const data = await response.json();
+      console.log("Address registered:", data);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Failed to register address:", errorData);
+        throw new Error(errorData.message || "Failed to register address");
+      }
+
+      console.log("Address registered successfully");
+      return data;
+    } catch (error) {
+      console.error("Error registering address:", error);
+    };
+  };	
+
 
   const handleAddCard = () => {
     if (!validateCardData(cardData)) return;
@@ -217,18 +259,19 @@ export default function Page() {
       const checkoutData = {
         seats: checkoutInfo.seats,
         tickets: checkoutInfo.tickets,
-        total_price: checkoutInfo.total,
+        total_price: total,
         movie_title: movie.title,
         show_date: checkoutInfo.show_date,
         show_time: checkoutInfo.show_time,
         card_number: encrypt(storedCards[selectedCardIndex].cardNumber),
       };
 
-      const response = await fetch("http://localhost:8080/api/booking", {
+      const response = await fetch(`http://localhost:8080/api/booking?user_id=${userId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(checkoutData),
       });
+      console.log("Checkout data:", checkoutData);
       if (!response.ok) throw new Error("Checkout failed");
       const data = await response.json();
       console.log("Checkout successful:", data);
@@ -252,7 +295,7 @@ export default function Page() {
         alert("Invalid promo code");
         return;
       }
-      if (data.bogo) {
+      if (!data.bogo) {
         console.log("BOGO promo code applied");
         const newTotal = checkoutInfo.total / 2;
         localStorage.setItem(
@@ -279,6 +322,59 @@ export default function Page() {
   };
 
   const cardTypes = ["Visa", "MasterCard", "American Express", "Discover"];
+
+  const states = [
+    "AL",
+    "AK",
+    "AZ",
+    "AR",
+    "CA",
+    "CO",
+    "CT",
+    "DE",
+    "FL",
+    "GA",
+    "HI",
+    "ID",
+    "IL",
+    "IN",
+    "IA",
+    "KS",
+    "KY",
+    "LA",
+    "ME",
+    "MD",
+    "MA",
+    "MI",
+    "MN",
+    "MS",
+    "MO",
+    "MT",
+    "NE",
+    "NV",
+    "NH",
+    "NJ",
+    "NM",
+    "NY",
+    "NC",
+    "ND",
+    "OH",
+    "OK",
+    "OR",
+    "PA",
+    "RI",
+    "SC",
+    "SD",
+    "TN",
+    "TX",
+    "UT",
+    "VT",
+    "VA",
+    "WA",
+    "WV",
+    "WI",
+    "WY",
+  ];
 
   if (!movie)
     return (
@@ -344,7 +440,7 @@ export default function Page() {
       >
         <Typography variant="body1">My Total:</Typography>
         <Typography variant="body1" fontWeight="bold">
-          ${checkoutInfo.total}
+          ${total}
         </Typography>
       </Box>
       <Typography variant="body1">3. Payment</Typography>
@@ -425,24 +521,60 @@ export default function Page() {
           fullWidth
           margin="normal"
         />
-        {addresses.length > 0 ? (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            {addresses.map((address, index) => (
-              <Button
-                key={index}
-                variant={
-                  index === selectedAddressIndex ? "contained" : "outlined"
-                }
-                onClick={() => setSelectedAddressIndex(index)}
-                sx={{ justifyContent: "space-between" }}
-              >
-                {address}
-              </Button>
-            ))}
-          </Box>
-        ) : (
-          <p>No addresses available</p>
-        )}
+        <TextField
+          label="Name"
+          name="name"
+          value={cardData.name}
+          onChange={handleChange}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Street"
+          name="street"
+          value={cardData.street}
+          onChange={handleChange}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="City"
+          name="city"
+          value={cardData.city}
+          onChange={handleChange}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Zip Code"
+          name="zipCode"
+          value={cardData.zipCode}
+          onChange={handleChange}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          id="state-select"
+          select
+          label="State"
+          fullWidth
+          value={cardData.state}
+          onChange={(e) =>
+            handleChange({
+              target: { name: "state", value: e.target.value },
+            })
+          }
+        >
+          {states.map((state) => (
+            <MenuItem key={state} value={state}>
+              {state}
+            </MenuItem>
+          ))}
+        </TextField>
         <Button variant="contained" onClick={handleAddCard}>
           Add Card
         </Button>
