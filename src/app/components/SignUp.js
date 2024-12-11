@@ -23,6 +23,10 @@ const SignUpPage = () => {
     password: "",
     confirmPassword: "",
     phone_number: "",
+    home_address: "",
+    home_city:"",
+    home_state:"",
+    home_zip:"",
     card_number: "",
     card_type: "",
     expirationDate: "",
@@ -191,6 +195,7 @@ const SignUpPage = () => {
           registerForPromos: promos,
         }),
       });
+      const userID = await fetch(`http://localhost:8080/api/get-user-id-by-email?email=${email}`);
       console.log("User Response: ", response);
       if (!response.ok) {
         const errorData = await response.json();
@@ -206,12 +211,15 @@ const SignUpPage = () => {
       const userId = userData?.Id;
 
       
-      if (billingName)
-        await registerAddress(email, billingName, billingAddress, billingCity, billingZip, billingState);
+      if (billingName) {
+        let billingID = await registerAddress(email, billingName, billingAddress, billingCity, billingZip, billingState, userID, false);
+        if(card_number) {
+          await registerCard(email, encrypt(card_type), encrypt(card_number), encrypt(expirationDate), encrypt(securityCode), userID, billingID);
+        }
+      }
+        
 
-      if(card_number)
-        await registerCard(email, encrypt(card_type), encrypt(card_number), encrypt(expirationDate), encrypt(securityCode));
-
+      
 
       if (promos == 1) sendOptInEmail(email);
 
@@ -250,7 +258,7 @@ const SignUpPage = () => {
   // Function to register the address
 const registerAddress = async (email, billingName, billingAddress, billingCity, billingZip, billingState) => {
   try {
-    await fetch("http://localhost:8080/api/register-address", {
+    await fetch(`http://localhost:8080/api/register-address?user_id=${userId}`, {
       method: "POST",
       
       headers: { "Content-Type": "application/json" },
@@ -261,7 +269,7 @@ const registerAddress = async (email, billingName, billingAddress, billingCity, 
         state: billingState,
         zipCode: billingZip,
         email: email,
-        isHome: true
+        home: true
       })
     });
     console.log("Address registered successfully");
@@ -306,6 +314,9 @@ const cardTypes = ["Visa", "MasterCard", "American Express", "Discover"];
         }}
       >
         <h2>Sign Up</h2>
+        <Grid xs="auto">
+          <Typography>Personal Information</Typography>
+        </Grid>
         <TextField
           label="First Name"
           name="firstName"
@@ -372,6 +383,51 @@ const cardTypes = ["Visa", "MasterCard", "American Express", "Discover"];
           fullWidth
           margin="normal"
         />
+        <Grid xs="auto">
+          <Typography>Home Address</Typography>
+        </Grid>
+        <TextField
+          label="Address"
+          name="home_address"
+          value={formData.home_address}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="City"
+          name="home_city"
+          value={formData.home_city}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Zip or Postal Code"
+          name="home_zip"
+          value={formData.home_zip}
+          onChange={handleChange}
+          margin="normal"
+        />
+        <TextField
+          id="state-select"
+          select
+          label="State"
+          value={formData.home_state}
+          onChange={(e) =>
+            handleChange({ target: { name: "billingState", value: e.target.value } })
+          }        
+        >
+          {states.map((state) => (
+            <MenuItem key={state} value={state}>
+              {state}
+            </MenuItem>
+          ))}
+        </TextField>
+        
+        <Grid xs="auto">
+          <Typography>Credit Card Information</Typography>
+        </Grid>
         <TextField
           id="type-select"
           select
