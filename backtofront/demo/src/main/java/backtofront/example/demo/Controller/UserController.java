@@ -82,7 +82,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/update-password")
+   /*  @PostMapping("/update-password")
     public ResponseEntity<?> updatePassword(@RequestParam String newPassword, @RequestParam int user_id) {
         try {
             userService.updatePassword(newPassword, user_id);
@@ -93,7 +93,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ERRORMessage("Internal server error"));
         }
-    }
+    } */
 
     // returns cookie 
     @PostMapping("/login-user")
