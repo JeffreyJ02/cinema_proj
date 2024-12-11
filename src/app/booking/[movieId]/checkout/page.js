@@ -266,7 +266,7 @@ export default function Page() {
         card_number: encrypt(storedCards[selectedCardIndex].cardNumber),
       };
 
-      const response = await fetch(`http://localhost:8080/api/booking?user_id=${userId}`, {
+      const response = await fetch(`http://localhost:8080/api/register-booking?user_id=${userId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(checkoutData),
