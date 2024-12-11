@@ -12,13 +12,11 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-//import { useClient } from "next-auth/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { hash } from '../../utils/encryption';
 
-// This component is adapted from the Material-UI example at: https://mui.com/material-ui/getting-started/templates/sign-in/
 export default function SignIn() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -47,7 +45,6 @@ export default function SignIn() {
   }, [successMessage, router]);
 
   const validateInputs = () => {
-    // Validation from sample code
     let isValid = true;
 
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
@@ -71,39 +68,45 @@ export default function SignIn() {
     e.preventDefault();
     const { email, password, rememberMe } = formData;
     if (!validateInputs()) return;
-  
+
     try {
       const encryptedPassword = hash(password);
-      // Sending API call to login endpoint
+      const tempPassword = localStorage.getItem("tempPassword");
+
+      const loginData = {
+        email,
+        password: encryptedPassword,
+        rememberMe,
+        tempPassword: tempPassword || null, // Send temp password if exists
+      };
+
       const response = await fetch("http://localhost:8080/api/login-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password: encryptedPassword, rememberMe }),
+        body: JSON.stringify(loginData),
         credentials: "include",
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Unknown Login Error");
       }
-  
+
       const data = await response.json();
-      setSuccessMessage("Login successful! Redirecting..."); // Set success message
-      localStorage.setItem('userEmail', email);
-  
-      // Call the function to check admin status
-      await fetchAdminStatus(email); // Call this with the user's email
-  
+      setSuccessMessage("Login successful! Redirecting...");
+      localStorage.setItem("userEmail", email); // Store email for session
+
+      // Check if the user is an admin
+      await fetchAdminStatus(email);
     } catch (error) {
       console.error("Login error:", error);
       setErrorMessage(error.message);
-      setSuccessMessage("");
+      setSuccessMessage(""); // Clear success message on error
     }
   };
-  
-  // Define the fetchAdminStatus function outside of handleSubmit
+
   const fetchAdminStatus = async (email) => {
     try {
       const response = await fetch(
@@ -112,19 +115,16 @@ export default function SignIn() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            // Make sure to include the correct token if needed
-            // Authorization: `Bearer ${token}`, 
           },
         }
       );
-  
+
       if (!response.ok) {
         throw new Error("Failed to fetch admin status");
       }
-  
+
       const adminStatus = await response.json();
-      console.log("Admin status:", adminStatus);
-      if (adminStatus == 1) {
+      if (adminStatus === 1) {
         router.push("../admin");
       } else {
         router.push("/");
@@ -135,15 +135,16 @@ export default function SignIn() {
   };
 
   return (
-    <Container 
-      maxWidth={false} 
+    <Container
+      maxWidth={false}
       sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        width: "100vw", 
-      }}>
+        width: "100vw",
+      }}
+    >
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -161,12 +162,7 @@ export default function SignIn() {
           Log In
         </Typography>
 
-        <Grid
-          container
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ width: "100%", mt: 1 }}
-        >
+        <Grid container alignItems="center" justifyContent="space-between" sx={{ width: "100%", mt: 1 }}>
           <Grid xs="auto">
             <Typography>Email</Typography>
           </Grid>
@@ -181,17 +177,12 @@ export default function SignIn() {
           required
           autoFocus
           helperText={emailError}
-          error={emailError}
+          error={emailError !== ""}
           placeholder="your@email.com"
           variant="outlined"
         />
 
-        <Grid
-          container
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ width: "100%", mt: 1 }}
-        >
+        <Grid container alignItems="center" justifyContent="space-between" sx={{ width: "100%", mt: 1 }}>
           <Grid xs="auto">
             <Typography>Password</Typography>
           </Grid>
@@ -208,7 +199,7 @@ export default function SignIn() {
           value={formData.password}
           onChange={handleInputChange}
           helperText={passwordError}
-          error={passwordError}
+          error={passwordError !== ""}
           fullWidth
           required
           variant="outlined"
@@ -251,4 +242,3 @@ export default function SignIn() {
     </Container>
   );
 }
-
