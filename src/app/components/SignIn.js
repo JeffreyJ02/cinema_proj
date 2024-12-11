@@ -83,6 +83,8 @@ export default function SignIn() {
         tempPassword: tempPassword || null, // Send temp password if exists
       };
 
+      console.log("Login data:", loginData);
+
       const response = await fetch("http://localhost:8080/api/login-user", {
         method: "POST",
         headers: {
