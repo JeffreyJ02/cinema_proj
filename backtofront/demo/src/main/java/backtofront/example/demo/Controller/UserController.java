@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import backtofront.example.demo.Controller.ControllerMessage.*;
 import backtofront.example.demo.User.*;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+// import jakarta.servlet.http.Cookie;
+// import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin(origins = { "http://localhost:3000", "http://127.0.0.1:5500" })
@@ -59,16 +59,16 @@ public class UserController {
 
     // returns cookie 
     @PostMapping("/login-user")
-    public ResponseEntity<Object> loginUser(@RequestBody User login, @RequestParam boolean rememberMe, HttpServletResponse response) {
+    public ResponseEntity<?> loginUser(@RequestBody User login, @RequestParam boolean rememberMe) { //, HttpServletResponse response) {
         Optional<User> existingUser = userService.findByEmail(login.getEmail());
         if (existingUser.isPresent()) {
             User user = existingUser.get();
             System.out.println("Recieved password: " + user.getPassword());
             System.out.println("User password: " + existingUser.get().getPassword());
             if (user.getPassword().equals(user.getPassword())) {
-                Cookie userCookie = new Cookie(user.getUserId() + "", null);
-                userCookie.setMaxAge(rememberMe ? 604800 : -1);
-                response.addCookie(userCookie);
+                // Cookie userCookie = new Cookie(user.getUserId() + "", null);
+                // userCookie.setMaxAge(rememberMe ? 604800 : -1);
+                // response.addCookie(userCookie);
                 return ResponseEntity.ok(new OKMessage("Login successful: " + existingUser.get().getEmail()));
             } 
             else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ERRORMessage("Incorrect password"));
