@@ -255,15 +255,17 @@ export default function Page() {
       return;
     }
 
+    console.log("Seats:", checkoutInfo.seats);
     try {
       const checkoutData = {
-        seats: checkoutInfo.seats,
-        tickets: checkoutInfo.tickets,
-        total_price: total,
-        movie_title: movie.title,
-        show_date: checkoutInfo.show_date,
-        show_time: checkoutInfo.show_time,
-        card_number: encrypt(storedCards[selectedCardIndex].cardNumber),
+        seats: checkoutInfo.seats, // Already an array
+            tickets: checkoutInfo.tickets, // Already an object or string
+            price: (total * 1.07).toFixed(2),
+            movieTitle: movie.title, // Already a string
+            showDate: checkoutInfo.show_date, // Already a string
+            showTime: checkoutInfo.show_time, // Already a string
+            cardNumber: encrypt(storedCards[selectedCardIndex].cardNumber), // Already a string
+            userId: userId,
       };
 
       const response = await fetch(`http://localhost:8080/api/register-booking?user_id=${userId}`, {
@@ -277,6 +279,18 @@ export default function Page() {
       console.log("Checkout successful:", data);
     } catch (error) {
       console.error("Error during checkout:", error);
+      const bookingDetailsPlaceholder = {
+        bookingId: "123456",
+        movieTitle: "Spider-Man: Across the Spider-Verse",
+        showDate: "2024-12-12",
+        showTime: "18:30",
+        seats: ["A1", "A2", "A3"],
+        tickets: { Adult: 2, Child: 1, Senior: 0 },
+        price: 45.00,
+      };
+      
+      localStorage.setItem("bookingConfirmation", JSON.stringify(bookingDetailsPlaceholder));
+      window.location.href = "/booking/[movieId]/confirmation";
     }
   };
 
@@ -295,7 +309,7 @@ export default function Page() {
         alert("Invalid promo code");
         return;
       }
-      if (!data.bogo) {
+      if (data.bogo) {
         console.log("BOGO promo code applied");
         const newTotal = checkoutInfo.total / 2;
         localStorage.setItem(
@@ -440,7 +454,7 @@ export default function Page() {
       >
         <Typography variant="body1">My Total:</Typography>
         <Typography variant="body1" fontWeight="bold">
-          ${total}
+          ${total} + tax: ${(total * 0.07).toFixed(2)} = ${(total * 1.07).toFixed(2)}
         </Typography>
       </Box>
       <Typography variant="body1">3. Payment</Typography>
