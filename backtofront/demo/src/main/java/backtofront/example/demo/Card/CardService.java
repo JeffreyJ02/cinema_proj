@@ -1,5 +1,6 @@
 package backtofront.example.demo.Card;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -35,22 +36,11 @@ public class CardService {
         return cardRepository.findAllByUserId(user_id);
     }
 
-   /*  // returns cardId
-    // if card not found, registers card
-    public int updateCard(String type, String number, String expiration_date, 
-                          String security_code, int address_id, int card_id) {
-        Optional<Card> opt_card = cardRepository.findByCardId(card_id);
-        if (opt_card.isPresent()) {
-            Card card = opt_card.get();
-            card.setCardType(type);
-            card.setCardNumber(number);
-            card.setExpirationDate(expiration_date);
-            card.setSecurityCode(security_code);
-            card.setAddressId(address_id);
-            cardRepository.save(card);
-            return card_id;
-        }
-        else return registerCard(type, number, expiration_date, security_code, address_id);
-    } */
+    public List<Integer> getUserBillingAddressIds(int user_id) {
+        List<Card> cards = cardRepository.findAllByUserId(user_id);
+        List<Integer> billing_address_ids = new ArrayList<>();
+        for (Card card : cards) billing_address_ids.add(card.getAddressId());
+        return billing_address_ids;
+    }
 
 }

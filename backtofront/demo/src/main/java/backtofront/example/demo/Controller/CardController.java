@@ -61,4 +61,9 @@ public class CardController {
     public List<Card> getUserCards(@RequestParam int user_id) {
         return cardService.getUserCards(user_id);
     }
+
+    @GetMapping("/get-user-billing-address-ids")
+    public List<Integer> getUserBillingAddressIds(@RequestParam int user_id) {
+        return cardService.getUserBillingAddressIds(user_id);
+    }
 }

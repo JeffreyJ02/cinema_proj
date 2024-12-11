@@ -49,4 +49,15 @@ public class AddressController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
         }
     }
+
+    @GetMapping("/get-user-home-address")
+    public Address getUserHomeAddress(@RequestParam int user_id) {
+        return addressService.findUserHomeAddress(user_id);
+    }
+
+    @GetMapping("/get-address-by-id")
+    public Address getAddressByAddressId(@RequestParam int address_id) {
+        return addressService.findAddressByAddressId(address_id);
+    }
+
 }
