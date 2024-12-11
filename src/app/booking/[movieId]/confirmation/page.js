@@ -7,12 +7,13 @@ import { confirmationEmail } from "../../../../utils/email";
 export default function ConfirmationPage() {
   const [bookingDetails, setBookingDetails] = useState(null);
 
-  const sendConfirmationEmail = async (emailAddress) => {
+  const sendConfirmationEmail = async (emailAddress, details) => {
     console.log("sendConfirmationEmail called");
+    console.log("Booking details email:", details);
     try {
       confirmationEmail({
-        email: emailAddress,
-        message: `Your booking has been confirmed for ${bookingDetails.movieTitle} at ${bookingDetails.showTime} on ${bookingDetails.showDate}}!`,
+        user_email: emailAddress,
+        message: `Your booking has been confirmed for ${details.movieTitle} at ${details.showTime} on ${details.showDate}!`,
       });
       console.log("Confirmation email sent to:", emailAddress);
     } catch (error) {
@@ -20,12 +21,20 @@ export default function ConfirmationPage() {
     }
   };
 
+
   useEffect(() => {
     const bookingData = JSON.parse(localStorage.getItem("bookingConfirmation"));
-    setBookingDetails(bookingData);
     const userEmail = localStorage.getItem("userEmail");
-    sendConfirmationEmail(userEmail);
+
+    if (bookingData) {
+      setBookingDetails(bookingData);
+
+      sendConfirmationEmail(userEmail, bookingData);
+    } else {
+      console.error("No booking details found in localStorage.");
+    }
   }, []);
+
 
   if (!bookingDetails) {
     return (
@@ -85,16 +94,14 @@ export default function ConfirmationPage() {
           <strong>Show Time:</strong> {bookingDetails.showTime}
         </Typography>
         <Typography variant="body1">
-          <strong>Seats:</strong> {bookingDetails.seats.join(", ")}
+          <strong>Seats:</strong> {bookingDetails.seats}
         </Typography>
         <Typography variant="body1">
           <strong>Tickets:</strong>{" "}
-          {Object.entries(bookingDetails.tickets)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(", ")}
+          {bookingDetails.tickets}
         </Typography>
         <Typography variant="body1">
-          <strong>Total Price:</strong> ${bookingDetails.price.toFixed(2)}
+          <strong>Total Price:</strong> ${bookingDetails.price}
         </Typography>
       </Box>
       <Button

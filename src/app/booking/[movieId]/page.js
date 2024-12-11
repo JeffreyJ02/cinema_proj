@@ -213,20 +213,29 @@ export default function Home({ params }) {
     getShowtimes(movieId);
   }, [movieId]);
 
-  const updateTicketCount = (type, action) => {
-    if (action === "Add") {
-      setTicketCounts((prevCounts) => {
+  const updateTicketCount = (type, action, max) => {
+    setTicketCounts((prevCounts) => {
+      const totalTickets = Object.values(prevCounts).reduce((sum, count) => sum + count, 0);
+  
+      if (action === "Add") {
+        if (totalTickets + 1 > max) {
+          return prevCounts;
+        }
         return {
           ...prevCounts,
           [type]: Math.min(prevCounts[type] + 1, selectedSeats.length),
         };
-      });
-    } else if (action === "Remove") {
-      setTicketCounts((prevCounts) => {
-        return { ...prevCounts, [type]: Math.max(prevCounts[type] - 1, 0) };
-      });
-    }
+      } else if (action === "Remove") {
+        return {
+          ...prevCounts,
+          [type]: Math.max(prevCounts[type] - 1, 0),
+        };
+      }
+      return prevCounts;
+    });
   };
+  
+  
 
   const handleCheckout = () => {
     console.log("Checkout");
@@ -239,6 +248,7 @@ export default function Home({ params }) {
       showing_id: selectedShowtime.id,
       show_date: selectedDate,
       show_time: selectedShowtime.time,
+      seat_arr: selectedSeats,
     }
 
     console.log("Checkout data:", checkoutData);
@@ -393,6 +403,7 @@ export default function Home({ params }) {
                 <TicketView
                   ticketCounts={ticketCounts}
                   onTicketChange={updateTicketCount}
+                  maxVal={selectedSeats.length}
                 />
               </div>
             </div>
