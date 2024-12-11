@@ -94,7 +94,7 @@ export default function SignIn() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Unknown Login Error");
+        throw new Error(errorData.message || "Incorrect email or password");
       }
 
       const data = await response.json();

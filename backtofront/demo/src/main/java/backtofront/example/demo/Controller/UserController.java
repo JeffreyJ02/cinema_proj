@@ -103,7 +103,7 @@ public class UserController {
             User user = existingUser.get();
             System.out.println("Recieved password: " + user.getPassword());
             System.out.println("User password: " + existingUser.get().getPassword());
-            if (user.getPassword().equals(user.getPassword())) {
+            if (existingUser.get().getPassword().equals(login.getPassword())) {
                 // Cookie userCookie = new Cookie(user.getUserId() + "", null);
                 // userCookie.setMaxAge(rememberMe ? 604800 : -1);
                 // response.addCookie(userCookie);
