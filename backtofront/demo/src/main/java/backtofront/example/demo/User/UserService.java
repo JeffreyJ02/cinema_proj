@@ -88,6 +88,8 @@ public class UserService {
         System.out.println("saving password");
         userRepository.updatePassword(newPassword, email);
 
+    }
+
     public void updatePassword(String newPassword, int user_id) {
         userRepository.updatePassword(newPassword, 0);
 
