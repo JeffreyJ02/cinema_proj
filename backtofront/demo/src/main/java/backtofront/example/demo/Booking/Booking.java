@@ -18,8 +18,6 @@ public class Booking {
     @Column(name = "booking_id", unique = true, nullable = false)
     private int bookingId;
 
-    // store list?
-    // ticket number = show seats?
     @Column(name = "tickets", nullable = false)
     private List<Integer> tickets;
 
