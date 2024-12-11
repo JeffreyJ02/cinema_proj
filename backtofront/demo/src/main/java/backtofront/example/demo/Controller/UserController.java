@@ -59,14 +59,15 @@ public class UserController {
 
     // returns cookie 
     @PostMapping("/login-user")
-    public ResponseEntity<Object> loginUser(@RequestBody User login, HttpServletResponse response) {
+    public ResponseEntity<Object> loginUser(@RequestBody User login, @RequestParam boolean rememberMe, HttpServletResponse response) {
         Optional<User> existingUser = userService.findByEmail(login.getEmail());
         if (existingUser.isPresent()) {
             User user = existingUser.get();
             System.out.println("Recieved password: " + user.getPassword());
             System.out.println("User password: " + existingUser.get().getPassword());
             if (user.getPassword().equals(user.getPassword())) {
-                Cookie userCookie = new Cookie(user.getEmail(), user.getUserId() + "");
+                Cookie userCookie = new Cookie(user.getFirstName(), user.getUserId() + "");
+                userCookie.setMaxAge(rememberMe ? 604800 : -1);
                 response.addCookie(userCookie);
                 return ResponseEntity.ok(new OKMessage("Login successful: " + existingUser.get().getEmail()));
             } 
