@@ -103,8 +103,6 @@ useEffect(() => {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    //const encryptedPassword = btoa(newPassword);
-    //const encryptedCreditCard = btoa(creditCardNumber.slice(0, -4) + "****" + creditCardNumber.slice(-4));
 
     const encryptedNewPassword = hash(newPassword);
     const encryptedCurrentPassword = hash(currentPassword);

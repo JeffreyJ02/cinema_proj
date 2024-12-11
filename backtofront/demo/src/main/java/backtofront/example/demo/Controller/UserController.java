@@ -1,6 +1,5 @@
 package backtofront.example.demo.Controller;
 
-
 import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
@@ -46,18 +45,18 @@ public class UserController {
         try {
             System.out.println(user);
             userService.updateProfile(
-                user.getEmail(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getPhone_number(),
-                user.getPromotions()
-            );
-            
+                    user.getEmail(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getPhone_number(),
+                    user.getPromotions());
+
             return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ERRORMessage("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ERRORMessage("Internal server error"));
         }
     }
 
@@ -67,12 +66,12 @@ public class UserController {
         try {
             System.out.println(user);
             userService.updatePassword(
-                user.getEmail(),
-                user.getPassword(),
-                newpass
-                
+                    user.getEmail(),
+                    user.getPassword(),
+                    newpass
+
             );
-            
+
             return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
@@ -82,22 +81,27 @@ public class UserController {
         }
     }
 
-   /*  @PostMapping("/update-password")
-    public ResponseEntity<?> updatePassword(@RequestParam String newPassword, @RequestParam int user_id) {
-        try {
-            userService.updatePassword(newPassword, user_id);
-            return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ERRORMessage(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ERRORMessage("Internal server error"));
-        }
-    } */
+    /*
+     * @PostMapping("/update-password")
+     * public ResponseEntity<?> updatePassword(@RequestParam String
+     * newPassword, @RequestParam int user_id) {
+     * try {
+     * userService.updatePassword(newPassword, user_id);
+     * return ResponseEntity.ok(new OKMessage("Profile updated successfully!"));
+     * } catch (IllegalArgumentException e) {
+     * return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new
+     * ERRORMessage(e.getMessage()));
+     * } catch (Exception e) {
+     * return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+     * .body(new ERRORMessage("Internal server error"));
+     * }
+     * }
+     */
 
-    // returns cookie 
+    // returns cookie
     @PostMapping("/login-user")
-    public ResponseEntity<?> loginUser(@RequestBody User login) { //, @RequestParam boolean rememberMe) , HttpServletResponse response) {
+    public ResponseEntity<?> loginUser(@RequestBody User login) { // , @RequestParam boolean rememberMe) ,
+                                                                  // HttpServletResponse response) {
         Optional<User> existingUser = userService.findByEmail(login.getEmail());
         if (existingUser.isPresent()) {
             User user = existingUser.get();
@@ -120,6 +124,11 @@ public class UserController {
         return userService.findByEmail(email).get();
     }
 
+    @GetMapping("/get-user-id-by-email")
+    public int getUserIdByEmail(@RequestParam String email) {
+        return userService.findByEmail(email).get().getUserId();
+    }
+
     @GetMapping("/get-all-users")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
@@ -134,5 +143,5 @@ public class UserController {
     public int getAdminStatus(@RequestParam String email) {
         return userService.getUserProfile(email).getAdmin();
     }
-    
+
 }
