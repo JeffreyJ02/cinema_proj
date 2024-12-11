@@ -252,7 +252,7 @@ Ex.
 
   const handleAddCard = () => {
     if (!validateCardData(cardData)) return;
-
+    console.log("Card data:", cardData);
     registerCard(cardData).then(() => {
       setStoredCards((prev) => [
         ...prev,
@@ -680,7 +680,6 @@ Ex.
               ))}
             </TextField>
           </Box>
-
           <Button variant="contained" onClick={handleAddCard}>
             Add Card
           </Button>
