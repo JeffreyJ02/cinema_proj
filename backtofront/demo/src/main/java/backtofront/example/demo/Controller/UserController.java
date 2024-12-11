@@ -66,7 +66,7 @@ public class UserController {
             System.out.println("Recieved password: " + user.getPassword());
             System.out.println("User password: " + existingUser.get().getPassword());
             if (user.getPassword().equals(user.getPassword())) {
-                Cookie userCookie = new Cookie(user.getFirstName(), user.getUserId() + "");
+                Cookie userCookie = new Cookie(user.getUserId() + "", null);
                 userCookie.setMaxAge(rememberMe ? 604800 : -1);
                 response.addCookie(userCookie);
                 return ResponseEntity.ok(new OKMessage("Login successful: " + existingUser.get().getEmail()));
@@ -95,4 +95,5 @@ public class UserController {
     public int getAdminStatus(@RequestParam String email) {
         return userService.getUserProfile(email).getAdmin();
     }
+    
 }
