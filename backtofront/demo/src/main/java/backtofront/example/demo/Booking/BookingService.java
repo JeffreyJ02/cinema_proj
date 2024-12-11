@@ -13,14 +13,14 @@ public class BookingService {
     }
 
     public void registerBooking(List<Integer> tickets, String movieTitle, String showDate,
-                                String showTime, String cardNumber, int userId) {
+                                String showTime, String cardNumber, double price, int userId) {
         Booking booking = new Booking();
-        // (int)
         booking.setBookingId(bookingRepository.maxBookingId() + 1);
         booking.setTickets(tickets);
         booking.setShowDate(showDate);
         booking.setShowTime(showTime);
         booking.setCardNumber(cardNumber);
+        booking.setPrice(price);
         booking.setUserId(userId);
 
         bookingRepository.save(booking);

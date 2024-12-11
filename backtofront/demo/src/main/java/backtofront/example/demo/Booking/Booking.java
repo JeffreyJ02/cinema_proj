@@ -33,6 +33,9 @@ public class Booking {
     @Column(name = "card_number", nullable = false)
     private String cardNumber;
 
+    @Column(name = "price", nullable = false)
+    private double price;
+
     @Column(name = "user_id", nullable = false)
     private int userId;
     
