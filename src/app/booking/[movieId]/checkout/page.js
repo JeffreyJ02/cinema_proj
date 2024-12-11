@@ -58,6 +58,42 @@ export default function Page() {
     }
   };
 
+  // Function to update seat availability in the database
+  /*
+Here is what I am expecting on the frontend:
+I do the api call to update the seat availability for a specific showtime.
+Once the user selects their seats, I combine the arrays of seat availability and selected seats.
+I then send a POST request to the backend with the updated seat availability.
+Ex.
+{
+"showtimeId": 2,
+"selectedSeats": ["A4", "A5"]
+}
+*/
+  const updateDatabaseSeats = async () => {
+    try {
+      const params = new URLSearchParams({
+        showingId: checkoutInfo.showing_id,
+      });
+
+      checkoutInfo.seat_arr.forEach((seat) => {
+        params.append("seatAvailability", seat);
+      });
+
+      const response = await fetch(
+        `http://localhost:8080/api/update-seats?${params.toString()}`,
+        {
+          method: "POST",
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to update seat availability");
+      console.log("Seats successfully updated in the database.");
+    } catch (error) {
+      console.error("Error updating seats:", error);
+    }
+  };
+
   const getUserProfile = async () => {
     try {
       const response = await fetch(
@@ -154,7 +190,6 @@ export default function Page() {
         expirationDate: encrypt(cardData.expirationDate),
         securityCode: encrypt(cardData.cvv),
       };
-      
 
       const response = await fetch(
         `http://localhost:8080/api/register-card?user_id=${userId}&address_id=${addressNumber}`,
@@ -190,15 +225,18 @@ export default function Page() {
 
       console.log("Registering address:", addressData);
 
-      const response = await fetch(`http://localhost:8080/api/register-address?user_id=${userId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(addressData),
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/register-address?user_id=${userId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(addressData),
+        }
+      );
 
       const data = await response.json();
       console.log("Address registered:", data);
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Failed to register address:", errorData);
@@ -209,9 +247,8 @@ export default function Page() {
       return data;
     } catch (error) {
       console.error("Error registering address:", error);
-    };
-  };	
-
+    }
+  };
 
   const handleAddCard = () => {
     if (!validateCardData(cardData)) return;
@@ -255,42 +292,61 @@ export default function Page() {
       return;
     }
 
-    console.log("Seats:", checkoutInfo.seats);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/get-seats?showingId=${checkoutInfo.showing_id}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch seat availability");
+      }
+      const seatAvailability = await response.json();
+  
+      const unavailableSeats = seatAvailability.map((seat) => seat.seatId);
+      const hasConflict = checkoutInfo.seat_arr.some((seat) =>
+        unavailableSeats.includes(seat)
+      );
+  
+      if (hasConflict) {
+        console.error("Seat conflict detected");
+        alert("One or more selected seats are no longer available.");
+        return;
+      } else {
+        console.log("No seat conflicts detected");
+        updateDatabaseSeats();
+      }
+    } catch (error) {
+      console.error("Error fetching seat availability:",  error);
+    }
+  
     try {
       const checkoutData = {
-        seats: checkoutInfo.seats, // Already an array
-            tickets: checkoutInfo.tickets, // Already an object or string
-            price: (total * 1.07).toFixed(2),
-            movieTitle: movie.title, // Already a string
-            showDate: checkoutInfo.show_date, // Already a string
-            showTime: checkoutInfo.show_time, // Already a string
-            cardNumber: encrypt(storedCards[selectedCardIndex].cardNumber), // Already a string
-            userId: userId,
+        seats: checkoutInfo.seats,
+        tickets: checkoutInfo.tickets,
+        price: (total * 1.07).toFixed(2),
+        movieTitle: movie.title,
+        showDate: checkoutInfo.show_date,
+        showTime: checkoutInfo.show_time,
+        cardNumber: encrypt(storedCards[selectedCardIndex].cardNumber),
+        userId: userId,
       };
 
-      const response = await fetch(`http://localhost:8080/api/register-booking?user_id=${userId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(checkoutData),
-      });
       console.log("Checkout data:", checkoutData);
+
+      const response = await fetch(
+        `http://localhost:8080/api/register-booking?user_id=${userId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(checkoutData),
+        }
+      );
       if (!response.ok) throw new Error("Checkout failed");
       const data = await response.json();
       console.log("Checkout successful:", data);
+      localStorage.setItem("bookingConfirmation", JSON.stringify(checkoutData));
+      window.location.href = "/booking/[movieId]/confirmation";
     } catch (error) {
       console.error("Error during checkout:", error);
-      const bookingDetailsPlaceholder = {
-        bookingId: "123456",
-        movieTitle: "Spider-Man: Across the Spider-Verse",
-        showDate: "2024-12-12",
-        showTime: "18:30",
-        seats: ["A1", "A2", "A3"],
-        tickets: { Adult: 2, Child: 1, Senior: 0 },
-        price: 45.00,
-      };
-      
-      localStorage.setItem("bookingConfirmation", JSON.stringify(bookingDetailsPlaceholder));
-      window.location.href = "/booking/[movieId]/confirmation";
     }
   };
 
@@ -454,7 +510,8 @@ export default function Page() {
       >
         <Typography variant="body1">My Total:</Typography>
         <Typography variant="body1" fontWeight="bold">
-          ${total} + tax: ${(total * 0.07).toFixed(2)} = ${(total * 1.07).toFixed(2)}
+          ${total} + tax: ${(total * 0.07).toFixed(2)} = $
+          {(total * 1.07).toFixed(2)}
         </Typography>
       </Box>
       <Typography variant="body1">3. Payment</Typography>

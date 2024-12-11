@@ -16,9 +16,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { hash } from '../../utils/encryption';
+import { useUser } from "../../context/UserContext";
+
 
 export default function SignIn() {
   const router = useRouter();
+  const { login } = useUser();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -96,7 +99,7 @@ export default function SignIn() {
 
       const data = await response.json();
       setSuccessMessage("Login successful! Redirecting...");
-      localStorage.setItem("userEmail", email); // Store email for session
+      login(email);
 
       // Check if the user is an admin
       await fetchAdminStatus(email);

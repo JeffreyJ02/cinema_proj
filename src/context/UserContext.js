@@ -7,27 +7,39 @@ import { jwtDecode } from "jwt-decode";
 const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [cookies] = useCookies(["token"]);
+  const [userEmail, setUserEmail] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
-    if (cookies.token) {
-      try {
-        // Decodes the token and sets the user so frontend can pull data from the token
-        const decoded = jwtDecode(cookies.token);
-        setUser(decoded);
-        console.log("Decoded token:", decoded);
-      } catch (error) {
-        console.error("Invalid token:", error);
-        setUser(null);
-      }
+    const userEmail = localStorage.getItem("userEmail");
+    const currentPath = window.location.pathname;
+
+    if (!userEmail && currentPath !== "/sign-in" && currentPath !== "/sign-up" && currentPath !== "/forgot-password" && currentPath !== "/password-reset" && currentPath !== "/") {
+      setIsAuthenticated(false);
+      window.location.href = "/sign-in";
     } else {
-      setUser(null); // No token found
+      setUserEmail(userEmail);
+      setIsAuthenticated(true);
     }
-  }, [cookies.token]); // Rerun if the token changes
+  }, []);
+
+  const login = (email) => {
+    localStorage.setItem("userEmail", email);
+    setUserEmail(email);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("userEmail");
+    setUserEmail(null);
+    window.location.href = "/sign-in";
+  };
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ userEmail, login, logout }}>
       {children}
     </UserContext.Provider>
   );
