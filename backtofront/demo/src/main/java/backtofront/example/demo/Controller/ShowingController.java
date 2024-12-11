@@ -50,4 +50,9 @@ public class ShowingController {
     public List<Showing> getShowingsByMovieId(@RequestParam int movieId) {
         return showingService.findByMovieId(movieId);
     }
+
+    @GetMapping("/get-movie-ids-by-showdate")
+    public List<Integer> getMovieIdsByShowDate(@RequestParam String showDate) {
+        return showingService.getMovieIdsByShowDate(showDate);
+    }
 }
