@@ -40,7 +40,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (successMessage) {
-      router.push("/");
+      //router.push("/");
     }
   }, [successMessage, router]);
 
@@ -129,7 +129,7 @@ export default function SignIn() {
       if (adminStatus === 1) {
         router.push("../admin");
       } else {
-        router.push("/");
+        //router.push("/");
       }
     } catch (error) {
       console.error("Error fetching admin status:", error);
