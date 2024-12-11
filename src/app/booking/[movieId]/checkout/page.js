@@ -366,6 +366,7 @@ Ex.
         alert("Invalid promo code");
         return;
       }
+      console.log("Promo code data:", data);
       if (data.bogo) {
         console.log("BOGO promo code applied");
         const newTotal = checkoutInfo.total / 2;
@@ -707,7 +708,7 @@ Ex.
           <Button
             variant="outlined"
             color="primary"
-            onClick={() => console.log("Apply promo code")}
+            onClick={() => applyPromoCode(promoCode)}
             sx={{
               flexShrink: 0,
               height: "56px",
